@@ -80,7 +80,6 @@ const adminAuth = (req, res, next) =>{
 
 module.exports = {
     checkToken,
-    loginAuth,
     registerAuth,
     logoutAuth,
     adminAuth,

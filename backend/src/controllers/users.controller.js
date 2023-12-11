@@ -1,5 +1,4 @@
 const userService = require('../services/users.service');
-const session = require('express-session');
 const jwt = require('jsonwebtoken');
 
 const getAllUsers = async (req, res) => {

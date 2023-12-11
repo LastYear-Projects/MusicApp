@@ -22,12 +22,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-app.use(flash());
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-}));
 
 
 //socket.io
@@ -48,7 +42,6 @@ app.use('/users', require('./routes/users.routes'));
 app.use('/orders', require('./routes/orders.routes'));
 app.use('/auth', require('./routes/auth.routes'));
 app.use('/admin', require('./routes/admin.routes')); 
-app.use('/locations', require('./routes/locations.routes'));
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();
