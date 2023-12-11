@@ -7,9 +7,6 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/mongo');
 const getToken = require('./config/spotifyApi');
-const passport = require('passport'); //
-const session = require('express-session');  ///
-const flash = require('express-flash'); //
 const socketio = require("socket.io");
 const { setSocket } = require('./utils/socketService');
 
@@ -31,8 +28,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 //socket.io
 const server = require("http").createServer(app);

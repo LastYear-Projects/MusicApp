@@ -1,13 +1,6 @@
 const mongoose = require('mongoose');
 
 const SongScheme = new mongoose.Schema({
-    // _id: {
-    //     type: String,
-    //     trim: true,
-    //     minlength: 3,
-    //     maxlength: 50,
-    //     unique: true
-    // },
     title: {
         type: String,
         required: true,
@@ -29,13 +22,6 @@ const SongScheme = new mongoose.Schema({
         minlength: 3,
         maxlength: 50
     },
-    year: {
-        type: Number,
-        required: true,
-        trim: true,
-        minlength: 4,
-        maxlength: 4
-    },
     genre: {
         type: [String],
         trim: true,
@@ -56,9 +42,13 @@ const SongScheme = new mongoose.Schema({
         trim: true,
         default: 'https://www.freeiconspng.com/uploads/no-image-icon-4.png'
     },
-    numOfPurchases : {
-        type: Number,
-        default: 0
+    comments : {
+        type: [
+            {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'comment',
+            },
+        ],
     },
     price: {
         type: Number,
