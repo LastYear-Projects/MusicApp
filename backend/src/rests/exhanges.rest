@@ -1,0 +1,11 @@
+curl --request GET 'https://api.apilayer.com/exchangerates_data/latest?symbols=ils&base=usd'
+--header 'apikey: TFpsc4FIunqEjYbDuIpY6EBj4FV6hyfJ'
+
+###
+
+GET https://api.apilayer.com/exchangerates_data/latest?symbols=ils&base=usd HTTP/1.1
+content-type: application/json
+
+{
+    "apikey": "TFpsc4FIunqEjYbDuIpY6EBj4FV6hyfJ"
+}

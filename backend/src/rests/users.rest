@@ -1,0 +1,39 @@
+GET http://localhost:6969/users/
+content-type: application/json
+
+
+###
+
+POST http://localhost:6969/users HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Tal Mekler",
+    "email": "Mekler@gmail.com",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:6969/users/user-details/ HTTP/1.1
+content-type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Y2NkYTViMjE1MDVkN2Y2MjdlNDVkYSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2OTE5NTY2ODcsImV4cCI6MTcyMzQ5MjY4N30.rQZyR5nAJS0bzjgFa1JbvawQPOq3aiOYVoC0Ts5MwZc"
+}
+
+###
+PUT http://localhost:6969/users/ HTTP/1.1
+content-type: application/json
+
+{
+
+ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZDQ4YzJmODAyYjhhMzgzY2QzMTM3ZCIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2OTIwMjkwNjksImV4cCI6MTcyMzU2NTA2OX0.Pwr3CNa1kX97BzuDv7YU0AWqWQ3JH-VZ-eNBelHSBVE",
+ "updatedUser": {
+    "name": "UpdatedMekler",
+    "email": "UpdatedMekler@gmail.com",
+    "password": "123456789"
+    }
+}
+
+

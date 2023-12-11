@@ -1,0 +1,5 @@
+
+
+curl -i -X GET "https://graph.facebook.com/{your-user-id}/accounts?access_token={user-access-token} 
+
+EAAQYhKKQZC8sBO2B5QkAZBJ3ySZCgfqyeuGwGH9IRIkyKsoYr9L5b1OF9ZBdXAqZCAshEslKdiJwgAAKdb9YUEM1Vl00n1Pq3UTtGIkgWnHobCKdy8lyH7XdbIH7xsOBsr9ooSdnZAbJp2R6xS0pGZCWm7NucQSDWxOWskFSUZAepEqaE94oiuZBq1O5XJz7GnQg14aZC9cRHKRfZAxZAuxqF3cf

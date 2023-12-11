@@ -1,0 +1,70 @@
+GET http://localhost:6969/songs
+content-type: application/json
+
+
+###
+
+GET http://localhost:6969/songs/64ccda0c5fad016c15f71c3d
+
+###
+
+POST http://localhost:6969/songs HTTP/1.1
+content-type: application/json
+
+{
+    "title": "BDIKALAST",
+    "artist": "BendaLulu",
+    "album": "Bendaron24",
+    "year": 2022,
+    "genre": ["AniBeshok24", "Alonko"],
+    "duration": 1234,
+    "album_image": "https://avatars.githubusercontent.com/u/81577071?v=4",
+    "preview_url":"https://p.scdn.co/mp3-preview/98123a7d31111d0d9a61c21d4ce6e9215a8f5903?cid=38e67659f07443c3be7ebf8f88362892"
+}
+
+###
+
+DELETE http://localhost:1234/songs/Plain_JaneA$AP_FergStill_Striving2017
+
+###
+
+POST http://localhost:6969/songs/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Mekleron1",
+    "artist": "Burgeron1",
+    "album": "Bendaron1",
+    "year": 2024,
+    "genre": ["AniBeshok1", "Rap1"],
+    "duration": 12345,
+    "album_image": "https://avatars.githubusercontent.com/u/81577071?v=4",
+    "preview_url":"https://p.scdn.co/mp3-preview/34934b16056fc0f696dfccfd48ec62b1202d5b18?cid=38e67659f07443c3be7ebf8f88362892"
+}
+
+###
+
+curl -X POST "https://accounts.spotify.com/api/token" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "grant_type=client_credentials&client_id=38e67659f07443c3be7ebf8f88362892&client_secret=627725320547433196284da785fcb187"
+
+###
+
+
+curl "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb" \
+     -H "Authorization: Bearer  BQDZ4pJGEtAylpBZ8KGcWfuSeI0w9u-0HPBDbT9SUBQsLcg4-VnIsg3AmV2XV3GbELDE7nsTKCb4OSdkoB285FbQvsyI3Fz8dxPT232Ca4_05Vkbk6g"
+
+
+###
+
+curl --request GET \
+  --url https://api.spotify.com/v1/tracks/4dVpf9jZjcORqGTLUaeYj9 \
+  --header 'Authorization: Bearer BQB0EwP-y57VxzSkJP6NpM9NrG-8Jq0h40PZHFOfFAcR3Uww71Un-KI44kjHttzZRx2AxbRBQFCXm5J4U8K_NBDU7MyJ3zz-m-k0VufAEnoSY5Ha-9I'
+
+###
+
+curl --request GET \
+  --url https://api.spotify.com/v1/tracks/11dFghVXANMlKmJXsNCbNl \
+  --header 'Authorization: Bearer BQB3bdjpzmcMDp_K81IeJ8136mwMbHfHNMaQD-JZ5StWyy_hxYUQ0hs6uoDtAPkVmlTNSlKBn0ZjNyi9Pe5NFExD_4YRQDou2_D0qDdtaoCDH2GxMyU'
+
+
