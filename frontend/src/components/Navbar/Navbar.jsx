@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+
 import {
   AppBar,
   Box,
@@ -32,11 +33,13 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const navigate = useNavigate();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
+    navigate("/profile");
   };
 
   const handleMobileMenuClose = () => {
@@ -65,7 +68,7 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={() => navigate("/cart")}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <ShoppingCartIcon />
@@ -118,7 +121,6 @@ export default function Navbar() {
             >
               <MoozikaLogo />
             </Typography>
-
             <StyledAutocomplete
               disablePortal
               id="combo-box-demo"
@@ -133,6 +135,7 @@ export default function Navbar() {
                   size="large"
                   aria-label="show 4 new mails"
                   color="inherit"
+                  onClick={() => navigate("/cart")}
                 >
                   <Badge badgeContent={4} color="error">
                     <ShoppingCartIcon />
@@ -147,7 +150,7 @@ export default function Navbar() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <AccountCircle />
+                  <AccountCircle onClick={() => navigate("/profile")} />
                 </IconButton>
                 <IconButton
                   size="large"
@@ -155,10 +158,9 @@ export default function Navbar() {
                   aria-label="account of current user"
                   aria-controls={menuId}
                   aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <Typography> SignIn</Typography>
+                  <Typography>SignIn</Typography>
                 </IconButton>
               </Box>
             ) : (
