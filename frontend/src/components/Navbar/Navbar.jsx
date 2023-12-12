@@ -19,6 +19,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Outlet } from "react-router-dom";
 
+import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -142,7 +144,7 @@ export default function Navbar() {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-              Moozika
+              <MoozikaLogo/>
             </Typography>
             <Search>
               <SearchIconWrapper>
