@@ -6,6 +6,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/footer/Footer";
 
 import HomePage from "./pages/HomePage/HomePage";
 import CartPage from "./pages/CartPage/CartPage";
@@ -20,23 +21,31 @@ const routes = [
   { path: "/signup", element: <SignUpPage /> },
   { path: "/song", element: <SongPage /> },
   { path: "/profile", element: <UserProfile /> },
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Navbar />}>
-        {routes.map(({ path, element }) => {
-          return <Route key={path} path={path} element={element} />;
-        })}
-      </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      {routes.map(({ path, element }) => {
+        return <Route key={path} path={path} element={element} />;
+      })}
     </>
   )
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <Navbar />
+      <div style={{ flex: 1 }}>
+        <RouterProvider router={router} />
+      </div>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
