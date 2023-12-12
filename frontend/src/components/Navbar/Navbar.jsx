@@ -84,7 +84,7 @@ export default function Navbar() {
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: "top",
+        vertical: "bottom",
         horizontal: "right",
       }}
       id={mobileMenuId}
