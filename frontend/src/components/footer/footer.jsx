@@ -35,8 +35,9 @@ const Footer = () => {
                     bottom: 0,
                     width: "100%",
                     backgroundColor: "#1A1A1A",
-                    color: "#FFC105", // Set the color for all icons
-                    "& .MuiBottomNavigationAction-root": {
+                    color: "white", // Set the color for all icons
+                    "& .Mui-selected, & .MuiBottomNavigationAction-root": {
+                        color: "white",
                         "&:hover": {
                             color: "#FFC105", // Change the color on hover
                         },
