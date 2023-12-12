@@ -7,7 +7,6 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Import the new
 import { Box } from "@mui/material";
 
 const Footer = () => {
-    const [value, setValue] = React.useState(0);
     const handleTopPageClick = () => {
         // Scroll to the top of the page
         window.scrollTo({
