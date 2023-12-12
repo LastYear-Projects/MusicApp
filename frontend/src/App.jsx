@@ -27,9 +27,11 @@ const routes = [
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {routes.map(({ path, element }) => {
-        return <Route key={path} path={path} element={element} />;
-      })}
+      <Route path="/" element={<Navbar />}>
+        {routes.map(({ path, element }) => {
+          return <Route key={path} path={path} element={element} />;
+        })}
+      </Route>
     </>
   )
 );
@@ -39,7 +41,6 @@ function App() {
     <div
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
-      <Navbar />
       <div style={{ flex: 1 }}>
         <RouterProvider router={router} />
       </div>
