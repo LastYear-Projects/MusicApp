@@ -6,7 +6,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+*::selection {
+  background-color: #1a1a1a;
+}
 
 body {
   background-color: #111111;
+  color: white;
 }
