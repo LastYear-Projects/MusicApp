@@ -45,7 +45,6 @@ function App() {
       <div style={{ flex: 1 }}>
         <RouterProvider router={router} />
       </div>
-      <MultiActionAreaCard />
       <Footer />
     </div>
   );
