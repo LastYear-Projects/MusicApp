@@ -16,25 +16,23 @@ genre [string, string],
 year,
 duration: 1000 = 1sec,
 price,
-
-const songDurationInSeconds=song.duration/1000;//50000 -> 50sec -> 00:50 
-  const minutes=parseInt(songDurationInSeconds/60).toFixed(0);
-  const seconds=parseInt(songDurationInSeconds%60).toFixed(0);
-  const songDuration=`${minutes>9?minutes:"0"+minutes}:${seconds>9?seconds:"0"+seconds}`;
+numOfCommends,
 */
-export default function SpotifyCard({
-  album_image = "https://picsum.photos/200",
-  title = "Nana",
-  album = "Malibu",
-  artist = "Anderson, Paak",
-  genre = ["Rap", "Hip-Hop"],
-  year = 2016,
-  duration = 320000,
-  price = "39.49$",
-  numOfPurchases = 4,
-  numOfComments = 6,
-}) {
-  const songDurationInSeconds = duration / 1000; //50000 -> 50sec -> 00:50
+const defaultSong = {
+  album_image: "https://picsum.photos/200",
+  title: "Nana",
+  album: "Malibu",
+  artist: "Anderson, Paak",
+  genre: ["Rap", "Hip-Hop"],
+  year: 2016,
+  duration: 320000,
+  price: "39.49$",
+  numOfPurchases: 4,
+  numOfComments: 6,
+};
+
+export default function SongCard({ song = defaultSong }) {
+  const songDurationInSeconds = song.duration / 1000; //50000 -> 50sec -> 00:50
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
   const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
   const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
@@ -44,7 +42,7 @@ export default function SpotifyCard({
     <Card
       sx={{
         margin: "5rem",
-        maxWidth: 285,
+        maxWidth: 295,
         borderRadius: "0.8rem",
         overflow: "hidden",
         backgroundColor: "#1A1A1A",
@@ -59,7 +57,7 @@ export default function SpotifyCard({
       <CardActionArea>
         <CardMedia
           component="img"
-          image={album_image}
+          image={song.album_image}
           alt="Album Cover"
           sx={
             {
@@ -80,7 +78,7 @@ export default function SpotifyCard({
             variant="h5"
             component="div"
           >
-            {title}
+            {song.title}
           </Typography>
           <Typography
             sx={{
@@ -92,7 +90,7 @@ export default function SpotifyCard({
             variant="body2"
             color="text.secondary"
           >
-            {album}
+            {song.album}
           </Typography>
           <Typography
             sx={{
@@ -104,7 +102,7 @@ export default function SpotifyCard({
             variant="body2"
             color="text.secondary"
           >
-            {artist}
+            {song.artist}
           </Typography>
           <Typography
             sx={{
@@ -116,7 +114,7 @@ export default function SpotifyCard({
             variant="body2"
             color="text.secondary"
           >
-            {genre.join(", ")}
+            {song.genre.join(", ")}
           </Typography>
           <Typography
             sx={{
@@ -128,7 +126,7 @@ export default function SpotifyCard({
             variant="body2"
             color="text.secondary"
           >
-            {year}
+            {song.year}
           </Typography>
           <Typography
             sx={{ color: "#9A9A9A", fontWeight: 200, fontSize: "1rem" }}
@@ -142,7 +140,7 @@ export default function SpotifyCard({
             variant="body2"
             color="text.secondary"
           >
-            Price: {price}
+            Price: {song.price}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -159,14 +157,14 @@ export default function SpotifyCard({
           sx={{ color: "#9A9A9A" }}
           startIcon={<CommentIcon />}
         >
-          {numOfComments ? numOfComments : 0} Comments
+          {song.numOfComments ? song.numOfComments : 0} Comments
         </Button>
         <Button
           size="small"
           sx={{ color: "#9A9A9A" }}
           startIcon={<CloudDownloadIcon />}
         >
-          {numOfPurchases ? numOfPurchases : 0} Downloads
+          {song.numOfPurchases ? song.numOfPurchases : 0} Downloads
         </Button>
       </CardActions>
     </Card>
