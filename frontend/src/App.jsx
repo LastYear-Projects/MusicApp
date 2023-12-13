@@ -14,7 +14,6 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import MultiActionAreaCard from "./components/songCard/songCard";
 
 const routes = [
   { path: "/", element: <HomePage /> },
