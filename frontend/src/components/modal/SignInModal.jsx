@@ -32,10 +32,15 @@ export default function SignInModal({
         //TODO: sent it later to server
         setOpenModal(false);
     };
-    const responseGoogle = (response) => {
-        // Handle Google sign-in response here
-        console.log(response);
+    const onSuccess = (response) => {
+        // TODO:Handle Google sign-in response here
+        console.log("Google sign in success: ", response);
         setOpenModal(false);
+    };
+    const onFailure = (response) => {
+        // TODO:Handle Google sign-in response here
+        var accessToken = gapi.auth.getToken().access_token ;
+        console.log("Google sign in failure: ", response+accessToken);
     };
 return (
         <div>
@@ -113,25 +118,25 @@ return (
                                 </Link>
                             </Typography>
 
-                            {/*<GoogleLogin*/}
-                            {/*    clientId="YOUR_GOOGLE_CLIENT_ID"*/}
-                            {/*    onSuccess={responseGoogle}*/}
-                            {/*    onFailure={responseGoogle}*/}
-                            {/*    cookiePolicy="single_host_origin"*/}
-                            {/*    render={(renderProps) => (*/}
-                            {/*        <button*/}
-                            {/*            onClick={renderProps.onClick}*/}
-                            {/*            disabled={renderProps.disabled}*/}
-                            {/*            className={css["googleButton"]}*/}
-                            {/*        >*/}
-                            {/*            <img*/}
-                            {/*                src="https://developers.google.com/identity/images/g-logo.png"*/}
-                            {/*                alt="Google logo"*/}
-                            {/*            />*/}
-                            {/*            <span>Sign In with Google</span>*/}
-                            {/*        </button>*/}
-                            {/*    )}*/}
-                            {/*/>*/}
+                            <GoogleLogin
+                                clientId="YOUR_GOOGLE_CLIENT_ID"
+                                onSuccess={onSuccess}
+                                onFailure={onFailure}
+                                cookiePolicy="single_host_origin"
+                                render={(renderProps) => (
+                                    <button
+                                        onClick={renderProps.onClick}
+                                        disabled={renderProps.disabled}
+                                        className={css["googleButton"]}
+                                    >
+                                        <img
+                                            src="https://developers.google.com/identity/images/g-logo.png"
+                                            alt="Google logo"
+                                        />
+                                        <span>Sign In with Google</span>
+                                    </button>
+                                )}
+                            />
                         </Container>
                     </Box>
                 </Fade>
