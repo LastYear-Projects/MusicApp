@@ -6,17 +6,26 @@ import {
     Fade,
     Typography,
     Button,
-    Container, IconButton,
-    // ... (other imports)
+    Container,
+    IconButton,
+    TextField,
 } from "@mui/material";
+
 import ClearIcon from "@mui/icons-material/Clear";
 import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 
 export default function SignInModal({
-                                        // eslint-disable-next-line react/prop-types
-                                        openModal, setOpenModal, // Add any other necessary props
-                                    }) {
+                                        openModal, setOpenModal,
+                                    })
+{
+    const handleSignIn = () => {
+        // Handle sign-in logic here
+        // You can use the same logic as in your actual sign-in functionality
+        // For example, validate the form and call a function to perform sign-in
+        // onClose to close the modal after sign-in
+        setOpenModal(false);
+    };
     return (
         <div>
             <Modal
@@ -45,19 +54,33 @@ export default function SignInModal({
                         >
                             Sign In
                         </Typography>
-                        {/* Add your sign-in content here */}
-                        {/* You can include a form, buttons, or any other sign-in UI */}
                         <Container>
+                            <TextField
+                                label="Username"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                autoFocus
+                                InputProps={{
+                                style: { color: "white" },
+                            }}
+                            />
+                            <TextField
+                                label="Password"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                type="password"
+                                InputProps={{
+                                    style: { color: "white" },
+                                }}
+
+                            />
                             <Button
                                 variant="contained"
-                                onClick={() => {
-                                    // Handle sign-in logic
-                                    // You can use the same logic as in your SignIn.js component
-                                    // For example, call a function to perform sign-in
-                                    // onClose to close the modal after sign-in
-                                    setOpenModal(false);
-                                }}
+                                onClick={handleSignIn}
                                 className={css["button"]}
+                                fullWidth
                             >
                                 Sign In
                             </Button>
