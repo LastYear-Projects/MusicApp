@@ -36,6 +36,92 @@ const router = createBrowserRouter(
     </>
   )
 );
+const cardArray = [
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nana",
+    album: "Malibu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nana",
+    album: "Malibu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nanadsfds",
+    album: "Malihgfhgfbu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nanadsfds",
+    album: "Malihgfhgfbu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nanadsfds",
+    album: "Malihgfhgfbu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nanadsfds",
+    album: "Malihgfhgfbu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+  {
+    album_image: "https://picsum.photos/200",
+    title: "Nanadsfds",
+    album: "Malihgfhgfbu",
+    artist: "Anderson, Paak",
+    genre: ["Rap", "Hip-Hop"],
+    year: 2016,
+    duration: 320000,
+    price: "39.49$",
+    numOfPurchases: 4,
+    numOfComments: 6,
+  },
+];
 
 function App() {
   return (
@@ -44,7 +130,7 @@ function App() {
     >
       <div style={{ flex: 1 }}>
         <RouterProvider router={router} />
-        <List />
+        <List list={cardArray} />
       </div>
       <Footer />
     </div>
