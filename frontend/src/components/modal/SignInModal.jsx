@@ -9,24 +9,35 @@ import {
     Container,
     IconButton,
     TextField,
+    Link,
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import css from "./style.module.css";
 import {modalStyle} from "../../constants";
+import {GoogleLogin} from "react-google-login";
 
 export default function SignInModal({
+                                        // eslint-disable-next-line react/prop-types
                                         openModal, setOpenModal,
                                     })
 {
+    const [userNameAndPassword, setUserNameAndPassword] = React.useState({
+        username: "",
+        password: "",
+    });
+
     const handleSignIn = () => {
-        // Handle sign-in logic here
-        // You can use the same logic as in your actual sign-in functionality
-        // For example, validate the form and call a function to perform sign-in
-        // onClose to close the modal after sign-in
+        console.log("username: ", userNameAndPassword.username + " password: ", userNameAndPassword.password);
+        //TODO: sent it later to server
         setOpenModal(false);
     };
-    return (
+    const responseGoogle = (response) => {
+        // Handle Google sign-in response here
+        console.log(response);
+        setOpenModal(false);
+    };
+return (
         <div>
             <Modal
                 aria-labelledby="transition-modal-title"
@@ -56,23 +67,34 @@ export default function SignInModal({
                         </Typography>
                         <Container>
                             <TextField
+                                value={userNameAndPassword.username}
+                                onChange={(e) => setUserNameAndPassword({ ...userNameAndPassword, username: e.target.value })}
                                 label="Username"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
                                 autoFocus
                                 InputProps={{
-                                style: { color: "white" },
-                            }}
+                                    style: {color: "white"},
+                                }}
+                                InputLabelProps={{
+                                    style: {color: "white"},
+                                }}
                             />
                             <TextField
+                                value={userNameAndPassword.password}
+                                onChange={  (e) => setUserNameAndPassword({ ...userNameAndPassword, password: e.target.value})}
                                 label="Password"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
                                 type="password"
                                 InputProps={{
-                                    style: { color: "white" },
+                                    style: {color: "white"},
+                                    notchedOutline: {borderColor: "white"},
+                                }}
+                                InputLabelProps={{
+                                    style: {color: "white"},
                                 }}
 
                             />
@@ -84,6 +106,32 @@ export default function SignInModal({
                             >
                                 Sign In
                             </Button>
+                            <Typography variant="body2" color="white" align="center" sx={{marginTop: 2}}>
+                                Don't have an account?{" "}
+                                <Link href="/signup" underline="always" color="primary">
+                                    Sign Up
+                                </Link>
+                            </Typography>
+
+                            {/*<GoogleLogin*/}
+                            {/*    clientId="YOUR_GOOGLE_CLIENT_ID"*/}
+                            {/*    onSuccess={responseGoogle}*/}
+                            {/*    onFailure={responseGoogle}*/}
+                            {/*    cookiePolicy="single_host_origin"*/}
+                            {/*    render={(renderProps) => (*/}
+                            {/*        <button*/}
+                            {/*            onClick={renderProps.onClick}*/}
+                            {/*            disabled={renderProps.disabled}*/}
+                            {/*            className={css["googleButton"]}*/}
+                            {/*        >*/}
+                            {/*            <img*/}
+                            {/*                src="https://developers.google.com/identity/images/g-logo.png"*/}
+                            {/*                alt="Google logo"*/}
+                            {/*            />*/}
+                            {/*            <span>Sign In with Google</span>*/}
+                            {/*        </button>*/}
+                            {/*    )}*/}
+                            {/*/>*/}
                         </Container>
                     </Box>
                 </Fade>
