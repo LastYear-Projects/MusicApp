@@ -21,6 +21,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { StyledAutocomplete } from "../../constants/index";
 
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
+import SignInModal from "../modal/SignInModal.jsx";
 
 import css from "./styles.module.css";
 
@@ -33,6 +34,7 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -50,8 +52,12 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleSignInButtonClick = () => {setIsSignInModalOpen(true)};
+
+
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -159,6 +165,7 @@ export default function Navbar() {
                   aria-controls={menuId}
                   aria-haspopup="true"
                   color="inherit"
+                  onClick={handleSignInButtonClick}
                 >
                   <Typography>SignIn</Typography>
                 </IconButton>
@@ -185,6 +192,8 @@ export default function Navbar() {
       <main style={{ flex: "1" }}>
         <Outlet />
       </main>
+      <SignInModal openModal={isSignInModalOpen} setOpenModal={setIsSignInModalOpen} />
+
     </div>
   );
 }
