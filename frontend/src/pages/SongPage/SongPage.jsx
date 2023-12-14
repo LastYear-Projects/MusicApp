@@ -1,7 +1,8 @@
 import React from "react";
+import Song from "../../components/Song/Song";
 
 const SongPage = () => {
-  return <div>Song Page</div>;
+  return <Song/>
 };
 
 export default SongPage;
