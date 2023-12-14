@@ -6,7 +6,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-export default function MediaControlCard() {
+ function addToCartHandler() {
+
+    alert("Added to cart");
+    // need to push to the cart the object of the song we are currently on , and update the number of items in the cart
+
+ }
+function Song() { // song needs to get an id so we can fetch the song details from the database and show the correct song page
+    //song needs to get a pointer to a function that will update the cart in the navbar 
   return (
     <Box
       sx={{
@@ -62,6 +69,7 @@ export default function MediaControlCard() {
                             color:"black"
                             },
                             }}
+                            onClick={addToCartHandler}
                 >               
                  Add to Cart
                 </Button>
@@ -72,3 +80,4 @@ export default function MediaControlCard() {
     </Box>
   );
 }
+export default Song;
