@@ -119,13 +119,14 @@ export default function Navbar() {
           }}
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography
+            <Typography className={css["moozika-logo"]}
+              onClick={() => navigate("/")}
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-              <MoozikaLogo />
+            <MoozikaLogo />
             </Typography>
             <StyledAutocomplete
               disablePortal
