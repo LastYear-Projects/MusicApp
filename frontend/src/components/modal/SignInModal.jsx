@@ -49,14 +49,13 @@ export default function SignInModal({
         setOpenModal(false);
     };
     const onSuccess = (response) => {
-        // TODO:Handle Google sign-in response here
-        console.log("Google sign in success: ", response.token);
-        // localStorage.setItem(response.token);
+        console.log("Google sign in success: ", response.accessToken);
+        localStorage.setItem("moozikaToken", response.accessToken);
         setOpenModal(false);
     };
     const onFailure = (response) => {
         // TODO:Handle Google sign-in response here
-        // console.log("Google sign in failure: ", response + accessToken);
+        console.log("Google sign in failure:", response);
     };
     return (
         <div>
@@ -141,11 +140,13 @@ export default function SignInModal({
                             </Typography>
 
                             <GoogleLogin
-                                //TODO:fix the .env here
                                 clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
+                                // cookiePolicy="none"
+                                className={css["googleButton"]}
+
                                 render={(renderProps) => (
                                     <Button
                                         onClick={renderProps.onClick}
