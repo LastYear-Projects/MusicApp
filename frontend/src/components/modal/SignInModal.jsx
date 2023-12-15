@@ -16,6 +16,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
+import axios from "axios";
 
 
 
@@ -24,24 +25,38 @@ export default function SignInModal({
                                         openModal, setOpenModal,
                                     }) {
     const [userNameAndPassword, setUserNameAndPassword] = React.useState({
-        username: "",
+        email: "",
         password: "",
     });
 
-    const handleSignIn = () => {
-        console.log("username: ", userNameAndPassword.username + " password: ", userNameAndPassword.password);
-        //TODO: sent it later to server
+    const handleSignIn =async () => {
+        // console.log("username: ", userNameAndPassword.email + " password: ", userNameAndPassword.password);
+
+        await axios.post(
+            "http://localhost:6969/auth/login",
+            {
+                email: userNameAndPassword.email,
+                password: userNameAndPassword.password
+            })
+            .then((userToken) =>
+                {
+                    console.log("userToken: ", userToken.data.token)
+                    localStorage.setItem("moozikaToken", userToken.data.token);
+                })
+            .catch((err) =>
+                {console.log("error: ", err.response.data)});
+
         setOpenModal(false);
     };
     const onSuccess = (response) => {
         // TODO:Handle Google sign-in response here
-        console.log("Google sign in success: ", response);
+        console.log("Google sign in success: ", response.token);
+        // localStorage.setItem(response.token);
         setOpenModal(false);
     };
     const onFailure = (response) => {
         // TODO:Handle Google sign-in response here
-        var accessToken = gapi.auth.getToken().access_token;
-        console.log("Google sign in failure: ", response + accessToken);
+        // console.log("Google sign in failure: ", response + accessToken);
     };
     return (
         <div>
@@ -73,10 +88,10 @@ export default function SignInModal({
                         </Typography>
                         <Container>
                             <TextField
-                                value={userNameAndPassword.username}
+                                value={userNameAndPassword.email}
                                 onChange={(e) => setUserNameAndPassword({
                                     ...userNameAndPassword,
-                                    username: e.target.value
+                                    email: e.target.value
                                 })}
                                 label="Username"
                                 variant="outlined"
