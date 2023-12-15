@@ -17,6 +17,8 @@ import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
 
+
+
 export default function SignInModal({
                                         // eslint-disable-next-line react/prop-types
                                         openModal, setOpenModal,
@@ -125,7 +127,7 @@ export default function SignInModal({
 
                             <GoogleLogin
                                 //TODO:fix the .env here
-                                clientId="YOUR_CLIENT_ID"
+                                clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
