@@ -9,6 +9,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useNavigate } from "react-router-dom";
 
 export default function SongCard({
+  _id,
   album_image,
   title,
   album,
@@ -41,7 +42,7 @@ export default function SongCard({
         },
       }}
     >
-      <CardActionArea onClick={() => navigate(`/song/${title}`)}>
+      <CardActionArea onClick={() => navigate(`/song/${_id}`)}>
         <CardMedia component="img" image={album_image} alt="Album Cover" />
         <CardContent>
           <Typography
