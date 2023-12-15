@@ -23,7 +23,7 @@ const routes = [
   { path: "/", element: <HomePage /> },
   { path: "/cart", element: <CartPage /> },
   { path: "/signup", element: <SignUpPage /> },
-  { path: "/song", element: <SongPage /> },
+  { path: "/song/:id", element: <SongPage /> },
   { path: "/profile", element: <UserProfile /> },
   { path: "*", element: <NotFoundPage /> },
 ];
