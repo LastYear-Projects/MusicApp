@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { useNavigate } from "react-router-dom";
 
 export default function SongCard({
   album_image,
@@ -25,6 +26,7 @@ export default function SongCard({
   const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
     seconds > 9 ? seconds : "0" + seconds
   }`;
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -34,14 +36,12 @@ export default function SongCard({
         overflow: "hidden",
         backgroundColor: "#1A1A1A",
         transition: "background-color 0.3s, box-shadow 0.3s",
-        boxShadow: "0.25rem 0.25rem 0.5rem #2A2A2A",
         "&:hover": {
           backgroundColor: "#2A2A2A",
-          boxShadow: "0 0.5rem 1rem #2A2A2A",
         },
       }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={() => navigate(`/song/${title}`)}>
         <CardMedia component="img" image={album_image} alt="Album Cover" />
         <CardContent>
           <Typography
@@ -140,7 +140,7 @@ export default function SongCard({
           sx={{ color: "#9A9A9A" }}
           startIcon={<CloudDownloadIcon />}
         >
-          {numOfPurchases ? numOfPurchases : 0} Downloads
+          {numOfPurchases ? numOfPurchases : 0} Purchases
         </Button>
       </CardActions>
     </Card>
