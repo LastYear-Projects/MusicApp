@@ -31,7 +31,7 @@ export default function SongCard({
   return (
     <Card
       sx={{
-        margin: "5rem",
+        // margin: "5rem",
         maxWidth: 295,
         borderRadius: "0.8rem",
         overflow: "hidden",
