@@ -1,27 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const useFetch = (url) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url);
-        setData(response.data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  return useQuery({
+    queryKey: ["fetchData"],
+    queryFn: () => axios.get(url).then((res) => res.data)
+  })
 
-    fetchData();
-  }, [url]);
-
-  return { data, loading, error };
+ 
 };
 
 export default useFetch;
