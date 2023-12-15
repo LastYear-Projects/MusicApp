@@ -31,7 +31,7 @@ export default function Navbar() {
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
   const {data} = useFetch("http://localhost:6969/songs");
-  const top100Films = data?.map((song) => song.title);
+  const top100Films = data!=null? data.map((song) => song.title) : [];
   
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
