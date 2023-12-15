@@ -14,8 +14,9 @@ const Comment = ({
         padding: "10px",
         marginBottom: "10px",
         wordBreak: "break-all",
-        maxWidth: "35rem",
-        minWidth: "15rem",
+        width: "100%",
+        maxWidth: "40rem",
+        minWidth: "10rem",
       }}
     >
       <Box display="flex" flexDirection="column">
