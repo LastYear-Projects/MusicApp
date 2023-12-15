@@ -22,21 +22,17 @@ import { StyledAutocomplete } from "../../constants/index";
 
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal.jsx";
-
+import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
-
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-];
-
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
-
+  const {data} = useFetch("http://localhost:6969/songs");
+  const top100Films = data?.map((song) => song.title);
+  
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
