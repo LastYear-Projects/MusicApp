@@ -2,14 +2,18 @@ import { Grid } from "@mui/material";
 import React from "react";
 import DefaultCard from "../songCard/songCard";
 
-const List = ({ list, CardComponent = DefaultCard }) => {
+const List = ({
+  list,
+  CardComponent = DefaultCard,
+  flexDirection = "rows",
+}) => {
   return (
-    <Grid container>
+    <Grid container flexDirection={flexDirection}>
       {list.map((item) => {
         return (
           <Grid
             style={{
-              padding: "1rem",
+              padding: flexDirection === "rows" ? "1rem" : "0",
               justifyContent: "center",
               display: "flex",
             }}
