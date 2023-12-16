@@ -1,0 +1,14 @@
+.title{
+    color: white;
+    }
+.priceText{
+        color:#C0C0C0
+    }
+.priceSection{
+    display: flex;
+    column-gap: 0.5rem;
+    align-items: center;
+}
+.trashIcon:hover{
+    fill: red;
+}

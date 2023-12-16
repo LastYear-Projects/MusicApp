@@ -1,0 +1,18 @@
+.cartText{
+color: white;
+}
+.total{
+    color:white;
+    margin-top: 3rem;
+}
+.title{
+    color:white;
+    margin-top: 1rem;
+}
+.checkoutButton{
+    margin-top: 3rem;
+    margin-left: 0.5rem;
+    margin-right:0.5rem;
+    border-radius: 10px;
+    outline: white;
+}
