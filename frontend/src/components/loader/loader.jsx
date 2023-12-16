@@ -1,14 +1,7 @@
-import React from "react";
-import {CircularProgress} from "@mui/material";
+import css from "./styles.module.css";
 
-
-const Loader = () => {
-    return(
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-    </div>
-);
-
-}
+const Loader = ({ isLoading, children }) => {
+  return isLoading ? <div className={css["loader"]}></div> : children;
+};
 
 export default Loader;

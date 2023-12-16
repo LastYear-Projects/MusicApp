@@ -1,8 +1,9 @@
 import React from "react";
 
 export const MoozikaLogo = () => {
+
   return (
-    <a className="navbar-brand fs-3 fw-bold w-100" href="/">
+    <a className="navbar-brand fs-3 fw-bold w-100">
       <svg
         width="218"
         height="62"

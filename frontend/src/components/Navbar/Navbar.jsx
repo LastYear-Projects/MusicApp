@@ -22,20 +22,19 @@ import { StyledAutocomplete } from "../../constants/index";
 
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal.jsx";
-
+import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
-
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-];
-
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { data } = useFetch("http://localhost:6969/songs");
+  const top100Films =
+    data != null
+      ? data.map((song) => ({ title: song.title, _id: song._id }))
+      : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -52,8 +51,9 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSignInButtonClick = () => {setIsSignInModalOpen(true)};
-
+  const handleSignInButtonClick = () => {
+    setIsSignInModalOpen(true);
+  };
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -120,6 +120,8 @@ export default function Navbar() {
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography
+              className={css["moozika-logo"]}
+              onClick={() => navigate("/")}
               variant="h6"
               noWrap
               component="div"
@@ -131,9 +133,13 @@ export default function Navbar() {
               disablePortal
               id="combo-box-demo"
               options={top100Films}
+              getOptionLabel={(option) => option.title}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Search..." />
               )}
+              onChange={(e, value) => {
+                value ? navigate(`/song/${value._id}`) : "";
+              }}
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -192,8 +198,10 @@ export default function Navbar() {
       <main style={{ flex: "1" }}>
         <Outlet />
       </main>
-      <SignInModal openModal={isSignInModalOpen} setOpenModal={setIsSignInModalOpen} />
-
+      <SignInModal
+        openModal={isSignInModalOpen}
+        setOpenModal={setIsSignInModalOpen}
+      />
     </div>
   );
 }
