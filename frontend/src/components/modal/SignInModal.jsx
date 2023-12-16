@@ -17,11 +17,12 @@ import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
 
+
+
 export default function SignInModal({
                                         // eslint-disable-next-line react/prop-types
                                         openModal, setOpenModal,
-                                    })
-{
+                                    }) {
     const [userNameAndPassword, setUserNameAndPassword] = React.useState({
         username: "",
         password: "",
@@ -39,10 +40,10 @@ export default function SignInModal({
     };
     const onFailure = (response) => {
         // TODO:Handle Google sign-in response here
-        var accessToken = gapi.auth.getToken().access_token ;
-        console.log("Google sign in failure: ", response+accessToken);
+        var accessToken = gapi.auth.getToken().access_token;
+        console.log("Google sign in failure: ", response + accessToken);
     };
-return (
+    return (
         <div>
             <Modal
                 aria-labelledby="transition-modal-title"
@@ -73,7 +74,10 @@ return (
                         <Container>
                             <TextField
                                 value={userNameAndPassword.username}
-                                onChange={(e) => setUserNameAndPassword({ ...userNameAndPassword, username: e.target.value })}
+                                onChange={(e) => setUserNameAndPassword({
+                                    ...userNameAndPassword,
+                                    username: e.target.value
+                                })}
                                 label="Username"
                                 variant="outlined"
                                 margin="normal"
@@ -88,7 +92,10 @@ return (
                             />
                             <TextField
                                 value={userNameAndPassword.password}
-                                onChange={  (e) => setUserNameAndPassword({ ...userNameAndPassword, password: e.target.value})}
+                                onChange={(e) => setUserNameAndPassword({
+                                    ...userNameAndPassword,
+                                    password: e.target.value
+                                })}
                                 label="Password"
                                 variant="outlined"
                                 margin="normal"
@@ -119,22 +126,32 @@ return (
                             </Typography>
 
                             <GoogleLogin
-                                clientId="YOUR_GOOGLE_CLIENT_ID"
+                                //TODO:fix the .env here
+                                clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
                                 render={(renderProps) => (
-                                    <button
+                                    <Button
                                         onClick={renderProps.onClick}
                                         disabled={renderProps.disabled}
                                         className={css["googleButton"]}
+                                        fullWidth
+                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
                                         <img
                                             src="https://developers.google.com/identity/images/g-logo.png"
                                             alt="Google logo"
+                                            style={{
+                                                marginRight: '10px',
+                                                alignItems: 'center',
+                                                width: '20px',
+                                                height: '20px',
+                                                justifyContent: 'center'
+                                            }}
                                         />
                                         <span>Sign In with Google</span>
-                                    </button>
+                                    </Button>
                                 )}
                             />
                         </Container>

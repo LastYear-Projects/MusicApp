@@ -6,67 +6,44 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { useNavigate } from "react-router-dom";
 
-/*
-album_image,
-title,
-album,
-artist,
-genre [string, string],
-year,
-duration: 1000 = 1sec,
-price,
-numOfCommends,
-*/
-const defaultSong = {
-  album_image: "https://picsum.photos/200",
-  title: "Nana",
-  album: "Malibu",
-  artist: "Anderson, Paak",
-  genre: ["Rap", "Hip-Hop"],
-  year: 2016,
-  duration: 320000,
-  price: "39.49$",
-  numOfPurchases: 4,
-  numOfComments: 6,
-};
-
-export default function SongCard({ song = defaultSong }) {
-  const songDurationInSeconds = song.duration / 1000; //50000 -> 50sec -> 00:50
+export default function SongCard({
+  _id,
+  album_image,
+  title,
+  album,
+  artist,
+  genre,
+  year,
+  duration,
+  price,
+  numOfPurchases,
+  numOfComments,
+}) {
+  const songDurationInSeconds = duration / 1000; //50000 -> 50sec -> 00:50
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
   const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
   const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
     seconds > 9 ? seconds : "0" + seconds
   }`;
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
-        margin: "5rem",
+        // margin: "5rem",
         maxWidth: 295,
         borderRadius: "0.8rem",
         overflow: "hidden",
         backgroundColor: "#1A1A1A",
         transition: "background-color 0.3s, box-shadow 0.3s",
-        boxShadow: "0.25rem 0.25rem 0.5rem #2A2A2A",
         "&:hover": {
           backgroundColor: "#2A2A2A",
-          boxShadow: "0 0.5rem 1rem #2A2A2A",
         },
       }}
     >
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          image={song.album_image}
-          alt="Album Cover"
-          sx={
-            {
-              // objectFit: "contain",
-              // maxHeight: "11rem",
-              // marginTop: "1rem",
-            }
-          }
-        />
+      <CardActionArea onClick={() => navigate(`/song/${_id}`)}>
+        <CardMedia component="img" image={album_image} alt="Album Cover" />
         <CardContent>
           <Typography
             sx={{
@@ -78,7 +55,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="h5"
             component="div"
           >
-            {song.title}
+            {title}
           </Typography>
           <Typography
             sx={{
@@ -90,7 +67,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="body2"
             color="text.secondary"
           >
-            {song.album}
+            {album}
           </Typography>
           <Typography
             sx={{
@@ -102,7 +79,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="body2"
             color="text.secondary"
           >
-            {song.artist}
+            {artist}
           </Typography>
           <Typography
             sx={{
@@ -114,7 +91,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="body2"
             color="text.secondary"
           >
-            {song.genre.join(", ")}
+            {genre.join(", ")}
           </Typography>
           <Typography
             sx={{
@@ -126,7 +103,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="body2"
             color="text.secondary"
           >
-            {song.year}
+            {year}
           </Typography>
           <Typography
             sx={{ color: "#9A9A9A", fontWeight: 200, fontSize: "1rem" }}
@@ -140,7 +117,7 @@ export default function SongCard({ song = defaultSong }) {
             variant="body2"
             color="text.secondary"
           >
-            Price: {song.price}
+            Price: {price}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -157,14 +134,14 @@ export default function SongCard({ song = defaultSong }) {
           sx={{ color: "#9A9A9A" }}
           startIcon={<CommentIcon />}
         >
-          {song.numOfComments ? song.numOfComments : 0} Comments
+          {numOfComments ? numOfComments : 0} Comments
         </Button>
         <Button
           size="small"
           sx={{ color: "#9A9A9A" }}
           startIcon={<CloudDownloadIcon />}
         >
-          {song.numOfPurchases ? song.numOfPurchases : 0} Downloads
+          {numOfPurchases ? numOfPurchases : 0} Purchases
         </Button>
       </CardActions>
     </Card>
