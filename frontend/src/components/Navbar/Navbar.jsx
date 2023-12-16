@@ -30,9 +30,12 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
-  const {data} = useFetch("http://localhost:6969/songs");
-  const top100Films = data!=null? data.map((song) => song.title) : [];
-  
+  const { data } = useFetch("http://localhost:6969/songs");
+  const top100Films =
+    data != null
+      ? data.map((song) => ({ title: song.title, _id: song._id }))
+      : [];
+
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
@@ -48,8 +51,9 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSignInButtonClick = () => {setIsSignInModalOpen(true)};
-
+  const handleSignInButtonClick = () => {
+    setIsSignInModalOpen(true);
+  };
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -115,22 +119,27 @@ export default function Navbar() {
           }}
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography className={css["moozika-logo"]}
+            <Typography
+              className={css["moozika-logo"]}
               onClick={() => navigate("/")}
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-            <MoozikaLogo />
+              <MoozikaLogo />
             </Typography>
             <StyledAutocomplete
               disablePortal
               id="combo-box-demo"
               options={top100Films}
+              getOptionLabel={(option) => option.title}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Search..." />
               )}
+              onChange={(e, value) => {
+                value ? navigate(`/song/${value._id}`) : "";
+              }}
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -189,8 +198,10 @@ export default function Navbar() {
       <main style={{ flex: "1" }}>
         <Outlet />
       </main>
-      <SignInModal openModal={isSignInModalOpen} setOpenModal={setIsSignInModalOpen} />
-
+      <SignInModal
+        openModal={isSignInModalOpen}
+        setOpenModal={setIsSignInModalOpen}
+      />
     </div>
   );
 }
