@@ -20,8 +20,9 @@ const SongPage = () => {
     setIsLoading(false);
   };
   React.useEffect(() => {
+    setIsLoading(true);
     fetchSong();
-  }, []);
+  }, [id]);
 
   return (
     <Loader isLoading={isLoading}>
