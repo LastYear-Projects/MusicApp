@@ -8,7 +8,7 @@ const List = ({
   flexDirection = "rows",
 }) => {
   return (
-    <Grid container flexDirection={flexDirection}>
+    <Grid container flexDirection={flexDirection} justifyContent="center">
       {list.map((item) => {
         return (
           <Grid
