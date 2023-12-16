@@ -11,7 +11,7 @@ const HomePage = () => {
   } = useFetch("http://localhost:6969/songs");
   //TODO : send the data to context/redux, and handle error.
   return (
-    <Box paddingBottom="5rem">
+    <Box marginBottom="3.3rem">
       <Loader isLoading={isLoading}>
         <List list={songs} />
       </Loader>
