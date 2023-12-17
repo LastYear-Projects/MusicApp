@@ -16,16 +16,16 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const enumFields = [
-  { field: "SongTitle", placeholder: "Song Title", Icon: <UserOutlined /> },
+  { field: "Title", placeholder: "Song Title", Icon: <UserOutlined /> },
   { field: "AlbumName", placeholder: "Album Name", Icon: <UserOutlined /> },
-  { field: "Songartist", placeholder: "Song Artist", Icon: <UserOutlined /> },
+  { field: "artist", placeholder: "Song Artist", Icon: <UserOutlined /> },
   { field: "Year", placeholder: "Year", Icon: <CalendarMonthIcon /> },
   {
-    field: "SongDuration",
+    field: "Duration",
     placeholder: "Song Duration",
     Icon: <AvTimerIcon />,
   },
-  { field: "SongPrice", placeholder: "Song Price", Icon: <AttachMoneyIcon /> },
+  { field: "Price", placeholder: "Song Price", Icon: <AttachMoneyIcon /> },
   {
     field: "AlbumImageUrl",
     placeholder: "Album Image Url",
@@ -33,7 +33,7 @@ const enumFields = [
   },
   { field: "PreviewUrl", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
   {
-    field: "SongIdFromYoutube",
+    field: "IdFromYoutube",
     placeholder: "Song Id From Youtube",
     Icon: <YouTubeIcon />,
   },
@@ -42,7 +42,7 @@ const enumFields = [
     placeholder: "Number Of Purchases",
     Icon: <ShoppingBagIcon />,
   },
-  { field: "SongGenre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
+  { field: "Genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
 const AddSong = () => {
@@ -50,31 +50,31 @@ const AddSong = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
-    SongTitle: "",
+    Title: "",
     AlbumName: "",
-    Songartist: "",
+    artist: "",
     Year: "",
-    SongDuration: "",
-    SongPrice: "",
+    Duration: "",
+    Price: "",
     AlbumImageUrl: "",
     PreviewUrl: "",
-    SongIdFromYoutube: "",
+    IdFromYoutube: "",
     NumberOfPurchases: "",
-    SongGenre: "",
+    Genre: "",
   });
 
   const onSubmit = async () => {
     const requiredFields = [
       "AlbumName",
-      "Songartist",
+      "artist",
       "Year",
-      "SongDuration",
-      "SongPrice",
+      "Duration",
+      "Price",
       "AlbumImageUrl",
       "PreviewUrl",
-      "SongIdFromYoutube",
+      "IdFromYoutube",
       "NumberOfPurchases",
-      "SongGenre",
+      "Genre",
     ];
     const hasEmptyField = requiredFields.some((field) => !formData[field]);
 
@@ -82,6 +82,18 @@ const AddSong = () => {
       message.error("Please fill in all required fields");
       return;
     }
+
+    if (isNaN(formData.Duration)) {
+      message.error("Duration must be a number");
+      return;
+    }
+
+    const decimalNumberRegex = /^\d+(\.\d+)?$/;
+    if (!decimalNumberRegex.test(formData.Price)) {
+      message.error("Year must be a number");
+      return;
+    }
+
     setOpenModal(false);
   };
 
@@ -90,6 +102,7 @@ const AddSong = () => {
       ...prevData,
       [name]: value,
     }));
+    console.log(formData);
   };
 
   return (
