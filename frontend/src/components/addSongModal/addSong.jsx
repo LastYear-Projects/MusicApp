@@ -6,18 +6,43 @@ import { Form, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import AlbumIcon from "@mui/icons-material/Album";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import AvTimerIcon from "@mui/icons-material/AvTimer";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 const enumFields = [
-  "SongTitle",
-  "AlbumName",
-  "Songartist",
-  "Year",
-  "SongDuration",
-  "SongPrice",
-  "AlbumImageUrl",
-  "PreviewUrl",
-  "SongIdFromYoutube",
-  "NumberOfPurchases",
-  "SongGenre",
+  { field: "SongTitle", placeholder: "Song Title", Icon: <UserOutlined /> },
+  { field: "AlbumName", placeholder: "Album Name", Icon: <UserOutlined /> },
+  { field: "Songartist", placeholder: "Song Artist", Icon: <UserOutlined /> },
+  { field: "Year", placeholder: "Year", Icon: <CalendarMonthIcon /> },
+  {
+    field: "SongDuration",
+    placeholder: "Song Duration",
+    Icon: <AvTimerIcon />,
+  },
+  { field: "SongPrice", placeholder: "Song Price", Icon: <AttachMoneyIcon /> },
+  {
+    field: "AlbumImageUrl",
+    placeholder: "Album Image Url",
+    Icon: <AlbumIcon />,
+  },
+  { field: "PreviewUrl", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
+  {
+    field: "SongIdFromYoutube",
+    placeholder: "Song Id From Youtube",
+    Icon: <YouTubeIcon />,
+  },
+  {
+    field: "NumberOfPurchases",
+    placeholder: "Number Of Purchases",
+    Icon: <ShoppingBagIcon />,
+  },
+  { field: "SongGenre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
 const AddSong = () => {
@@ -40,7 +65,6 @@ const AddSong = () => {
 
   const onSubmit = async () => {
     const requiredFields = [
-      "SongTitle",
       "AlbumName",
       "Songartist",
       "Year",
@@ -77,16 +101,18 @@ const AddSong = () => {
         title="Add Song"
       >
         <Form onFinish={handleSubmit(onSubmit)}>
-          {enumFields.map((field) => {
+          {enumFields.map(({ field, placeholder, Icon }) => {
             return (
               <Form.Item
                 key={field}
                 name={field}
-                rules={[{ required: true, message: `Please input ${field}` }]}
+                rules={[
+                  { required: true, message: `Please input ${placeholder}` },
+                ]}
               >
                 <Input
-                  prefix={<UserOutlined />}
-                  placeholder={field}
+                  prefix={Icon}
+                  placeholder={placeholder}
                   {...register(field)}
                   onChange={(e) => handleInputChange(field, e.target.value)}
                 />
