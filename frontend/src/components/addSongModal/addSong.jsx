@@ -7,7 +7,6 @@ import { UserOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AlbumIcon from "@mui/icons-material/Album";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -20,7 +19,7 @@ const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
   { field: "album", placeholder: "Album Name", Icon: <UserOutlined /> },
   { field: "artist", placeholder: "Song Artist", Icon: <UserOutlined /> },
-  { field: "year", placeholder: "Year", Icon: <CalendarMonthIcon /> },
+  { field: "year", placeholder: "Release Date", Icon: <CalendarMonthIcon /> },
   {
     field: "duration",
     placeholder: "Song Duration",
