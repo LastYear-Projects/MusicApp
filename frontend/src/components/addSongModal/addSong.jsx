@@ -14,35 +14,31 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import axios from "axios";
 
 const enumFields = [
-  { field: "Title", placeholder: "Song Title", Icon: <UserOutlined /> },
-  { field: "AlbumName", placeholder: "Album Name", Icon: <UserOutlined /> },
+  { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
+  { field: "album", placeholder: "Album Name", Icon: <UserOutlined /> },
   { field: "artist", placeholder: "Song Artist", Icon: <UserOutlined /> },
-  { field: "Year", placeholder: "Year", Icon: <CalendarMonthIcon /> },
+  { field: "year", placeholder: "Year", Icon: <CalendarMonthIcon /> },
   {
-    field: "Duration",
+    field: "duration",
     placeholder: "Song Duration",
     Icon: <AvTimerIcon />,
   },
-  { field: "Price", placeholder: "Song Price", Icon: <AttachMoneyIcon /> },
+  { field: "price", placeholder: "Song Price", Icon: <AttachMoneyIcon /> },
   {
-    field: "AlbumImageUrl",
+    field: "album_image",
     placeholder: "Album Image Url",
     Icon: <AlbumIcon />,
   },
-  { field: "PreviewUrl", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
+  { field: "preview_url", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
   {
-    field: "IdFromYoutube",
+    field: "youtube_id",
     placeholder: "Song Id From Youtube",
     Icon: <YouTubeIcon />,
   },
-  {
-    field: "NumberOfPurchases",
-    placeholder: "Number Of Purchases",
-    Icon: <ShoppingBagIcon />,
-  },
-  { field: "Genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
+  { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
 const AddSong = () => {
@@ -50,31 +46,30 @@ const AddSong = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
-    Title: "",
-    AlbumName: "",
+    title: "",
+    album: "",
     artist: "",
-    Year: "",
-    Duration: "",
-    Price: "",
-    AlbumImageUrl: "",
-    PreviewUrl: "",
-    IdFromYoutube: "",
-    NumberOfPurchases: "",
-    Genre: "",
+    year: "",
+    duration: "",
+    price: "",
+    album_image: "",
+    preview_url: "",
+    youtube_id: "",
+    genre: "",
   });
 
   const onSubmit = async () => {
     const requiredFields = [
-      "AlbumName",
+      "title",
+      "album",
       "artist",
-      "Year",
-      "Duration",
-      "Price",
-      "AlbumImageUrl",
-      "PreviewUrl",
-      "IdFromYoutube",
-      "NumberOfPurchases",
-      "Genre",
+      "year",
+      "duration",
+      "price",
+      "album_image",
+      "preview_url",
+      "youtube_id",
+      "genre",
     ];
     const hasEmptyField = requiredFields.some((field) => !formData[field]);
 
@@ -83,17 +78,38 @@ const AddSong = () => {
       return;
     }
 
-    if (isNaN(formData.Duration)) {
+    if (isNaN(formData.duration)) {
       message.error("Duration must be a number");
       return;
     }
 
     const decimalNumberRegex = /^\d+(\.\d+)?$/;
-    if (!decimalNumberRegex.test(formData.Price)) {
-      message.error("Year must be a number");
+    if (!decimalNumberRegex.test(formData.price)) {
+      message.error("Price must be a number");
       return;
     }
 
+    const yearRegex = /^[0-9\/\.\-]+$/;
+    if (!yearRegex.test(formData.year)) {
+      message.error(
+        "Year must be a number with that format: 00/00/0000 or 00.00.0000"
+      );
+      return;
+    }
+
+    const lettersRegex = /^[a-zA-Z]+$/;
+    if (!lettersRegex.test(formData.genre)) {
+      message.error("Genre must contain only letters and commas");
+      return;
+    }
+
+    // const youtubeVideoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
+    // if (!youtubeVideoIdRegex.test(formData.youtube_id)) {
+    //   message.error("Youtube Id must be 11 characters long");
+    //   return;
+    // }
+
+    // await axios.post("http://localhost:6969/songs", formData);
     setOpenModal(false);
   };
 
@@ -119,7 +135,10 @@ const AddSong = () => {
                 key={field}
                 name={field}
                 rules={[
-                  { required: true, message: `Please input ${placeholder}` },
+                  {
+                    required: field === "preview_url" ? false : true,
+                    message: `Please input ${placeholder}`,
+                  },
                 ]}
               >
                 <Input
