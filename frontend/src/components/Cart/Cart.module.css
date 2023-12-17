@@ -1,5 +1,8 @@
 .cartText{
 color: white;
+display: flex;
+justify-content: space-between;
+margin-top: 0.5rem;
 }
 .total{
     color:white;
@@ -10,9 +13,7 @@ color: white;
     margin-top: 1rem;
 }
 .checkoutButton{
-    margin-top: 3rem;
-    margin-left: 0.5rem;
-    margin-right:0.5rem;
+    margin: 2rem 0.5rem 2rem 0.5rem;
     border-radius: 10px;
     outline: white;
 }
