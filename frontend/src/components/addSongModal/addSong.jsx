@@ -102,7 +102,6 @@ const AddSong = () => {
       ...prevData,
       [name]: value,
     }));
-    console.log(formData);
   };
 
   return (
