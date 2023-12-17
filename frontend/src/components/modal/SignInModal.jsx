@@ -17,6 +17,7 @@ import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
 import axios from "axios";
+import {message} from "antd";
 
 
 
@@ -30,8 +31,6 @@ export default function SignInModal({
     });
 
     const handleSignIn =async () => {
-        // console.log("username: ", userNameAndPassword.email + " password: ", userNameAndPassword.password);
-
         await axios.post(
             "http://localhost:6969/auth/login",
             {
@@ -51,10 +50,11 @@ export default function SignInModal({
     const onSuccess = (response) => {
         console.log("Google sign in success: ", response.accessToken);
         localStorage.setItem("moozikaToken", response.accessToken);
+        message.success("Google sign in success");
         setOpenModal(false);
     };
     const onFailure = (response) => {
-        // TODO:Handle Google sign-in response here
+        message.failure("Google sign in failure"+response)
         console.log("Google sign in failure:", response);
     };
     return (
