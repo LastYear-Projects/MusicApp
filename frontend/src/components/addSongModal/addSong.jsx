@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TransitionsModal from "../modal/modal";
-import { Box, Button } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
 
 import { Form, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -14,6 +14,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -42,6 +43,8 @@ const enumFields = [
 
 const AddSong = ({ openModal, setOpenModal }) => {
   const { register, handleSubmit } = useForm();
+  const [successfullyMessage, setSuccessfullyMessage] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     album: "",
@@ -100,13 +103,17 @@ const AddSong = ({ openModal, setOpenModal }) => {
       return;
     }
 
-    // const youtubeVideoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-    // if (!youtubeVideoIdRegex.test(formData.youtube_id)) {
-    //   message.error("Youtube Id must be 11 characters long");
-    //   return;
-    // }
+    const youtubeVideoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
+    if (!youtubeVideoIdRegex.test(formData.youtube_id)) {
+      message.error("Youtube Id must be 11 characters long");
+      return;
+    }
 
     // await axios.post("http://localhost:6969/songs", formData);
+    setSuccessfullyMessage(true);
+    setTimeout(() => {
+      navigate("/profile");
+    }, 1500);
     setOpenModal(false);
   };
 
@@ -146,7 +153,6 @@ const AddSong = ({ openModal, setOpenModal }) => {
               </Form.Item>
             );
           })}
-
           <Form.Item>
             <Button
               type="primary"
@@ -164,6 +170,17 @@ const AddSong = ({ openModal, setOpenModal }) => {
           </Form.Item>
         </Form>
       </TransitionsModal>
+      {successfullyMessage && (
+        <Snackbar
+          open={open}
+          autoHideDuration={1000}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Song was successfully added, redirecting to profile page...
+          </Alert>
+        </Snackbar>
+      )}
     </Box>
   );
 };
