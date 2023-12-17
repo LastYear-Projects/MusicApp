@@ -40,10 +40,8 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = () => {
+const AddSong = ({ openModal, setOpenModal }) => {
   const { register, handleSubmit } = useForm();
-
-  const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     album: "",
@@ -121,7 +119,6 @@ const AddSong = () => {
 
   return (
     <Box>
-      <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
       <TransitionsModal
         openModal={openModal}
         setOpenModal={setOpenModal}

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React from "react";
 import useFetch from "../../hooks/useFetch";
 import List from "../../components/list/List";
@@ -18,7 +18,23 @@ const HomePage = () => {
   //     </Loader>
   //   </Box>
   // );
-  return <AddSong />;
+  const [openAddSongModal, setOpenAddSongModal] = React.useState(false);
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpenAddSongModal(true);
+        }}
+      >
+        Add Song
+      </Button>
+
+      <AddSong
+        openModal={openAddSongModal}
+        setOpenModal={setOpenAddSongModal}
+      />
+    </>
+  );
 };
 
 export default HomePage;
