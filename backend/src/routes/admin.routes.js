@@ -6,18 +6,18 @@ const songController = require('../controllers/songs.controller');
 const validations = require('../validations/index')
 
 router
-    .post('/users/', validations.checkToken, validations.adminAuth, userController.getAllUsers)
-    .put('/users/:userId', validations.checkToken, validations.adminAuth, validations.updatedUserAuth, userController.updateUser)
-    .delete('/users/:userId', validations.checkToken, validations.adminAuth, userController.deleteUser)
+    .post('/users/', validations.checkToken, validations.adminAuth, userController.getAllUsers) //TODO:LO MEANYEN
+    .put('/users/:userId', validations.checkToken, validations.updatedUserAuth, userController.updateUser)
+    .delete('/users/:userId', validations.checkToken, userController.deleteUser)
 
-    .post('/songs/', validations.checkToken, validations.adminAuth, songController.getAllSongs)
-    .post('/songs/create', validations.checkToken, validations.adminAuth, songController.createSong)
-    .put('/songs/:songId', validations.checkToken, validations.adminAuth, songController.updateSong)
-    .delete('/songs/:songId', validations.checkToken, validations.adminAuth, songController.deleteSong)
+    .post('/songs/', validations.checkToken, validations.adminAuth, songController.getAllSongs) //TODO:LO MEANYEN
+    .post('/songs/create', validations.checkToken, songController.createSong)
+    .put('/songs/:songId', validations.checkToken, validations.songCreatorAuth, songController.updateSong) //TODO:songCreatorAuth
+    .delete('/songs/:songId', validations.checkToken, validations.songCreatorAuth, songController.deleteSong) //TODO:songCreatorAuth
 
-    .post('/orders/', validations.checkToken, validations.adminAuth, orderController.getAllOrders)
-    .put('/orders/:orderId', validations.checkToken, validations.adminAuth, orderController.updateOrder)
-    .delete('/orders/:orderId', validations.checkToken, validations.adminAuth, orderController.deleteOrder)
+    .post('/orders/', validations.checkToken, validations.adminAuth, orderController.getAllOrders) //TODO:LO MEANYEN
+    .put('/orders/:orderId', validations.checkToken, validations.adminAuth, orderController.updateOrder) //TODO:LO MEANYEN
+    .delete('/orders/:orderId', validations.checkToken, validations.adminAuth, orderController.deleteOrder) //TODO:LO MEANYEN
 
 
 module.exports = router;

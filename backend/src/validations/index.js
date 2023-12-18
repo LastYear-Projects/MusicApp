@@ -39,9 +39,7 @@ const registerAuth = (req, res, next) =>{
     next();
 }
 
-const logoutAuth = (req, res, next) =>{
-    
-}
+
 
 //checks if the user has filled all the fields correctly
 const updatedUserAuth = (req, res, next) =>{
@@ -76,12 +74,21 @@ const adminAuth = (req, res, next) =>{
     next();
 }
 
+//checks if the user is the song creator
+const songCreatorAuth = (req, res, next) =>{
+    const {token,song} = req.body;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    if(decodedToken.id !== song.creator){
+        return res.status(403).json({message: "You must be the song creator to access this resource"});
+    }
+    next();
+}
 
 
 module.exports = {
     checkToken,
     registerAuth,
-    logoutAuth,
     adminAuth,
-    updatedUserAuth
+    updatedUserAuth,
+    songCreatorAuth
 }
