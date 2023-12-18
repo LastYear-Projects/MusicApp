@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
-import Comment from "../../components/comment/Comment";
 import List from "../../components/list/List";
 
 const SongPage = () => {
