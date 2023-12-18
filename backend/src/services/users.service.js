@@ -8,12 +8,9 @@ const getAllUsers = async () => {
 const getUserById = async (id) => {
     if (id) {
         try{
-            const user = await User.findById(id).populate({
-                path: 'orders',
-                populate: {
+            const user = await User.findById(id).select("-password").populate({
                   path: 'songs',
                   model: 'song'
-                }
             });
             if(user){
                 return user;
@@ -27,7 +24,7 @@ const getUserById = async (id) => {
     throw new Error('Id is required');
 }
 
-const getUserByName = async (name) => {
+const getUserByName = async (name) => { //todo: check if needed
     if (name) {
         try{
             const user = await User.findOne({name});
@@ -70,12 +67,7 @@ const createUser = async (user) => {
                 throw new Error('Email already exists');
             }
             //const id = (email+name).replace(/\s/g, '_');
-            const newUser = new User({
-                //_id: id,
-                name,
-                email,
-                password
-            })
+            const newUser = new User({...user})
             await newUser.save();
             return newUser;
         }
@@ -112,30 +104,7 @@ const updateUser = async (id, newUser) => {
         }
     }
     throw new Error('Id and new user are required');
-    // const {name, email, password} = newUser;
-    // if (id) {
-    //     try{
-    //         const user = await User.findById(id);
-    //         if(user){
-    //             if(name){
-    //                 user.name = name;
-    //             }
-    //             if(email){
-    //                 user.email = email;
-    //             }
-    //             if(password){
-    //                 user.password = password;
-    //             }
-    //             await user.save();
-    //             return user;
-    //         }
-    //         throw new Error('User not found');
-    //     }
-    //     catch(error){
-    //         throw new Error(error.message)
-    //     }
-    // }
-    // throw new Error('Id is required');
+   
 }
 
 const addOrderToUser = async (id, orderID) => {
@@ -163,7 +132,7 @@ const addSongsToUser = async (id, songs) => {
                 for(let i = 0; i < songs.length; i++){
                     user.songs.push(songs[i]);
                 }
-                updateUser(id, user);
+                await updateUser(id, user);
                 return user;
             }
             throw new Error('User not found');
