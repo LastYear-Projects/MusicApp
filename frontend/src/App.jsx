@@ -18,6 +18,7 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import { gapi } from "gapi-script";
 
 const routes = [
   { path: "/", element: <HomePage /> },
@@ -28,6 +29,13 @@ const routes = [
   { path: "*", element: <NotFoundPage /> },
 ];
 
+gapi.load("client:auth2", () => {
+    gapi.client.init({
+        clientId:import.meta.env.VITE_APP_GOOGLE_CLIENT_ID,
+        //TODO:check what is the chat for
+        plugin_name: "chat",
+    });
+});
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
