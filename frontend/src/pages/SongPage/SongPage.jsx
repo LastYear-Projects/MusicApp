@@ -5,6 +5,7 @@ import axios from "axios";
 import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
+import Comment from "../../components/comment/Comment";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -14,8 +15,11 @@ const SongPage = () => {
 
   const fetchSong = async () => {
     const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
+    const { data: comments } = await axios.get(
+      `http://localhost:6969/comments/song/${id}`
+    );
     setSong(data);
-    setComments(data.comments);
+    setComments(comments.comments);
     setIsLoading(false);
   };
   React.useEffect(() => {
@@ -52,7 +56,11 @@ const SongPage = () => {
             marginBottom="5rem"
           >
             {comments.length > 0 ? (
-              <List {...comments} />
+              <List
+                list={comments}
+                CardComponent={Comment}
+                flexDirection="column"
+              />
             ) : (
               <Typography variant="h6" textAlign={"center"}>
                 No comments yet

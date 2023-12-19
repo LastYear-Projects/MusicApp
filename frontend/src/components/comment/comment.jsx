@@ -1,11 +1,11 @@
 import React from "react";
 import { Avatar, Typography, Box, Paper, Button } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 const Comment = ({
-  profile_image = "https://picsum.photos/200",
-  username = "username",
-  comment = "esttesttesttesttesttesttesttsttestt",
-  date = "25.10.2023",
+  comment = "Test Comment",
+  date = "00.00.0000",
+  user: { name = "name", profile_image = "https://picsum.photos/200" },
 }) => {
   return (
     <Paper
@@ -24,7 +24,7 @@ const Comment = ({
           <Avatar src={profile_image} alt="Avatar" />
           <Box marginLeft="1rem">
             <Typography variant="subtitle1" fontWeight="bold">
-              {username}
+              {name}
             </Typography>
             <Typography variant="body1">{comment}</Typography>
           </Box>

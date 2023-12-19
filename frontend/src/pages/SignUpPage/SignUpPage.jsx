@@ -3,7 +3,6 @@ import { Form, Input, DatePicker, Upload, Button, message } from "antd";
 import { UserOutlined, InboxOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import styles from "./styles.module.css";
 const { Dragger } = Upload;
 
 const Signup = () => {
