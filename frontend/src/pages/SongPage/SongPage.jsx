@@ -15,61 +15,64 @@ const SongPage = () => {
   const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
 
   const fetchSong = async () => {
-    const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
-    // const { data: comments } = await axios.get(
-    //   `http://localhost:6969/comments/song/${id}`
-    // );
-    setSong(data);
-    // setComments(comments.comments);
-    setIsLoading(false);
-    // setIsCommentsLoading(false);
+    try {
+      const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
+      setSong(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching song:", error);
+      setIsLoading(false);
+    }
   };
-  React.useEffect(() => {
-    setIsLoading(true);
-    fetchSong();
-  }, []);
 
   const fetchComments = async () => {
-    const { data: comments } = await axios.get(
-      `http://localhost:6969/comments/song/${id}`
-    );
-    setComments(comments.comments);
-    setIsCommentsLoading(false);
+    try {
+      const { data: fetchedComments } = await axios.get(
+        `http://localhost:6969/comments/song/${id}`
+      );
+      setComments(fetchedComments.comments);
+      setIsCommentsLoading(false);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      setIsCommentsLoading(false);
+    }
   };
 
   const removeComment = async (id) => {
     setIsCommentsLoading(true);
-    await axios.delete(`http://localhost:6969/comments/${id}`);
-    setComments((prev) => prev.filter((comment) => comment._id !== id));
-    setIsCommentsLoading(false);
+    try {
+      await axios.delete(`http://localhost:6969/comments/${id}`);
+      setComments((prev) => prev.filter((comment) => comment._id !== id));
+    } catch (error) {
+      console.error("Error removing comment:", error);
+    } finally {
+      setIsCommentsLoading(false);
+    }
   };
 
   const editComment = async (id, editedComment) => {
     try {
       console.log("HERE: ", id, editedComment);
-      await axios
-        .put(`http://localhost:6969/comments/${id}`, {
-          comment: editedComment,
-        })
-        .then((res) => {
-          console.log("RES: ", res.data);
-          setComments((prev) =>
-            prev.map((comment) => {
-              if (comment._id === id) {
-                return res.data;
-              }
-              return comment;
-            })
-          );
-        });
+      setIsCommentsLoading(true);
+      const { data } = await axios.put(`http://localhost:6969/comments/${id}`, {
+        comment: editedComment,
+      });
+
+      setComments((prev) =>
+        prev.map((comment) => (comment._id === id ? data : comment))
+      );
+
+      fetchComments();
     } catch (error) {
       console.error("Error editing comment:", error);
     }
   };
 
   React.useEffect(() => {
+    setIsLoading(true);
+    fetchSong();
     fetchComments();
-  }, [comments]);
+  }, []);
 
   return (
     <Loader isLoading={isLoading}>
