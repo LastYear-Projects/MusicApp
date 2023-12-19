@@ -12,6 +12,7 @@ const SongPage = () => {
   const [song, setSong] = React.useState({});
   const [comments, setComments] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
 
   const fetchSong = async () => {
     const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
@@ -21,11 +22,19 @@ const SongPage = () => {
     setSong(data);
     setComments(comments.comments);
     setIsLoading(false);
+    setIsCommentsLoading(false);
   };
   React.useEffect(() => {
     setIsLoading(true);
     fetchSong();
-  }, [id]);
+  }, []);
+
+  const removeComment = async (id) => {
+    setIsCommentsLoading(true);
+    await axios.delete(`http://localhost:6969/comments/${id}`);
+    setComments((prev) => prev.filter((comment) => comment._id !== id));
+    setIsCommentsLoading(false);
+  };
 
   return (
     <Loader isLoading={isLoading}>
@@ -55,17 +64,20 @@ const SongPage = () => {
             marginTop="2rem"
             marginBottom="5rem"
           >
-            {comments.length > 0 ? (
-              <List
-                list={comments}
-                CardComponent={Comment}
-                flexDirection="column"
-              />
-            ) : (
-              <Typography variant="h6" textAlign={"center"}>
-                No comments yet
-              </Typography>
-            )}
+            <Loader isLoading={isCommentsLoading}>
+              {comments.length > 0 ? (
+                <List
+                  list={comments}
+                  CardComponent={Comment}
+                  flexDirection="column"
+                  func={removeComment}
+                />
+              ) : (
+                <Typography variant="h6" textAlign={"center"}>
+                  No comments yet
+                </Typography>
+              )}
+            </Loader>
           </Box>
         </Box>
       </Box>

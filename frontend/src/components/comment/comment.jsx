@@ -1,10 +1,12 @@
 import React from "react";
 import { Avatar, Typography, Box, Paper, Button } from "@mui/material";
-import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Comment = ({
   comment = "Test Comment",
   date = "00.00.0000",
+  _id = "0",
+  func: removeComment,
   user: { name = "name", profile_image = "https://picsum.photos/200" },
 }) => {
   return (
@@ -31,7 +33,12 @@ const Comment = ({
         </Box>
 
         <Box display="flex" alignItems="center" marginTop={1}>
-          <Button size="small" variant="text" color="error" onClick={() => {}}>
+          <Button
+            size="small"
+            variant="text"
+            color="error"
+            onClick={() => removeComment(_id)}
+          >
             Remove
           </Button>
           <Typography variant="caption" color="textSecondary" marginLeft="auto">
