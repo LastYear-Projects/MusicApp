@@ -52,7 +52,6 @@ const SongPage = () => {
 
   const editComment = async (id, editedComment) => {
     try {
-      console.log("HERE: ", id, editedComment);
       setIsCommentsLoading(true);
       const { data } = await axios.put(`http://localhost:6969/comments/${id}`, {
         comment: editedComment,
