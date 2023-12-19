@@ -16,6 +16,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import css from "./style.module.css";
 import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
+import axios from "axios";
+import {message} from "antd";
 
 
 
@@ -24,24 +26,36 @@ export default function SignInModal({
                                         openModal, setOpenModal,
                                     }) {
     const [userNameAndPassword, setUserNameAndPassword] = React.useState({
-        username: "",
+        email: "",
         password: "",
     });
 
-    const handleSignIn = () => {
-        console.log("username: ", userNameAndPassword.username + " password: ", userNameAndPassword.password);
-        //TODO: sent it later to server
+    const handleSignIn =async () => {
+        await axios.post(
+            "http://localhost:6969/auth/login",
+            {
+                email: userNameAndPassword.email,
+                password: userNameAndPassword.password
+            })
+            .then((userToken) =>
+                {
+                    console.log("userToken: ", userToken.data.token)
+                    localStorage.setItem("moozikaToken", userToken.data.token);
+                })
+            .catch((err) =>
+                {console.log("error: ", err.response.data)});
+
         setOpenModal(false);
     };
     const onSuccess = (response) => {
-        // TODO:Handle Google sign-in response here
-        console.log("Google sign in success: ", response);
+        console.log("Google sign in success: ", response.accessToken);
+        localStorage.setItem("moozikaToken", response.accessToken);
+        message.success("Google sign in success");
         setOpenModal(false);
     };
     const onFailure = (response) => {
-        // TODO:Handle Google sign-in response here
-        var accessToken = gapi.auth.getToken().access_token;
-        console.log("Google sign in failure: ", response + accessToken);
+        message.failure("Google sign in failure"+response)
+        console.log("Google sign in failure:", response);
     };
     return (
         <div>
@@ -73,10 +87,10 @@ export default function SignInModal({
                         </Typography>
                         <Container>
                             <TextField
-                                value={userNameAndPassword.username}
+                                value={userNameAndPassword.email}
                                 onChange={(e) => setUserNameAndPassword({
                                     ...userNameAndPassword,
-                                    username: e.target.value
+                                    email: e.target.value
                                 })}
                                 label="Username"
                                 variant="outlined"
@@ -126,11 +140,13 @@ export default function SignInModal({
                             </Typography>
 
                             <GoogleLogin
-                                //TODO:fix the .env here
                                 clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
+                                // cookiePolicy="none"
+                                className={css["googleButton"]}
+
                                 render={(renderProps) => (
                                     <Button
                                         onClick={renderProps.onClick}

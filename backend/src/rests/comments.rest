@@ -1,0 +1,16 @@
+###
+
+POST http://localhost:6969/comments/
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1N2NiYWVhOWU5Yzk0MDI2Y2RjMTUyZiIsImlhdCI6MTcwMjkzNzU0MywiZXhwIjoxNzM0NDczNTQzfQ.hNElD9eHhpjun6qYg8qjCp45MrJ90eL0dECkG7gTS7M",
+    "comment": "test comment",
+    "songId": "6580c547d7d1d0dcafa1fcb2"
+    
+}
+
+
+###
+GET http://localhost:6969/comments/song/6580c547d7d1d0dcafa1fcb2
+

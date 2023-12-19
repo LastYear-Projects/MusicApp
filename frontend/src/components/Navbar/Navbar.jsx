@@ -74,38 +74,60 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={() => navigate("/cart")}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
-        <p>Cart</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-      <MenuItem onClick={() => {}}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <LogoutIcon />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem>
+      {isLoggedIn && (
+        <>
+          <MenuItem onClick={() => navigate("/cart")}>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} color="error">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+            <p>Cart</p>
+          </MenuItem>
+          <MenuItem onClick={handleProfileMenuOpen}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+          <MenuItem onClick = {()=> setIsLoggedIn(false)}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <LogoutIcon />
+            </IconButton>
+            <p>Logout</p>
+          </MenuItem>
+        </>
+      )}
+
+      {!isLoggedIn && (
+        <MenuItem onClick={handleSignInButtonClick}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <Typography>Login</Typography>
+          </IconButton>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -171,13 +193,18 @@ export default function Navbar() {
                   aria-controls={menuId}
                   aria-haspopup="true"
                   color="inherit"
-                  onClick={handleSignInButtonClick}
+                  onClick = {()=> setIsLoggedIn(false)}
                 >
-                  <Typography>SignIn</Typography>
+                  <Typography>Logout</Typography>
                 </IconButton>
               </Box>
             ) : (
-              <MenuItem onClick={() => {}}>Login</MenuItem>
+              <MenuItem
+                onClick={handleSignInButtonClick}
+                sx={{ display: { xs: "none", md: "flex" } }}
+              >
+                Login
+              </MenuItem>
             )}
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton

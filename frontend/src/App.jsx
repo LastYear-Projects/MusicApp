@@ -8,7 +8,6 @@ import {
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/footer/Footer";
 
@@ -18,6 +17,7 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import { gapi } from "gapi-script";
 
 const routes = [
   { path: "/", element: <HomePage /> },
@@ -28,13 +28,22 @@ const routes = [
   { path: "*", element: <NotFoundPage /> },
 ];
 
+gapi.load("client:auth2", () => {
+  gapi.client.init({
+    clientId: import.meta.env.VITE_APP_GOOGLE_CLIENT_ID,
+    //TODO:check what is the chat for
+    plugin_name: "chat",
+  });
+});
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Navbar />}>
-        {routes.map(({ path, element }) => {
-          return <Route key={path} path={path} element={element} />;
-        })}
+        <Route path="/" element={<Footer />}>
+          {routes.map(({ path, element }) => {
+            return <Route key={path} path={path} element={element} />;
+          })}
+        </Route>
       </Route>
     </>
   )
@@ -48,9 +57,7 @@ function App() {
       >
         <div style={{ flex: 1 }}>
           <RouterProvider router={router} />
-         
         </div>
-        <Footer />
       </div>
     </QueryClientProvider>
   );

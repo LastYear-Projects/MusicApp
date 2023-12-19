@@ -1,6 +1,6 @@
 const songService = require('../services/songs.service');
 const curl = require('curl');
-
+const jwt = require('jsonwebtoken');
 
 const getAllSongs = async (req, res) => {
     try {
@@ -74,14 +74,15 @@ const getSongById = async (req, res) => {
 
 const createSong = async (req, res) => {
     try {
-        const { song } = req.body;
+        const { song, token } = req.body; //TODO: add the creator ID from the token
         const genres = [...song.genre];
         const duration = song.duration;
         const price = song.price;
+        const creatorID = jwt.decode(token).id;
         //check with regex that the price doesnt contain letters (point is allowed)
         const reg = new RegExp('^[0-9]+(\.[0-9]+)?');
-        if (!reg.test(price)) return res.status(500).json({ message: "Price must be a number" });
-        if (song.price < 0) return res.status(500).json({ message: "Price cannot be negative" });
+        if (price && !reg.test(price)) return res.status(500).json({ message: "Price must be a number" });
+        if (price &&price  < 0) return res.status(500).json({ message: "Price cannot be negative" });
         if (duration < 0) return res.status(500).json({ message: "Duration cannot be negative" });
         const titleCaseGenres = genres.map(genre => {
             let myGenre = genre.split(' ');
@@ -92,6 +93,7 @@ const createSong = async (req, res) => {
             return myGenre.join('-');
         });
         song.genre = titleCaseGenres;
+        song.creator = creatorID;
         const newSong = await songService.createSong(song);
         res.status(201).json(newSong);
     } catch (error) {
