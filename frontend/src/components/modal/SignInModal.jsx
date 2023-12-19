@@ -140,6 +140,7 @@ export default function SignInModal({
                             </Typography>
 
                             <GoogleLogin
+                                //TODO:fix the .env here
                                 clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
