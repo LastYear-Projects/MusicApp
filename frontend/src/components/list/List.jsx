@@ -5,6 +5,7 @@ import DefaultCard from "../songCard/songCard";
 const List = ({
   list,
   func = () => {},
+  testFunc = () => {},
   CardComponent = DefaultCard,
   flexDirection = "rows",
 }) => {
@@ -21,7 +22,7 @@ const List = ({
               }}
               key={item}
             >
-              <CardComponent {...item} func={func} />
+              <CardComponent {...item} func={func} editFunc={testFunc} />
             </Grid>
           );
         })}

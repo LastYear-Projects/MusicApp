@@ -1,5 +1,12 @@
 import React from "react";
-import { Avatar, Typography, Box, Paper, Button } from "@mui/material";
+import {
+  Avatar,
+  Typography,
+  Box,
+  Paper,
+  Button,
+  TextField,
+} from "@mui/material";
 import axios from "axios";
 
 const Comment = ({
@@ -7,8 +14,33 @@ const Comment = ({
   date = "00.00.0000",
   _id = "0",
   func: removeComment,
+  editFunc: editComment,
   user: { name = "name", profile_image = "https://picsum.photos/200" },
 }) => {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editedComment, setEditedComment] = React.useState("");
+
+  const validateUser = async () => {
+    console.log("Hereeee");
+    const userToken = localStorage.getItem("userToken");
+    console.log(userToken);
+    const { data } = await axios.get(
+      `http://localhost:6969/users/user-details/`,
+      userToken
+    );
+    console.log("data0", data);
+
+    // if (data.user_id === userToken.id) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+  };
+
+  React.useEffect(() => {
+    validateUser();
+  }, []);
+
   return (
     <Paper
       elevation={3}
@@ -28,7 +60,16 @@ const Comment = ({
             <Typography variant="subtitle1" fontWeight="bold">
               {name}
             </Typography>
-            <Typography variant="body1">{comment}</Typography>
+
+            {isEditing ? (
+              <TextField
+                value={editedComment}
+                onChange={(e) => setEditedComment(e.target.value)}
+                fullWidth
+              />
+            ) : (
+              <Typography variant="body1">{comment}</Typography>
+            )}
           </Box>
         </Box>
 
@@ -41,6 +82,28 @@ const Comment = ({
           >
             Remove
           </Button>
+          {isEditing ? (
+            <Button
+              size="small"
+              variant="text"
+              color="primary"
+              onClick={() => {
+                editComment(_id, editedComment);
+                setIsEditing(false);
+              }}
+            >
+              Save
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              variant="text"
+              color="primary"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </Button>
+          )}
           <Typography variant="caption" color="textSecondary" marginLeft="auto">
             {date}
           </Typography>
