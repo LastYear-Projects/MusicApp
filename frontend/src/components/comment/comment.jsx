@@ -10,15 +10,15 @@ import {
 import axios from "axios";
 
 const Comment = ({
-  comment = "Test Comment",
-  date = "00.00.0000",
-  _id = "0",
+  comment,
+  date,
+  _id,
   func: removeComment,
   editFunc: editComment,
-  user: { name = "name", profile_image = "https://picsum.photos/200" },
+  user: { name, profile_image },
 }) => {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [editedComment, setEditedComment] = React.useState("");
+  const [editedComment, setEditedComment] = React.useState(comment);
 
   const validateUser = async () => {
     console.log("Hereeee");
