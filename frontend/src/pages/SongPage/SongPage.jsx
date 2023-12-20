@@ -119,7 +119,7 @@ const SongPage = () => {
                 </Typography>
               )}
               {userToken && (
-                <Form>
+                <Form style={{ marginTop: "1rem" }}>
                   <Form.Item>
                     <textarea
                       placeholder="Add a comment..."
