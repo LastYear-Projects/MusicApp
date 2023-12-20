@@ -20,7 +20,6 @@ import axios from "axios";
 import {message} from "antd";
 
 
-
 export default function SignInModal({
                                         // eslint-disable-next-line react/prop-types
                                         openModal, setOpenModal,
@@ -30,20 +29,25 @@ export default function SignInModal({
         password: "",
     });
 
-    const handleSignIn =async () => {
+    const handleSignIn = async () => {
         await axios.post(
             "http://localhost:6969/auth/login",
             {
                 email: userNameAndPassword.email,
                 password: userNameAndPassword.password
             })
-            .then((userToken) =>
-                {
-                    console.log("userToken: ", userToken.data.token)
-                    localStorage.setItem("moozikaToken", userToken.data.token);
-                })
-            .catch((err) =>
-                {console.log("error: ", err.response.data)});
+            .then((userToken) => {
+                console.log("userToken: ", userToken.data.token)
+                localStorage.setItem("moozikaToken", userToken.data.token);
+                message.success("Sign in success");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            })
+            .catch((err) => {
+                message.error("Sign in failed - wrong Email or password");
+                console.log("error: ", err.response.data)
+            });
 
         setOpenModal(false);
     };
@@ -53,10 +57,12 @@ export default function SignInModal({
         message.success("Google sign in success");
         setOpenModal(false);
 
-        setTimeout(()=>{window.location.reload()},2500);
+        setTimeout(() => {
+            window.location.reload()
+        }, 2500);
     };
     const onFailure = (response) => {
-        message.failure("Google sign in failure"+response)
+        message.failure("Google sign in failure" + response)
         console.log("Google sign in failure:", response);
     };
     return (
@@ -142,7 +148,6 @@ export default function SignInModal({
                             </Typography>
 
                             <GoogleLogin
-                                //TODO:fix the .env here
                                 clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
@@ -156,7 +161,7 @@ export default function SignInModal({
                                         disabled={renderProps.disabled}
                                         className={css["googleButton"]}
                                         fullWidth
-                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
                                     >
                                         <img
                                             src="https://developers.google.com/identity/images/g-logo.png"
