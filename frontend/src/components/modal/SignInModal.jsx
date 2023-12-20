@@ -18,6 +18,7 @@ import {modalStyle} from "../../constants";
 import {GoogleLogin} from "react-google-login";
 import axios from "axios";
 import {message} from "antd";
+import {gapi} from "gapi-script";
 
 
 export default function SignInModal({
@@ -51,15 +52,35 @@ export default function SignInModal({
 
         setOpenModal(false);
     };
-    const onSuccess = (response) => {
+    const onSuccessFromGoogle = async (response) => {
+
         console.log("Google sign in success: ", response.accessToken);
-        localStorage.setItem("moozikaToken", response.accessToken);
+        // localStorage.setItem("moozikaToken", response.accessToken);
         message.success("Google sign in success");
         setOpenModal(false);
 
-        setTimeout(() => {
-            window.location.reload()
-        }, 2500);
+
+        // Get user details from Google API
+        const googleResponse = await axios.get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json", {
+            headers: {
+                Authorization: `Bearer ${response.accessToken}`,},
+        });
+
+        const userData = await googleResponse.data;
+
+        // Now you have additional user information in the `userData` object
+        const { email, name, picture } = userData;
+        console.log("User details:", email, name, picture);
+
+        await axios.post("http://localhost:6969/auth/google-login", {name: userData.name, email: userData.email, profile_image: userData.picture})
+            .then((res) => {
+                console.log("res token1: ", res)
+                console.log("res token2: ", res.data)
+                console.log("res token3: ", res.data.token)
+                localStorage.setItem("moozikaToken", res.data.token)
+            }
+            )
+            .catch((err) => {console.log("err: ", err.response.data)})
     };
     const onFailure = (response) => {
         message.failure("Google sign in failure" + response)
@@ -149,7 +170,7 @@ export default function SignInModal({
 
                             <GoogleLogin
                                 clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}
-                                onSuccess={onSuccess}
+                                onSuccess={onSuccessFromGoogle}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
                                 // cookiePolicy="none"
