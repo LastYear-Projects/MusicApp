@@ -6,6 +6,7 @@ import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
 import Comment from "../../components/comment/Comment";
+import { Button, Form } from "antd";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ const SongPage = () => {
   const [comments, setComments] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
+  const [newComment, setNewComment] = React.useState("");
+  const userToken = localStorage.getItem("moozikaToken");
 
   const fetchSong = async () => {
     try {
@@ -114,6 +117,56 @@ const SongPage = () => {
                 <Typography variant="h6" textAlign={"center"}>
                   No comments yet
                 </Typography>
+              )}
+              {userToken && (
+                <Form>
+                  <Form.Item>
+                    <textarea
+                      placeholder="Add a comment..."
+                      style={{
+                        width: "100%",
+                        border: "1px solid #ccc",
+                        borderRadius: "8px",
+                        padding: "1rem",
+                        resize: "none",
+                        height: "100px",
+                        outline: "none",
+                      }}
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                    />
+                  </Form.Item>
+                  <Box
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex"
+                  >
+                    <Form.Item>
+                      <Button
+                        textAlign={"center"}
+                        type="primary"
+                        htmlType="submit"
+                        onClick={() => {
+                          setIsCommentsLoading(true);
+                          axios
+                            .post("http://localhost:6969/comments/", {
+                              token: userToken,
+                              comment: newComment,
+                              songId: id,
+                            })
+                            .then(() => {
+                              fetchComments();
+                              setNewComment("");
+                            })
+                            .catch((err) => console.log(err))
+                            .finally(() => setIsCommentsLoading(false));
+                        }}
+                      >
+                        Add Comment
+                      </Button>
+                    </Form.Item>
+                  </Box>
+                </Form>
               )}
             </Loader>
           </Box>
