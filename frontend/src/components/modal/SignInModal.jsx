@@ -52,6 +52,8 @@ export default function SignInModal({
         localStorage.setItem("moozikaToken", response.accessToken);
         message.success("Google sign in success");
         setOpenModal(false);
+
+        setTimeout(()=>{window.location.reload()},2500);
     };
     const onFailure = (response) => {
         message.failure("Google sign in failure"+response)
