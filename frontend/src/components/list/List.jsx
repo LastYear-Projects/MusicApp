@@ -6,6 +6,7 @@ const List = ({
   list,
   func = () => {},
   testFunc = () => {},
+  creator = "",
   CardComponent = DefaultCard,
   flexDirection = "rows",
 }) => {
@@ -22,7 +23,12 @@ const List = ({
               }}
               key={item}
             >
-              <CardComponent {...item} func={func} editFunc={testFunc} />
+              <CardComponent
+                {...item}
+                func={func}
+                editFunc={testFunc}
+                creator={creator}
+              />
             </Grid>
           );
         })}

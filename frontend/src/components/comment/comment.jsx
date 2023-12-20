@@ -13,28 +13,29 @@ const Comment = ({
   comment,
   date,
   _id,
+  creator,
   func: removeComment,
   editFunc: editComment,
-  user: { name, profile_image },
+  user: { name, profile_image, _id: userId },
 }) => {
   const [isEditing, setIsEditing] = React.useState(false);
   const [editedComment, setEditedComment] = React.useState(comment);
+  const [validate, setValidate] = React.useState(false);
 
   const validateUser = async () => {
-    console.log("Hereeee");
-    const userToken = localStorage.getItem("userToken");
-    console.log(userToken);
-    const { data } = await axios.get(
-      `http://localhost:6969/users/user-details/`,
-      userToken
+    const userToken = localStorage.getItem("moozikaToken");
+    const { data } = await axios.post(
+      "http://localhost:6969/users/user-details",
+      {
+        token: userToken,
+      }
     );
-    console.log("data0", data);
 
-    // if (data.user_id === userToken.id) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
+    if (data._id === userId || data._id === creator) {
+      setValidate(true);
+    } else {
+      setValidate(false);
+    }
   };
 
   React.useEffect(() => {
@@ -74,35 +75,40 @@ const Comment = ({
         </Box>
 
         <Box display="flex" alignItems="center" marginTop={1}>
-          <Button
-            size="small"
-            variant="text"
-            color="error"
-            onClick={() => removeComment(_id)}
-          >
-            Remove
-          </Button>
-          {isEditing ? (
-            <Button
-              size="small"
-              variant="text"
-              color="primary"
-              onClick={() => {
-                editComment(_id, editedComment);
-                setIsEditing(false);
-              }}
-            >
-              Save
-            </Button>
-          ) : (
-            <Button
-              size="small"
-              variant="text"
-              color="primary"
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
+          {validate && (
+            <Box>
+              <Button
+                size="small"
+                variant="text"
+                color="error"
+                onClick={() => removeComment(_id)}
+              >
+                Remove
+              </Button>
+              {true &&
+                (isEditing ? (
+                  <Button
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    onClick={() => {
+                      editComment(_id, editedComment);
+                      setIsEditing(false);
+                    }}
+                  >
+                    Save
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit
+                  </Button>
+                ))}
+            </Box>
           )}
           <Typography variant="caption" color="textSecondary" marginLeft="auto">
             {date}
