@@ -41,9 +41,6 @@ export default function SignInModal({
                 console.log("userToken: ", userToken.data.token)
                 localStorage.setItem("moozikaToken", userToken.data.token);
                 message.success("Sign in success");
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3000);
             })
             .catch((err) => {
                 message.error("Sign in failed - wrong Email or password");
@@ -74,9 +71,6 @@ export default function SignInModal({
 
         await axios.post("http://localhost:6969/auth/google-login", {name: userData.name, email: userData.email, profile_image: userData.picture})
             .then((res) => {
-                console.log("res token1: ", res)
-                console.log("res token2: ", res.data)
-                console.log("res token3: ", res.data.token)
                 localStorage.setItem("moozikaToken", res.data.token)
             }
             )
@@ -86,13 +80,17 @@ export default function SignInModal({
         message.failure("Google sign in failure" + response)
         console.log("Google sign in failure:", response);
     };
+
+    const handleModalClose = () => {
+        setOpenModal(false);
+    };
     return (
         <div>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={openModal}
-                onClose={() => setOpenModal(false)}
+                onClose={handleModalClose}
                 closeAfterTransition
             >
                 <Fade in={openModal}>
@@ -173,7 +171,6 @@ export default function SignInModal({
                                 onSuccess={onSuccessFromGoogle}
                                 onFailure={onFailure}
                                 cookiePolicy="single_host_origin"
-                                // cookiePolicy="none"
                                 className={css["googleButton"]}
 
                                 render={(renderProps) => (

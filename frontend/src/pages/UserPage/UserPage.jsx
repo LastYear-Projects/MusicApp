@@ -6,10 +6,9 @@ import TransitionsModal from "../../components/modal/editSongModal.jsx"; // Make
 
 const UserPage = () => {
     const [user, setUser] = useState({
-        email: "Email: default value",
-        fullName: "fullName: default value",
-        dateOfBirth: "dateOfBirth: default value",
-        profilePicture: "profilePicture: default value",
+        email: "test",
+        name: "fsd",
+        profile_image: "fdsf",
     });
     const [songs, setSongs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -29,14 +28,19 @@ const UserPage = () => {
 
     const fetchUserData = async () => {
         try {
-            const userResponse = await axios.get("http://localhost:6969/user");
-            const songsResponse = await axios.get(
-                `http://localhost:6969/user/${userResponse.data.id}/songs`
-            );
 
-            setUser(userResponse.data);
-            setSongs(songsResponse.data);
+            const myUser = await axios.post(
+                'http://localhost:6969/users/user-details', {token: localStorage.getItem("moozikaToken")});
+
+            console.log("myUser : ", myUser)
+            setUser(myUser.data);
+
+            console.log("userResponse name: ", myUser.data.name)
+            console.log("userResponse data: ", myUser.data)
+
+            setSongs(myUser.data.songs );
             setIsLoading(false);
+
         } catch (error) {
             console.error("Error fetching user data", error);
             setIsLoading(false);
@@ -60,8 +64,6 @@ const UserPage = () => {
             // Update the song on the server
             await axios.put(`http://localhost:6969/songs/${editedSong._id}`, editedSong);
             setOpenEditModal(false);
-            // Refetch user data to get the updated songs list
-            fetchUserData();
         } catch (error) {
             console.error("Error updating song data", error);
         }
@@ -77,15 +79,12 @@ const UserPage = () => {
     return (
         <Loader isLoading={isLoading}>
             <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-                <Avatar alt="Profile Picture" src={user.profilePicture} sx={{ width: 100, height: 100, marginBottom: 2 }} />
+                <Avatar alt="Profile Picture" src={user.profile_image} sx={{ width: 100, height: 100, marginBottom: 2 }} />
                 <Typography variant="h4" gutterBottom>
-                    {user.username}
+                    {user.name}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" gutterBottom color="white">
                     {user.email}
-                </Typography>
-                <Typography variant="body1" color="textSecondary" gutterBottom color="white">
-                    {user.dateOfBirth}
                 </Typography>
 
                 <Box
