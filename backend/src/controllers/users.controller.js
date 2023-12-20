@@ -177,6 +177,7 @@ const googleLogin = async (req, res) => {
       if(!createdUser){
         return res.status(500).json({ message: "Something went wrong" });
       }
+      user = createdUser;
     }
     const token = jwt.sign(
       { id: user._id},
