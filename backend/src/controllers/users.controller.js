@@ -167,7 +167,7 @@ const googleLogin = async (req, res) => {
   try {
     const user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
-      const createdUser = await userService.createGoogleUser(createUser);
+      const createdUser = await userService.createGoogleUser(user);
       if(!createdUser){
         return res.status(500).json({ message: "Something went wrong" });
       }
