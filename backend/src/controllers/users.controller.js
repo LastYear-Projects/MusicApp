@@ -165,7 +165,7 @@ const checkSong = async (req, res) => {
 
 const googleLogin = async (req, res) => {
   try {
-    const user = await userService.getUserByEmail(req.body.email.toLowerCase());
+    let user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
       const newUser = {
         name: req.body.name,
