@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
-import { Box, Typography, Avatar, Button, TextField } from "@mui/material";
-import TransitionsModal from "../../components/modal/editSongModal.jsx"; // Make sure to adjust the path as needed
+import { Box, Typography, Avatar, Button, TextField, Paper, Grid } from "@mui/material";
+import TransitionsModal from "../../components/modal/editSongModal.jsx";
+import List from "../../components/list/List";
 
 const UserPage = () => {
     const [user, setUser] = useState({
@@ -28,19 +29,10 @@ const UserPage = () => {
 
     const fetchUserData = async () => {
         try {
-
-            const myUser = await axios.post(
-                'http://localhost:6969/users/user-details', {token: localStorage.getItem("moozikaToken")});
-
-            console.log("myUser : ", myUser)
+            const myUser = await axios.post('http://localhost:6969/users/user-details', { token: localStorage.getItem("moozikaToken") });
             setUser(myUser.data);
-
-            console.log("userResponse name: ", myUser.data.name)
-            console.log("userResponse data: ", myUser.data)
-
-            setSongs(myUser.data.songs );
+            setSongs(myUser.data.songs);
             setIsLoading(false);
-
         } catch (error) {
             console.error("Error fetching user data", error);
             setIsLoading(false);
@@ -53,7 +45,6 @@ const UserPage = () => {
     }, []);
 
     const handleEditSong = (songId) => {
-        // Find the song to edit based on songId
         const songToEdit = songs.find((song) => song._id === songId);
         setEditedSong(songToEdit);
         setOpenEditModal(true);
@@ -61,7 +52,6 @@ const UserPage = () => {
 
     const handleSaveSong = async () => {
         try {
-            // Update the song on the server
             await axios.put(`http://localhost:6969/songs/${editedSong._id}`, editedSong);
             setOpenEditModal(false);
         } catch (error) {
@@ -87,44 +77,9 @@ const UserPage = () => {
                     {user.email}
                 </Typography>
 
-                <Box
-                    sx={{
-                        border: "1px solid #ccc",
-                        borderRadius: "8px",
-                        padding: "1rem",
-                        overflowY: "auto",
-                        maxHeight: "50vh",
-                        "&::-webkit-scrollbar": {
-                            width: "8px",
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                            backgroundColor: "#6A6A6A",
-                            borderRadius: "4px",
-                        },
-                    }}
-                    marginTop="2rem"
-                    marginBottom="5rem"
-                >
-                    {songs.length > 0 ? (
-                        songs.map((song) => (
-                            <Box key={song._id} sx={{ marginBottom: "1rem" }}>
-                                {/* Display song details */}
-                                <Typography variant="h6">{song.title}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    {song.artist}
-                                </Typography>
-                                {/* Edit button */}
-                                <Button variant="outlined" onClick={() => handleEditSong(song._id)}>
-                                    Edit
-                                </Button>
-                            </Box>
-                        ))
-                    ) : (
-                        <Typography variant="h6" textAlign={"center"}>
-                            No bought songs yet
-                        </Typography>
-                    )}
-                </Box>
+                <Grid container spacing={2} marginTop="2rem">
+                    <List list={songs} />
+                </Grid>
 
                 <TransitionsModal
                     openModal={openEditModal}
@@ -134,7 +89,6 @@ const UserPage = () => {
                     btnText="Save Changes"
                     btnOnClick={handleSaveSong}
                 >
-                    {/* Edit song form */}
                     <TextField
                         label="Title"
                         name="title"
