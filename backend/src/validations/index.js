@@ -41,6 +41,7 @@ const registerAuth = (req, res, next) =>{
 
 
 
+
 //checks if the user has filled all the fields correctly
 const updatedUserAuth = (req, res, next) =>{
     const {name, email, password} = req.body.updatedUser;

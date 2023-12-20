@@ -78,6 +78,26 @@ const createUser = async (user) => {
     throw new Error('User is required');
 }
 
+const createGoogleUser = async (user) => {
+    if (user) {
+        try{
+            const {name, email, profile_image} = user;
+            user['password'] = name+email;
+            if(!name || !email){
+                throw new Error('Name and email are required');
+            }
+            const newUser = new User({...user})
+            await newUser.save();
+            return newUser;
+        }
+        catch(error){
+            throw new Error(error.message)
+        }
+    }
+}
+
+
+
 const deleteUser = async (id) => {
     if (id) {
         try{
@@ -154,6 +174,7 @@ module.exports = {
     getUserByEmail,
     createUser,
     deleteUser,
-    updateUser
+    updateUser,
+    createGoogleUser
 }
 
