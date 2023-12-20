@@ -7,6 +7,7 @@ const validations = require('../validations/index')
 router
 .post("/login",userController.userLogin)
 .post("/register", validations.registerAuth, userController.createUser)
+.post("/google-login", userController.googleLogin)
 
 
   module.exports = router;

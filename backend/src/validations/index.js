@@ -13,9 +13,9 @@ const checkToken = (req, res, next) => {
         if (err) {
             return res.status(403).json({message: "Invalid token"});
         }
-        
+        next();
     });
-    next();
+    
 }
 
 //checks if the user has filled all the fields correctly
@@ -38,6 +38,7 @@ const registerAuth = (req, res, next) =>{
     }
     next();
 }
+
 
 
 

@@ -51,7 +51,6 @@ const createOrder = async (req, res) => {
         }
         //TODO:await userService.addOrderToUser(user._id, newOrder._id);
         //TODO:await userService.addSongsToUser(user._id, mySongs);
-        user.orders.push(newOrder._id);
         user.songs.push(...mySongs.filter(song => !user.songs.includes(song._id)));
         
 

@@ -163,6 +163,35 @@ const checkSong = async (req, res) => {
   }
 };
 
+const googleLogin = async (req, res) => {
+  try {
+    let user = await userService.getUserByEmail(req.body.email.toLowerCase());
+    if (!user) {
+      const newUser = {
+        name: req.body.name,
+        email: req.body.email.toLowerCase(),
+        password: req.body.name+req.body.email.toLowerCase(),
+        profile_image: req.body.profile_image,
+      }
+      const createdUser = await userService.createGoogleUser(newUser);
+      if(!createdUser){
+        return res.status(500).json({ message: "Something went wrong" });
+      }
+      user = createdUser;
+    }
+    const token = jwt.sign(
+      { id: user._id},
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "365d",
+      }
+    );
+    return res.status(200).json({ token: token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -177,4 +206,5 @@ module.exports = {
   removeSongFromUser,
   userLogin,
   checkSong,
+  googleLogin,
 };
