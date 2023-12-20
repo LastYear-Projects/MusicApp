@@ -107,6 +107,7 @@ const SongPage = () => {
             <Loader isLoading={isCommentsLoading}>
               {comments.length > 0 ? (
                 <List
+                  creator={song.creator}
                   list={comments}
                   CardComponent={Comment}
                   flexDirection="column"
