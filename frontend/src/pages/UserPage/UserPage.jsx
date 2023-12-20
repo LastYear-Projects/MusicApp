@@ -68,7 +68,7 @@ const UserPage = () => {
 
     return (
         <Loader isLoading={isLoading}>
-            <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" , paddingBottom: 8}}>
                 <Avatar alt="Profile Picture" src={user.profile_image} sx={{ width: 100, height: 100, marginBottom: 4 , marginTop: 4 }} />
                 <Typography variant="h4" gutterBottom>
                     {user.name}
@@ -78,7 +78,7 @@ const UserPage = () => {
                 </Typography>
 
                 <Grid container spacing={2} marginTop="2rem">
-                    <List list={songs} />
+                    <List list={songs} marginB/>
                 </Grid>
 
                 <TransitionsModal
