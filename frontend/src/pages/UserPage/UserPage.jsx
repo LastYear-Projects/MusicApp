@@ -69,7 +69,7 @@ const UserPage = () => {
     return (
         <Loader isLoading={isLoading}>
             <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-                <Avatar alt="Profile Picture" src={user.profile_image} sx={{ width: 100, height: 100, marginBottom: 2 }} />
+                <Avatar alt="Profile Picture" src={user.profile_image} sx={{ width: 100, height: 100, marginBottom: 4 , marginTop: 4 }} />
                 <Typography variant="h4" gutterBottom>
                     {user.name}
                 </Typography>
