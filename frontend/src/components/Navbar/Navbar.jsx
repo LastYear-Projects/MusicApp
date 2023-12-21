@@ -17,7 +17,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-
+import {useState,useEffect} from "react";
 import { StyledAutocomplete } from "../../constants/index";
 
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
@@ -29,6 +29,7 @@ export default function Navbar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
+  const [cart,setCart]=useState([]);
   const navigate = useNavigate();
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
@@ -37,6 +38,22 @@ export default function Navbar() {
       : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const getCartSize=()=>{
+    const currentCart=JSON.parse(localStorage.getItem("cart"));
+    if(currentCart)
+    {
+      setCart(currentCart);
+    }
+    else{
+     setCart([])
+    }
+  }
+
+  useEffect(()=>{
+    getCartSize();
+    window.addEventListener("storage",getCartSize);
+    return ()=>window.removeEventListener("storage",getCartSize);
+  },[])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,7 +74,6 @@ export default function Navbar() {
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
-
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -79,12 +95,11 @@ export default function Navbar() {
           <MenuItem onClick={() => navigate("/cart")}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              {cart.length?<Badge badgeContent={cart.length} color="error">
                 <ShoppingCartIcon />
-              </Badge>
+              </Badge>:<ShoppingCartIcon />}
             </IconButton>
             <p>Cart</p>
           </MenuItem>
@@ -167,13 +182,12 @@ export default function Navbar() {
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <IconButton
                   size="large"
-                  aria-label="show 4 new mails"
                   color="inherit"
                   onClick={() => navigate("/cart")}
                 >
-                  <Badge badgeContent={4} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
+                  {cart.length?<Badge badgeContent={cart.length} color="error">
+                <ShoppingCartIcon />
+              </Badge>:<ShoppingCartIcon />}
                 </IconButton>
                 <IconButton
                   size="large"
