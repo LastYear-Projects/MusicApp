@@ -19,7 +19,7 @@ export default function SongCard({
   duration,
   price,
   numOfPurchases,
-  numOfComments,
+  comments,
 }) {
   const songDurationInSeconds = duration / 1000; //50000 -> 50sec -> 00:50
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
@@ -27,6 +27,7 @@ export default function SongCard({
   const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
     seconds > 9 ? seconds : "0" + seconds
   }`;
+  const numOfComments = comments ? comments.length : 0;
   const navigate = useNavigate();
   return (
     <Card
@@ -134,7 +135,7 @@ export default function SongCard({
           sx={{ color: "#9A9A9A" }}
           startIcon={<CommentIcon />}
         >
-          {numOfComments ? numOfComments : 0} Comments
+          {numOfComments} Comments
         </Button>
         <Button
           size="small"
