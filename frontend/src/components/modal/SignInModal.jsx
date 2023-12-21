@@ -159,7 +159,7 @@ export default function SignInModal({
                             >
                                 Sign In
                             </Button>
-                            <Typography variant="body2" color="white" align="center" sx={{marginTop: 2}}>
+                            <Typography variant="body2" align="center" sx={{marginTop: 2, color:"white" }}>
                                 Don't have an account?{" "}
                                 <Link href="/signup" underline="always" color="primary">
                                     Sign Up

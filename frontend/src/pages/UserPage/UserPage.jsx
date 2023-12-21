@@ -73,7 +73,7 @@ const UserPage = () => {
                 <Typography variant="h4" gutterBottom>
                     {user.name}
                 </Typography>
-                <Typography variant="body1" color="textSecondary" gutterBottom color="white">
+                <Typography variant="body1" color="textSecondary" gutterBottom sx={{color:"white"}} >
                     {user.email}
                 </Typography>
 
