@@ -33,7 +33,7 @@ function Song({
       <Card
         sx={{
           display: "flex",
-          backgroundColor: "#353839",
+          backgroundColor: "#1A1A1A",
           // width: "90%",
           maxWidth: "800px",
           height: "auto",
@@ -105,7 +105,7 @@ function Song({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginTop: "20px",
+                marginTop: "5rem",
                 "@media (max-width:959px)": {
                   justifyContent: "center",
                   textAlign: "center",
