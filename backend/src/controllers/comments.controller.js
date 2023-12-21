@@ -56,6 +56,12 @@ const updateCommentById = async (req, res) => {
 const deleteCommentById = async (req, res) => {
     try {
         const id = req.params.id;
+        //find the song that contains the comment
+        const song = await songService.getSongByCommentId(id);
+        //remove the comment from the song
+        song.comments = song.comments.filter(comment => comment._id != id);
+        //update the song
+        await songService.updateSong(song._id, song);
         const deletedComment = await commentService.deleteCommentById(id);
         res.status(200).json(deletedComment);
     } catch (error) {
