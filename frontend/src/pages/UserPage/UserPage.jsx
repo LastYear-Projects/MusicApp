@@ -5,6 +5,7 @@ import {Box, Typography, Avatar, Grid} from "@mui/material";
 import List from "../../components/list/List";
 import {Button, Upload} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
+import AddSong from "../../components/addSongModal/addSong.jsx";
 
 const UserPage = () => {
     const [user, setUser] = useState({
@@ -16,6 +17,7 @@ const UserPage = () => {
     const [songs, setSongs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newProfilePicture, setNewProfilePicture] = useState(null);
+    const [openAddSongModal, setOpenAddSongModal] = useState(false);
 
     const fetchUserData = async () => {
         try {
@@ -35,9 +37,19 @@ const UserPage = () => {
     }, []);
     const filterSongsCreatedByUser = () => {
         //TODO: we might need to change the field user._id
-        return user.songs.filter((song) => song.creator === user._id);
+        return user.songs.filter((song) => song.creator === localStorage.getItem('moozikaToken'));
+    };
+    const handleAddSong = () => {
+        setOpenAddSongModal(true);
     };
 
+    const handleAddSongSuccess = (newSong) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            songs: [...prevUser.songs, newSong],
+        }));
+        setOpenAddSongModal(false);
+    };
 
     return (
         <Loader isLoading={isLoading}>
@@ -48,6 +60,7 @@ const UserPage = () => {
                 alignItems: "center",
                 paddingBottom: 8
             }}>
+
                 <Avatar
                     alt="Profile Picture"
                     src={user.profile_image}
@@ -106,6 +119,7 @@ const UserPage = () => {
                         </Typography>
                     )}
                 </Grid>
+
                 <Typography
                     variant="h6"
                     gutterBottom
@@ -142,6 +156,14 @@ const UserPage = () => {
                         </Typography>
                     )}
                 </Grid>
+                <Button onClick={handleAddSong} variant="contained" color="primary">
+                    Add Song
+                </Button>
+                <AddSong
+                    openModal={openAddSongModal}
+                    setOpenModal={setOpenAddSongModal}
+                    onSuccess={handleAddSongSuccess}
+                />
             </Box>
         </Loader>
     );
