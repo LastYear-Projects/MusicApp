@@ -67,7 +67,6 @@ const AddSong = ({ openModal, setOpenModal }) => {
       "duration",
       "price",
       "album_image",
-      "preview_url",
       "youtube_id",
       "genre",
     ];
@@ -109,7 +108,10 @@ const AddSong = ({ openModal, setOpenModal }) => {
       return;
     }
 
-    // await axios.post("http://localhost:6969/songs", formData);
+    await axios.post("http://localhost:6969/admin/songs/create", {
+      song: formData,
+      token: localStorage.getItem("moozikaToken"),
+    });
     setSuccessfullyMessage(true);
     setTimeout(() => {
       navigate("/profile");
