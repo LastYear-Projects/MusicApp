@@ -9,8 +9,8 @@ import AddSong from "../../components/addSongModal/addSong.jsx";
 
 const UserPage = () => {
     const [user, setUser] = useState({
-        email: "unKnown",
-        name: "unKnown",
+        email: "Pleas sign in to see your profile",
+        name: "",
         profile_image: "unKnown",
         songs: []
     });
