@@ -1,31 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
-import { Box, Typography, Avatar, Button, TextField, Paper, Grid } from "@mui/material";
+import { Box, Typography, Avatar, TextField, Grid } from "@mui/material";
 import TransitionsModal from "../../components/modal/editSongModal.jsx";
 import List from "../../components/list/List";
+import {Button, Upload} from "antd";
+import {UploadOutlined} from "@ant-design/icons";
 
 const UserPage = () => {
     const [user, setUser] = useState({
-        email: "test",
-        name: "fsd",
-        profile_image: "fdsf",
+        email: "unKnown",
+        name: "unKnown",
+        profile_image: "unKnown",
     });
     const [songs, setSongs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [editedSong, setEditedSong] = useState({
-        title: "",
-        artist: "",
-        album: "",
-        genre: "",
-        duration: "",
-        album_image: "",
-        price: "",
-        preview_url: "",
-        youtube_id: "",
-    });
-
     const [openEditModal, setOpenEditModal] = useState(false);
+    const [newProfilePicture, setNewProfilePicture] = useState(null);
+
+
+    const handleProfilePictureUpdate = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("profilePicture", newProfilePicture);
+
+            //TODO: Update profile picture need to figure out from the backend how to do it
+            await axios.post('http://localhost:6969/users/update-profile-picture', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${localStorage.getItem("moozikaToken")}`,
+                },
+            });
+
+            // Fetch updated user data
+            await fetchUserData();
+        } catch (error) {
+            console.error("Error updating profile picture", error);
+        }
+    };
+
+    const handleFileInputChange = (e) => {
+        setNewProfilePicture(e.target.files[0]);
+    };
+
 
     const fetchUserData = async () => {
         try {
@@ -44,32 +61,29 @@ const UserPage = () => {
         fetchUserData();
     }, []);
 
-    const handleEditSong = (songId) => {
-        const songToEdit = songs.find((song) => song._id === songId);
-        setEditedSong(songToEdit);
-        setOpenEditModal(true);
-    };
 
-    const handleSaveSong = async () => {
-        try {
-            await axios.put(`http://localhost:6969/songs/${editedSong._id}`, editedSong);
-            setOpenEditModal(false);
-        } catch (error) {
-            console.error("Error updating song data", error);
-        }
-    };
-
-    const handleInputChange = (e) => {
-        setEditedSong({
-            ...editedSong,
-            [e.target.name]: e.target.value,
-        });
-    };
 
     return (
         <Loader isLoading={isLoading}>
             <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" , paddingBottom: 8}}>
-                <Avatar alt="Profile Picture" src={user.profile_image} sx={{ width: 100, height: 100, marginBottom: 4 , marginTop: 4 }} />
+                <Avatar
+                    alt="Profile Picture"
+                    src={user.profile_image}
+                    sx={{ width: 100, height: 100, marginBottom: 4, marginTop: 4 }}
+                />
+
+                <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
+                        setNewProfilePicture(file);
+                        return false;
+                    }}
+                >
+                    <Button icon={<UploadOutlined />} size="small">
+                        Change Profile Picture
+                    </Button>
+                </Upload>
+
                 <Typography variant="h4" gutterBottom>
                     {user.name}
                 </Typography>
@@ -81,32 +95,6 @@ const UserPage = () => {
                     <List list={songs} marginB/>
                 </Grid>
 
-                <TransitionsModal
-                    openModal={openEditModal}
-                    setOpenModal={setOpenEditModal}
-                    title="Edit Song"
-                    closeOnOverlay={true}
-                    btnText="Save Changes"
-                    btnOnClick={handleSaveSong}
-                >
-                    <TextField
-                        label="Title"
-                        name="title"
-                        value={editedSong.title}
-                        onChange={handleInputChange}
-                        variant="outlined"
-                        margin="dense"
-                    />
-                    <TextField
-                        label="Artist"
-                        name="artist"
-                        value={editedSong.artist}
-                        onChange={handleInputChange}
-                        variant="outlined"
-                        margin="dense"
-                    />
-                    {/* Add other fields for song editing */}
-                </TransitionsModal>
             </Box>
         </Loader>
     );
