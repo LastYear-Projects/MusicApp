@@ -24,7 +24,8 @@ const UserPage = () => {
             const formData = new FormData();
             formData.append("profilePicture", newProfilePicture);
 
-            //TODO: Update profile picture need to figure out from the backend how to do it
+            //TODO: Update profile picture at the server side using the API endpoint
+
             await axios.post('http://localhost:6969/users/update-profile-picture', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -91,10 +92,27 @@ const UserPage = () => {
                     {user.email}
                 </Typography>
 
-                <Grid container spacing={2} marginTop="2rem">
-                    <List list={songs} marginB/>
-                </Grid>
+                <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{
+                        borderBottom: "2px solid white",
+                        display: "inline-block",
+                        marginTop: 7,
+                        paddingRight: 90,
+                        paddingLeft: 3,
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textTransform: 'uppercase',
+                    }}
+                >
+                    Songs Owned By User
+                </Typography>
 
+
+                <Grid container spacing={2} marginTop="2rem">
+                    <List list={songs} style={{ marginTop: '1rem' }} />
+                </Grid>
             </Box>
         </Loader>
     );
