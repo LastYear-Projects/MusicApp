@@ -89,22 +89,13 @@ const UserPage = () => {
                 <Typography
                     variant="h6"
                     gutterBottom
-                    sx={{
-                        borderBottom: "2px solid white",
-                        display: "inline-block",
-                        marginTop: 7,
-                        paddingRight: 90,
-                        paddingLeft: 3,
-                        fontWeight: 'bold',
-                        color: 'white',
-                        textTransform: 'uppercase',
-                    }}
+                    sx={{borderBottom: "2px solid white", display: "inline-block", marginTop: 7, paddingRight: 90, paddingLeft: 3, fontWeight: 'bold', color: 'white', textTransform: 'uppercase',}}
                 >
                     Songs Owned By User
                 </Typography>
                 <Grid container spacing={2} marginTop="2rem">
                     {user.songs.length > 0 ? (
-                        <List list={user.songs} style={{ marginTop: '1rem' }} />
+                        <List list={songs} style={{ marginTop: '1rem' }} />
                     ) : (
                         <Typography variant="h6" color="white" gutterBottom
                                     sx={{
