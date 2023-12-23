@@ -98,6 +98,8 @@ const UserPage = () => {
             if (res.status === 200) {
                 message.success("the name was changed successfully")
                 handleCloseForm();
+                fetchUserData();
+                setNewName("")
             };
     }).catch((err) => {message.error("Error updating name")});}
 
