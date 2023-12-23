@@ -44,20 +44,18 @@ const registerAuth = (req, res, next) =>{
 
 
 //checks if the user has filled all the fields correctly
-const updatedUserAuth = (req, res, next) =>{
+const updatedUserAuth = (req, res, next) => {
     const {name, email, password} = req.body.updatedUser;
-    if (!name || !email || !password) {
-        return res.status(400).json({ error: "Please fill all the fields" });
-    }
+    
     //regex for email
-    if(!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)){
+    if(email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)){
         return res.status(400).json({ error: "Please enter a valid email" });
     }
-    if(password.length < 8){
+    if(password && password.length < 8){
         return res.status(400).json({ error: "Password must be at least 8 characters" });
     }
     //check if name contains digits
-    if(name.match(/\d/)){
+    if(name && name.match(/\d/)){
         return res.status(400).json({ error: "Name must not contain digits" });
     }
     next();
