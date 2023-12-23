@@ -43,7 +43,6 @@ const enumFields = [
 
 const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
   const { register, handleSubmit } = useForm();
-  const [successfullyMessage, setSuccessfullyMessage] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
@@ -112,10 +111,9 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
       song: formData,
       token: localStorage.getItem("moozikaToken"),
     });
-    setSuccessfullyMessage(true);
 
     onSuccess(response.data);
-    // setTimeout(() => {navigate("/profile");}, 1500);
+    message.success("Song was successfully added");
     setOpenModal(false);
   };
 
@@ -172,17 +170,6 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
           </Form.Item>
         </Form>
       </TransitionsModal>
-      {successfullyMessage && (
-        <Snackbar
-          open={open}
-          autoHideDuration={1000}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        >
-          <Alert severity="success" sx={{ width: "100%" }}>
-            Song was successfully added, redirecting to profile page...
-          </Alert>
-        </Snackbar>
-      )}
     </Box>
   );
 };
