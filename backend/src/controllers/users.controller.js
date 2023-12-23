@@ -39,6 +39,9 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
+const list = [];
+list.fin
+
 const getUserDetails = async (req, res) => {
   try {
     const { token } = req.body;

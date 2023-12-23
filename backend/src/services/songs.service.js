@@ -112,10 +112,6 @@ const getSongsByYear = async (year) => {
 const createSong = async (song) => {
     //create song and return it
 
-    const { title, artist, album, year, duration, price, album_image, preview_url} = song;
-    if (!title || !artist || !album || year === undefined || duration === undefined) {
-        throw new Error('All fields are required');
-    }
     //let id = title + artist + album + year;
     //id = id.replace(/\s+/g, '_');
 

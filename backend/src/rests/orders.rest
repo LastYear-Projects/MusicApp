@@ -6,11 +6,11 @@ POST http://localhost:6969/orders HTTP/1.1
 content-type: application/json
 
 {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Y2NkYTViMjE1MDVkN2Y2MjdlNDVkYSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2OTE3NjgyMjEsImV4cCI6MTcyMzMwNDIyMX0.emtSwJSQAekKNsVSMjVRxn2xyzr4ocgEkgzKQF4mc8s",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODMwZGM3NTU3NmExODdlMWFkNTk5MyIsImlhdCI6MTcwMzA4OTAzNiwiZXhwIjoxNzM0NjI1MDM2fQ.8mWFwjx_G8Hj1Q5-iUcUb-htcaLhdP0wVqiOaK1euJg",
             "order":{"songs": [
-            "64ccda0c5fad016c15f71c3d",
-            "64d2a2af3a54f70b2c2883f3",
-            "64ccd9dd5fad016c15f71c39"
+            "64e30d14fc68b9a5b37ba5bd",
+            "64e30d2bfc68b9a5b37ba5be",
+            "64e30d8cfc68b9a5b37ba5c0"
             ]
             }
 }
