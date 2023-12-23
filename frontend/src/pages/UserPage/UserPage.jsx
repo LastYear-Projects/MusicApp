@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
-import {Box, Typography, Avatar, Grid} from "@mui/material";
+import {Box, Typography, Avatar, Grid, TextField} from "@mui/material";
 import List from "../../components/list/List";
 import {Button, Upload} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
 import AddSong from "../../components/addSongModal/addSong.jsx";
+import {Update} from "@mui/icons-material";
 
 const UserPage = () => {
     const [user, setUser] = useState({
@@ -18,7 +19,6 @@ const UserPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [newProfilePicture, setNewProfilePicture] = useState(null);
     const [openAddSongModal, setOpenAddSongModal] = useState(false);
-    const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
     const [ownSongs, setOwnSongs] = useState([]);
 
@@ -37,6 +37,14 @@ const UserPage = () => {
         }));
     };
 
+    const handleCloseForm = () => {
+        setPasswordForm({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: ""
+        });
+        setIsPasswordFormOpen(false);
+    };
     const handleUpdatePassword = async () => {
         if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
             // Show an error message or handle password mismatch
@@ -132,8 +140,27 @@ const UserPage = () => {
                     src={user.profile_image}
                     sx={{width: 100, height: 100, marginBottom: 4, marginTop: 4}}
                 />
-                <Button onClick={() => setIsPasswordFormOpen(true)} variant="contained" color="primary"
-                        sx={{marginBottom: 2}}>
+
+
+                <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
+                        setNewProfilePicture(file);
+                        return false;
+                    }}
+                >
+                    <Button icon={<UploadOutlined/>} size="small" style={{marginBottom: "1rem"}}>
+                        Change Profile Picture
+                    </Button>
+                </Upload>
+
+
+                <Button onClick={() => setIsPasswordFormOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        style={{ marginBottom: "1rem" }}
+
+                >
                     Change Password
                 </Button>
 
@@ -143,7 +170,7 @@ const UserPage = () => {
                             borderBottom: "2px solid white",
                             display: "inline-block",
                             whiteSpace: 'nowrap',
-                            marginTop: 7,
+                            marginTop: 2,
                             paddingRight: windowWidth <= 600 ? 10 : 90,
                             paddingLeft: 3,
                             fontWeight: 'bold',
@@ -152,47 +179,93 @@ const UserPage = () => {
                         }}>
                             Update Password
                         </Typography>
+
+
+
                         <form>
-                            <input
-                                type="password"
-                                name="currentPassword"
-                                placeholder="Current Password"
-                                value={passwordForm.currentPassword}
-                                onChange={handlePasswordChange}
-                            />
-                            <input
-                                type="password"
-                                name="newPassword"
-                                placeholder="New Password"
-                                value={passwordForm.newPassword}
-                                onChange={handlePasswordChange}
-                            />
-                            <input
-                                type="password"
-                                name="confirmNewPassword"
-                                placeholder="Confirm New Password"
-                                value={passwordForm.confirmNewPassword}
-                                onChange={handlePasswordChange}
-                            />
-                            <Button type="button" onClick={handleUpdatePassword} variant="contained" color="primary"
-                                    sx={{marginBottom: 2}}>
-                                Update Password
-                            </Button>
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                sx={{
+                                    "& .MuiInputBase-input": {
+                                        color: "white",
+                                    },
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "white",
+                                    },
+                                    "& .MuiFormLabel-root": {
+                                        color: "white",
+                                    },
+                                }}
+                            >
+                                <TextField
+                                    type="password"
+                                    name="currentPassword"
+                                    label="Current Password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    value={passwordForm.currentPassword}
+                                    onChange={handlePasswordChange}
+                                    sx={{width: "40%"}}
+                                />
+                                <TextField
+                                    type="password"
+                                    name="newPassword"
+                                    label="New Password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    value={passwordForm.newPassword}
+                                    onChange={handlePasswordChange}
+                                    sx={{width: "40%"}}
+                                />
+                                <TextField
+                                    type="password"
+                                    name="confirmNewPassword"
+                                    label="Confirm New Password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    value={passwordForm.confirmNewPassword}
+                                    onChange={handlePasswordChange}
+                                    sx={{width: "40%"}}
+                                />
+                                <Box sx={{ display: "flex", flexDirection: "row", marginTop: 3 ,marginBottom: 3}}>
+                                    <Button
+                                        marginLeft = "2rem"
+                                        marginRight = "2rem"
+                                        onClick={handleUpdatePassword}
+                                        variant="contained"
+                                        style={{
+                                            marginRight: "1rem",
+                                            marginLeft: "1rem"
+                                        }}
+                                    >
+                                        Update Password
+                                    </Button>
+                                    <Button
+                                        onClick={handleCloseForm}
+                                        style={{
+                                            marginRight: "1rem",
+                                            marginLeft: "1rem"
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Box>
+                            </Box>
                         </form>
+
+
+
+
+
+
+
+
+
+
                     </Box>
                 )}
-
-                <Upload
-                    showUploadList={false}
-                    beforeUpload={(file) => {
-                        setNewProfilePicture(file);
-                        return false;
-                    }}
-                >
-                    <Button icon={<UploadOutlined/>} size="small">
-                        Change Profile Picture
-                    </Button>
-                </Upload>
 
                 <Typography variant="h4" gutterBottom>
                     {user.name}
