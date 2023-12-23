@@ -259,19 +259,20 @@ const UserPage = () => {
                     {ownSongs.length > 0
                         ? (<List list={ownSongs}/>)
                         :
-                        (<Typography variant="h6"
-                                    color="white"
-                                    gutterBottom
-                                    sx={{
-                                        paddingLeft: 15,
-                                        display: "inline-block",
-                                        paddingRight: windowWidth <= 600 ? 10 : 90,
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                        textTransform: 'uppercase',
-                                        textAlign: 'center',
-                                        whiteSpace: 'nowrap'
-                                    }}
+                        (<Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{
+                                borderBottom: "2px solid white",
+                                display: "inline-block",
+                                marginTop: 7,
+                                paddingRight: windowWidth <= 600 ? 10 : 90,
+                                paddingLeft: 3,
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textTransform: 'uppercase',
+                                whiteSpace: 'nowrap'
+                            }}
                         >
                             No songs created by you. Be the first to create one!
                         </Typography>)
