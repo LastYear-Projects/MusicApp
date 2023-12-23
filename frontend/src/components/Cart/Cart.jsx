@@ -4,55 +4,74 @@ import { useState } from "react";
 import CartItem from "../CartItem/CartItem";
 import classes from "./Cart.module.css";
 import Loader from "../loader/loader";
-const Dummy_CartItems = [
-  {
-    album_image:
-      "https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80",
-    title: "baby yoda",
-    price: 10,
-  },
-  {
-    album_image:
-      "https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80",
-    title: "baby yoda",
-    price: 10,
-  },
-  {
-    album_image:
-      "https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80",
-    title: "baby yoda",
-    price: 10,
-  },
-  {
-    album_image:
-      "https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80",
-    title: "baby yoda",
-    price: 10,
-  },
-];
-
+import axios from "axios";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
-    
-  const [cartItems, setCartItems] = useState(Dummy_CartItems); // will be a get request from the local storage - which will be an array of cart objects
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [cartExist, setCartExist] = useState(false);
+
+  function getCart() {
+    const cart = JSON.parse(localStorage.getItem("cart"));
+    if (cart.length === 0) {
+      setCartExist(false);
+      setIsLoading(false);
+      return;
+    }
+    cart.forEach(async (itemId) => {
+      const { data: songData } = await axios.get(
+        `http://localhost:6969/songs/${itemId}`
+      );
+      setCartItems((prev) => [...prev, songData]);
+    });
+    setCartExist(true);
+    setIsLoading(false);
+  }
+  function handeleDeleteSong(id) {
+    setIsLoading(true);
+    const cartIds = JSON.parse(localStorage.getItem("cart"));
+    const newCart = cartIds.filter((itemId) => itemId !== id);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartItems((prev) => prev.filter((item) => item._id !== id));
+    if (newCart.length === 0) {
+      setCartExist(false);
+    }
+    setIsLoading(false);
+  }
+  async function handleCheckout() {
+    setIsLoading(true);
+    const response = await axios.post("http://localhost:6969/orders", {
+      token: localStorage.getItem("moozikaToken"),
+      order: { songs: cartItems.map((item) => item._id) },
+    });
+    if(response.status==200){
+    message.success("Order created successfully");
+    localStorage.setItem("cart", JSON.stringify([]));
+    setCartItems([]);
+    setCartExist(false);
+    setIsLoading(false);
+    setTimeout(() => {
+      navigate("/");
+    }, 750);
+  }
+  else{
+    message.error("Order failed");
+    setIsLoading(false);
+  }
+  }
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
   let subtotal = 0;
   cartItems.forEach((item) => {
     subtotal += item.price;
   });
-  useEffect(() =>{
-    const dataId=localStorage.getItem("cart");
-    if(!dataId)
-    {
-      setCartExist(false);
-      setIsLoading(false)
-      return
-    }
-    setIsLoading(false);
-  }
-  ,[cartItems])
+  subtotal = subtotal.toFixed(2);
 
-  
   return (
     <Loader isLoading={isLoading}>
       <Card elevation={7} style={{ backgroundColor: "#181818", width: "65%" }}>
@@ -78,22 +97,24 @@ const Cart = () => {
           >
             <h2 className={classes.title}>Order Summery</h2>
             <div className={classes.cartText}>
-                <h4>Total items:</h4>
-                <h5>{cartItems.length}</h5>
+              <h4>Total items:</h4>
+              <h5>{cartItems.length}</h5>
             </div>
             <div className={classes.cartText}>
-                <h4>Subtotal:</h4>
-                <h5>{subtotal}</h5>
+              <h4>Subtotal:</h4>
+              <h5>{subtotal}</h5>
             </div>
             <div className={classes.cartText}>
-                <h4>Shipping:</h4>
-                <h5>Free</h5>
+              <h4>Discount:</h4>
+              <h5>Free</h5>
             </div>
             <div className={classes.cartText}>
-                <h4>Total:</h4>
-                <h5>{subtotal}</h5>
+              <h4>Total:</h4>
+              <h5>{subtotal}</h5>
             </div>
-            <button className={classes.checkoutButton}>Checkout</button>
+            <button className={classes.checkoutButton} onClick={handleCheckout}>
+              Checkout
+            </button>
           </Stack>
           <Stack
             direction={"column"}
@@ -115,20 +136,37 @@ const Cart = () => {
             }}
           >
             <h2 className={classes.title}>Shopping Cart</h2>
-            {cartExist ? cartItems.map((item) => {
-              return (
-                <CartItem
-                  album_image={item.album_image}
-                  title={item.title}
-                  price={item.price}
-                />
-              );
-            }):
-                <div style={{padding:"0.25rem",color:"black", backgroundColor:"#9A9A9A",marginRight:"3rem",marginTop:"1rem",borderRadius:"8px",fontWeight:"bold"}}>
-                <Typography variant="p" style={{display:"block"}}>Cart is Empty...</Typography>
-                <Typography variant="p" >Please add items to the cart...</Typography>
-                </div>
-            }
+            {cartExist ? (
+              cartItems.map((item) => {
+                return (
+                  <CartItem
+                    album_image={item.album_image}
+                    title={item.title}
+                    price={item.price}
+                    removeSong={() => handeleDeleteSong(item._id)}
+                  />
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  padding: "0.25rem",
+                  color: "black",
+                  backgroundColor: "#9A9A9A",
+                  marginRight: "3rem",
+                  marginTop: "1rem",
+                  borderRadius: "8px",
+                  fontWeight: "bold",
+                }}
+              >
+                <Typography variant="p" style={{ display: "block" }}>
+                  Cart is Empty...
+                </Typography>
+                <Typography variant="p">
+                  Please add items to the cart...
+                </Typography>
+              </div>
+            )}
           </Stack>
         </Stack>
       </Card>

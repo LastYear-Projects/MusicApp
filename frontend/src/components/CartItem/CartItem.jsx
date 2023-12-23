@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import classes from "./CartItem.module.css";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-const CartItem = ({ album_image, title, price }) => {
+const CartItem = ({ album_image, title, price,removeSong}) => {
   return (
     <Stack
       direction="row"
@@ -37,7 +37,7 @@ const CartItem = ({ album_image, title, price }) => {
         <p className={classes.title}>{title}</p>
         <div className={classes.priceSection}>
           <p className={classes.priceText}>${price}</p>
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" onClick={removeSong}>
             <DeleteIcon style={{color:"white"}} className={classes.trashIcon} />
           </IconButton>
         </div>

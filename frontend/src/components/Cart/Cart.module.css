@@ -17,3 +17,6 @@ margin-top: 0.5rem;
     border-radius: 10px;
     outline: white;
 }
+.checkoutButton:hover{
+    cursor: pointer;
+}

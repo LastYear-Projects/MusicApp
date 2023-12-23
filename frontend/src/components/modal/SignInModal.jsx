@@ -46,7 +46,7 @@ export default function SignInModal({
                 message.error("Sign in failed - wrong Email or password");
                 console.log("error: ", err.response.data)
             });
-
+        localStorage.setItem("cart",[]);
         setOpenModal(false);
     };
     const onSuccessFromGoogle = async (response) => {
