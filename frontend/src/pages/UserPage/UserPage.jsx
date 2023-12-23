@@ -18,6 +18,56 @@ const UserPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [newProfilePicture, setNewProfilePicture] = useState(null);
     const [openAddSongModal, setOpenAddSongModal] = useState(false);
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
+    const [ownSongs, setOwnSongs] = useState([]);
+
+    const [passwordForm, setPasswordForm] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: ""
+    });
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    const handlePasswordChange = (e) => {
+        const {name, value} = e.target;
+        setPasswordForm((prevForm) => ({
+            ...prevForm,
+            [name]: value
+        }));
+    };
+
+    const handleUpdatePassword = async () => {
+        if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
+            // Show an error message or handle password mismatch
+            console.error('New password and confirmation do not match');
+            return;
+        }
+        try {
+            const response = await axios.put('http://localhost:6969/users/update-password', {
+                currentPassword: passwordForm.currentPassword,
+                newPassword: passwordForm.newPassword
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("moozikaToken")}`
+                }
+            });
+
+            // Handle the response, e.g., show a success message
+            console.log('Password updated successfully', response.data);
+            setPasswordForm({
+                currentPassword: "",
+                newPassword: "",
+                confirmNewPassword: ""
+            });
+            setShowPasswordForm(false);
+        } catch (error) {
+            // Handle errors, e.g., show an error message
+            console.error('Error updating password', error);
+        }
+        setShowPasswordForm(false);
+        setIsPasswordFormOpen(false);
+    };
 
     const fetchUserData = async () => {
         try {
@@ -34,14 +84,36 @@ const UserPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUserData();
+
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        filterSongsCreatedByUser().then((res) => setOwnSongs(res)).catch((err) => console.log("error :      ",err));
+
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+
+
     }, []);
-    const filterSongsCreatedByUser = () => {
-        //TODO: we might need to change the field user._id
-        return user.songs.filter((song) => song.creator === localStorage.getItem('moozikaToken'));
+    const filterSongsCreatedByUser = async () => {
+        const myUser = await axios.post("http://localhost:6969/users/user-details", {
+            token: localStorage.getItem("moozikaToken"),
+        });
+
+        console.log("the songs that i get after filtering are: ", user.songs.filter((song) => song.creator === myUser.data._id));
+        return user.songs.filter((song) => song.creator === myUser.data._id);
     };
+
+
     const handleAddSong = () => {
         setOpenAddSongModal(true);
     };
+
 
     const handleAddSongSuccess = (newSong) => {
         setUser((prevUser) => ({
@@ -61,11 +133,61 @@ const UserPage = () => {
                 paddingBottom: 8
             }}>
 
+
                 <Avatar
                     alt="Profile Picture"
                     src={user.profile_image}
                     sx={{width: 100, height: 100, marginBottom: 4, marginTop: 4}}
                 />
+                <Button onClick={() => setIsPasswordFormOpen(true)} variant="contained" color="primary"
+                        sx={{marginBottom: 2}}>
+                    Change Password
+                </Button>
+
+                {isPasswordFormOpen && (
+                    <Box>
+                        <Typography variant="h6" gutterBottom sx={{
+                            borderBottom: "2px solid white",
+                            display: "inline-block",
+                            whiteSpace: 'nowrap',
+                            marginTop: 7,
+                            paddingRight: windowWidth <= 600 ? 10 : 90,
+                            paddingLeft: 3,
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textTransform: 'uppercase',
+                        }}>
+                            Update Password
+                        </Typography>
+                        <form>
+                            <input
+                                type="password"
+                                name="currentPassword"
+                                placeholder="Current Password"
+                                value={passwordForm.currentPassword}
+                                onChange={handlePasswordChange}
+                            />
+                            <input
+                                type="password"
+                                name="newPassword"
+                                placeholder="New Password"
+                                value={passwordForm.newPassword}
+                                onChange={handlePasswordChange}
+                            />
+                            <input
+                                type="password"
+                                name="confirmNewPassword"
+                                placeholder="Confirm New Password"
+                                value={passwordForm.confirmNewPassword}
+                                onChange={handlePasswordChange}
+                            />
+                            <Button type="button" onClick={handleUpdatePassword} variant="contained" color="primary"
+                                    sx={{marginBottom: 2}}>
+                                Update Password
+                            </Button>
+                        </form>
+                    </Box>
+                )}
 
                 <Upload
                     showUploadList={false}
@@ -89,21 +211,32 @@ const UserPage = () => {
                 <Typography
                     variant="h6"
                     gutterBottom
-                    sx={{borderBottom: "2px solid white", display: "inline-block", marginTop: 7, paddingRight: 90, paddingLeft: 3, fontWeight: 'bold', color: 'white', textTransform: 'uppercase',}}
+                    sx={{
+                        borderBottom: "2px solid white",
+                        display: "inline-block",
+                        whiteSpace: 'nowrap',
+                        marginTop: 7,
+                        paddingRight: windowWidth <= 600 ? 10 : 90,
+                        paddingLeft: 3,
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textTransform: 'uppercase',
+                    }}
                 >
                     Songs Owned By User
                 </Typography>
                 <Grid container spacing={2} marginTop="2rem">
                     {user.songs.length > 0 ? (
-                        <List list={songs} style={{ marginTop: '1rem' }} />
+                        <List list={songs} style={{marginTop: '1rem'}}/>
                     ) : (
                         <Typography variant="h6" color="white" gutterBottom
                                     sx={{
-                                        paddingRight: 30,
                                         paddingLeft: 15,
                                         fontWeight: 'bold',
                                         color: 'white',
                                         textTransform: 'uppercase',
+                                        paddingRight: windowWidth <= 600 ? 10 : 90,
+                                        whiteSpace: 'nowrap'
                                     }}
                         >
                             No songs found. Start adding some amazing songs!
@@ -118,35 +251,42 @@ const UserPage = () => {
                         borderBottom: "2px solid white",
                         display: "inline-block",
                         marginTop: 7,
-                        paddingRight: 90,
+                        paddingRight: windowWidth <= 600 ? 10 : 90,
                         paddingLeft: 3,
                         fontWeight: 'bold',
                         color: 'white',
                         textTransform: 'uppercase',
+                        whiteSpace: 'nowrap'
                     }}
                 >
                     Songs created By User
                 </Typography>
 
                 <Grid container spacing={2} marginTop="2rem">
-                    {filterSongsCreatedByUser().length > 0 ? (
-                        <List list={filterSongsCreatedByUser()} />
-                    ) : (
-                        <Typography variant="h6" color="white" gutterBottom
+                    {ownSongs.length > 0
+                        ? (<List list={ownSongs}/>)
+                        :
+                        (<Typography variant="h6"
+                                    color="white"
+                                    gutterBottom
                                     sx={{
-                                        paddingRight: 30,
                                         paddingLeft: 15,
+                                        display: "inline-block",
+                                        paddingRight: windowWidth <= 600 ? 10 : 90,
                                         fontWeight: 'bold',
                                         color: 'white',
                                         textTransform: 'uppercase',
+                                        textAlign: 'center',
+                                        whiteSpace: 'nowrap'
                                     }}
                         >
-
-
                             No songs created by you. Be the first to create one!
-                        </Typography>
-                    )}
+                        </Typography>)
+
+                    }
+                    )};
                 </Grid>
+
                 <Button onClick={handleAddSong} variant="contained" color="primary">
                     Add Song
                 </Button>
@@ -155,9 +295,12 @@ const UserPage = () => {
                     setOpenModal={setOpenAddSongModal}
                     onSuccess={handleAddSongSuccess}
                 />
+
+
             </Box>
         </Loader>
-    );
+    )
+        ;
 };
 
 export default UserPage;
