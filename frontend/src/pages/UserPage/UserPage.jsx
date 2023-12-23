@@ -69,12 +69,14 @@ const UserPage = () => {
         setIsPasswordFormOpen(false);
     };
 
+
     const fetchUserData = async () => {
         try {
             const myUser = await axios.post('http://localhost:6969/users/user-details', {token: localStorage.getItem("moozikaToken")});
             setUser(myUser.data);
             setSongs(myUser.data.songs);
             setIsLoading(false);
+            setOwnSongs(myUser.data.songs.filter((song) => song.creator === myUser.data._id));
         } catch (error) {
             console.error("Error fetching user data", error);
             setIsLoading(false);
@@ -91,23 +93,12 @@ const UserPage = () => {
 
         window.addEventListener("resize", handleResize);
 
-        filterSongsCreatedByUser().then((res) => setOwnSongs(res)).catch((err) => console.log("error :      ",err));
-
-
         return () => {
             window.removeEventListener("resize", handleResize);
         };
 
 
     }, []);
-    const filterSongsCreatedByUser = async () => {
-        const myUser = await axios.post("http://localhost:6969/users/user-details", {
-            token: localStorage.getItem("moozikaToken"),
-        });
-
-        console.log("the songs that i get after filtering are: ", user.songs.filter((song) => song.creator === myUser.data._id));
-        return user.songs.filter((song) => song.creator === myUser.data._id);
-    };
 
 
     const handleAddSong = () => {
@@ -116,11 +107,13 @@ const UserPage = () => {
 
 
     const handleAddSongSuccess = (newSong) => {
+        console.log("the new song is", newSong);
         setUser((prevUser) => ({
             ...prevUser,
             songs: [...prevUser.songs, newSong],
         }));
-        setOpenAddSongModal(false);
+        setOwnSongs((prevSongs) => [...prevSongs, newSong]);
+
     };
 
     return (
@@ -227,7 +220,7 @@ const UserPage = () => {
                 </Typography>
                 <Grid container spacing={2} marginTop="2rem">
                     {user.songs.length > 0 ? (
-                        <List list={songs} style={{marginTop: '1rem'}}/>
+                        <List list={user.songs} style={{marginTop: '1rem'}}/>
                     ) : (
                         <Typography variant="h6" color="white" gutterBottom
                                     sx={{

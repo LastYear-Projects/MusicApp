@@ -41,7 +41,7 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = ({ openModal, setOpenModal }) => {
+const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
   const { register, handleSubmit } = useForm();
   const [successfullyMessage, setSuccessfullyMessage] = useState(false);
   const navigate = useNavigate();
@@ -108,14 +108,14 @@ const AddSong = ({ openModal, setOpenModal }) => {
       return;
     }
 
-    await axios.post("http://localhost:6969/admin/songs/create", {
+    const response = await axios.post("http://localhost:6969/admin/songs/create", {
       song: formData,
       token: localStorage.getItem("moozikaToken"),
     });
     setSuccessfullyMessage(true);
-    setTimeout(() => {
-      navigate("/profile");
-    }, 1500);
+
+    onSuccess(response.data);
+    // setTimeout(() => {navigate("/profile");}, 1500);
     setOpenModal(false);
   };
 
