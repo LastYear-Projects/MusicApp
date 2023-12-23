@@ -3,10 +3,10 @@ import axios from "axios";
 import Loader from "../../components/loader/loader";
 import {Box, Typography, Avatar, Grid, TextField} from "@mui/material";
 import List from "../../components/list/List";
-import {Button, Upload} from "antd";
+import {Button, message, Upload} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
 import AddSong from "../../components/addSongModal/addSong.jsx";
-import {Update} from "@mui/icons-material";
+import {Edit, EditRounded, Update} from "@mui/icons-material";
 
 const UserPage = () => {
     const [user, setUser] = useState({
@@ -19,63 +19,87 @@ const UserPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [newProfilePicture, setNewProfilePicture] = useState(null);
     const [openAddSongModal, setOpenAddSongModal] = useState(false);
-    const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false);
+    const [isNameFormOpen, setIsNameFormOpen] = useState(false);
     const [ownSongs, setOwnSongs] = useState([]);
 
-    const [passwordForm, setPasswordForm] = useState({
-        currentPassword: "",
-        newPassword: "",
-        confirmNewPassword: ""
+    // const [passwordForm, setPasswordForm] = useState({
+    //     currentPassword: "",
+    //     newPassword: "",
+    //     confirmNewPassword: ""
+    // });
+    const [newName, setNewName] = useState({
+        newName: ""
     });
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const handlePasswordChange = (e) => {
-        const {name, value} = e.target;
-        setPasswordForm((prevForm) => ({
+    const handleNameChange = (e) => {
+        const name = e.target.value;
+        setNewName((prevForm) => ({
             ...prevForm,
-            [name]: value
+            newName: name
         }));
     };
 
     const handleCloseForm = () => {
-        setPasswordForm({
-            currentPassword: "",
-            newPassword: "",
-            confirmNewPassword: ""
-        });
-        setIsPasswordFormOpen(false);
+        setIsNameFormOpen(false);
     };
+    const handleOpenForm = () => {
+        setIsNameFormOpen(true);
+    };
+
     const handleUpdatePassword = async () => {
         if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
             // Show an error message or handle password mismatch
-            console.error('New password and confirmation do not match');
+            message.error('New password and confirmation do not match');
             return;
         }
-        try {
-            const response = await axios.put('http://localhost:6969/users/update-password', {
-                currentPassword: passwordForm.currentPassword,
-                newPassword: passwordForm.newPassword
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("moozikaToken")}`
-                }
-            });
 
-            // Handle the response, e.g., show a success message
-            console.log('Password updated successfully', response.data);
+        await axios.post("http://localhost:6969/auth/login", {
+                email: user.email,
+                password: passwordForm.currentPassword,
+            })
+            .then((res) => {
+                if(res.status !==200){
+                    message.error("Wrong password");
+                    return;
+                }
+            }).then((
+                await axios.put('http://localhost:6969/users', {
+                    token: localStorage.getItem("moozikaToken"),
+                    updatedUser: {
+                        password: passwordForm.newPassword,
+                        name: user.name,
+                        email: user.email,
+                    }
+                })
+            )).then((res) => {
+                if(res.status === 200)
+                    message.success("Password updated successfully");
+            }).catch((err) => {
+                    message.error("Error updating password");
+                }
+            );
+
             setPasswordForm({
                 currentPassword: "",
                 newPassword: "",
                 confirmNewPassword: ""
             });
-            setShowPasswordForm(false);
-        } catch (error) {
-            // Handle errors, e.g., show an error message
-            console.error('Error updating password', error);
-        }
-        setShowPasswordForm(false);
-        setIsPasswordFormOpen(false);
+        setIsNameFormOpen(false);
     };
+
+    const handleChangeName = async () => {
+        await axios.put('http://localhost:6969/users', {
+            token: localStorage.getItem("moozikaToken"),
+            updatedUser: {
+                name: newName.newName,
+            }
+        }).then((res) => {
+            if (res.status === 200) {
+                message.success("the name was changed successfully")
+                handleCloseForm();
+            };
+    }).catch((err) => {message.error("Error updating name")});}
 
 
     const fetchUserData = async () => {
@@ -133,14 +157,18 @@ const UserPage = () => {
                 alignItems: "center",
                 paddingBottom: 8
             }}>
-
-
                 <Avatar
                     alt="Profile Picture"
                     src={user.profile_image}
                     sx={{width: 100, height: 100, marginBottom: 4, marginTop: 4}}
                 />
 
+                <Typography variant="h4" gutterBottom>
+                    {user.name}
+                </Typography>
+                <Typography variant="body1" color="textSecondary" gutterBottom color="white">
+                    {user.email}
+                </Typography>
 
                 <Upload
                     showUploadList={false}
@@ -152,19 +180,18 @@ const UserPage = () => {
                     <Button icon={<UploadOutlined/>} size="small" style={{marginBottom: "1rem"}}>
                         Change Profile Picture
                     </Button>
+
+
                 </Upload>
 
-
-                <Button onClick={() => setIsPasswordFormOpen(true)}
-                        variant="contained"
-                        color="primary"
-                        style={{ marginBottom: "1rem" }}
-
-                >
-                    Change Password
+                <Button icon={<EditRounded/>}  size=" small"
+                onClick={handleOpenForm}>
+                    Change User Name
                 </Button>
 
-                {isPasswordFormOpen && (
+
+
+                {isNameFormOpen && (
                     <Box>
                         <Typography variant="h6" gutterBottom sx={{
                             borderBottom: "2px solid white",
@@ -177,7 +204,7 @@ const UserPage = () => {
                             color: 'white',
                             textTransform: 'uppercase',
                         }}>
-                            Update Password
+                            Update Name
                         </Typography>
 
 
@@ -200,47 +227,28 @@ const UserPage = () => {
                                 }}
                             >
                                 <TextField
-                                    type="password"
-                                    name="currentPassword"
-                                    label="Current Password"
+                                    type="New Name"
+                                    name="New Name"
+                                    label="Enter The New Name..."
                                     variant="outlined"
                                     margin="normal"
-                                    value={passwordForm.currentPassword}
-                                    onChange={handlePasswordChange}
+                                    value={newName.newName}
+                                    onChange={handleNameChange}
                                     sx={{width: "40%"}}
                                 />
-                                <TextField
-                                    type="password"
-                                    name="newPassword"
-                                    label="New Password"
-                                    variant="outlined"
-                                    margin="normal"
-                                    value={passwordForm.newPassword}
-                                    onChange={handlePasswordChange}
-                                    sx={{width: "40%"}}
-                                />
-                                <TextField
-                                    type="password"
-                                    name="confirmNewPassword"
-                                    label="Confirm New Password"
-                                    variant="outlined"
-                                    margin="normal"
-                                    value={passwordForm.confirmNewPassword}
-                                    onChange={handlePasswordChange}
-                                    sx={{width: "40%"}}
-                                />
+
                                 <Box sx={{ display: "flex", flexDirection: "row", marginTop: 3 ,marginBottom: 3}}>
                                     <Button
                                         marginLeft = "2rem"
                                         marginRight = "2rem"
-                                        onClick={handleUpdatePassword}
+                                        onClick={handleChangeName}
                                         variant="contained"
                                         style={{
                                             marginRight: "1rem",
                                             marginLeft: "1rem"
                                         }}
                                     >
-                                        Update Password
+                                        Update Name
                                     </Button>
                                     <Button
                                         onClick={handleCloseForm}
@@ -267,12 +275,10 @@ const UserPage = () => {
                     </Box>
                 )}
 
-                <Typography variant="h4" gutterBottom>
-                    {user.name}
-                </Typography>
-                <Typography variant="body1" color="textSecondary" gutterBottom color="white">
-                    {user.email}
-                </Typography>
+
+
+
+
 
                 <Typography
                     variant="h6"
