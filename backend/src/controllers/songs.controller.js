@@ -1,6 +1,7 @@
 const songService = require('../services/songs.service');
+const userService = require('../services/users.service');
 const curl = require('curl');
-
+const jwt = require('jsonwebtoken');
 
 const getAllSongs = async (req, res) => {
     try {
@@ -74,15 +75,17 @@ const getSongById = async (req, res) => {
 
 const createSong = async (req, res) => {
     try {
-        const { song } = req.body;
+        const { song, token } = req.body; //TODO: add the creator ID from the token
         const genres = [...song.genre];
         const duration = song.duration;
         const price = song.price;
+        const creatorID = jwt.decode(token).id;
+        const user = await userService.getUserById(creatorID);
         //check with regex that the price doesnt contain letters (point is allowed)
         const reg = new RegExp('^[0-9]+(\.[0-9]+)?');
-        if (!reg.test(price)) return res.status(500).json({ message: "Price must be a number" });
-        if (song.price < 0) return res.status(500).json({ message: "Price cannot be negative" });
-        if (duration < 0) return res.status(500).json({ message: "Duration cannot be negative" });
+        if (price && !reg.test(price)) return res.status(500).json({ message: "Price must be a number" });
+        if (price &&price  < 0) return res.status(500).json({ message: "Price cannot be negative" });
+        if (duration && duration < 0) return res.status(500).json({ message: "Duration cannot be negative" });
         const titleCaseGenres = genres.map(genre => {
             let myGenre = genre.split(' ');
             myGenre = myGenre.map(word => word[0].toUpperCase() + word.slice(1));
@@ -92,7 +95,12 @@ const createSong = async (req, res) => {
             return myGenre.join('-');
         });
         song.genre = titleCaseGenres;
+        song.creator = user._id;
+        console.log("user songs before push", user.songs)
         const newSong = await songService.createSong(song);
+        user.songs.push(newSong._id);
+        console.log("user songs after push", user.songs)
+        await userService.updateUser(creatorID, user);
         res.status(201).json(newSong);
     } catch (error) {
         res.status(409).json({ message: error.message });

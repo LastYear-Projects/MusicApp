@@ -35,7 +35,7 @@ const SongScheme = new mongoose.Schema({
         required: true,
         trim: true,
         minlength: 1,
-        maxlength: 5
+        maxlength: 5 //TODO: check if this is the right max length
     },
     album_image: {
         type: String,
@@ -50,9 +50,13 @@ const SongScheme = new mongoose.Schema({
             },
         ],
     },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     price: {
         type: Number,
-        required: true,
         trim: true,
         minlength: 1,
         maxlength: 5,
@@ -69,7 +73,10 @@ const SongScheme = new mongoose.Schema({
         type: String,
         trim: true,
         default: '',
-        required: true
+    },
+    numOfPurchases: {
+        type: Number,
+        default: 0
     },
 });
 

@@ -4,15 +4,24 @@ content-type: application/json
 
 ###
 
-GET http://localhost:6969/songs/64ccda0c5fad016c15f71c3d
+GET http://localhost:6969/songs/64e30d14fc68b9a5b37ba5bd
+
+###
+DELETE http://localhost:6969/admin/songs/6586ab1eae8f764a0b7f447e
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwMzMyNDQyNiwiZXhwIjoxNzM0ODYwNDI2fQ.zQc6QwEv3tmiACANkc7Q9TaVjrXSQ2Ft-C2ymxVsLxQ"
+}
 
 ###
 
-POST http://localhost:6969/songs HTTP/1.1
+POST http://localhost:6969/admin/songs/create HTTP/1.1
 content-type: application/json
 
 {
-    "title": "BDIKALAST",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwMzMyNDQyNiwiZXhwIjoxNzM0ODYwNDI2fQ.zQc6QwEv3tmiACANkc7Q9TaVjrXSQ2Ft-C2ymxVsLxQ",
+    "song": {
+    "title": "AddSongToYuvalOfek",
     "artist": "BendaLulu",
     "album": "Bendaron24",
     "year": 2022,
@@ -20,6 +29,7 @@ content-type: application/json
     "duration": 1234,
     "album_image": "https://avatars.githubusercontent.com/u/81577071?v=4",
     "preview_url":"https://p.scdn.co/mp3-preview/98123a7d31111d0d9a61c21d4ce6e9215a8f5903?cid=38e67659f07443c3be7ebf8f88362892"
+    }
 }
 
 ###

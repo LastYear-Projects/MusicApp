@@ -6,7 +6,7 @@ const CommentScheme = new mongoose.Schema({
         ref: 'user',
         required: true
     },
-    text: {
+    comment: {
         type: String,
         required: true,
         trim: true,
@@ -22,3 +22,5 @@ const CommentScheme = new mongoose.Schema({
           }
     }
 });
+
+module.exports = mongoose.model('comment', CommentScheme, 'comments')

@@ -23,20 +23,12 @@ const UserScheme = new mongoose.Schema({
         minlength: 3,
         maxlength: 500
     },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
     songs: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'song',
         default: []
     },
-    orders: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'order',
-        default: []
-    },
+    
     profile_image: {
         type: String,
         trim: true,

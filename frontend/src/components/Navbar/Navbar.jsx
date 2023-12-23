@@ -30,9 +30,12 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const navigate = useNavigate();
-  const {data} = useFetch("http://localhost:6969/songs");
-  const top100Films = data!=null? data.map((song) => song.title) : [];
-  
+  const { data } = useFetch("http://localhost:6969/songs");
+  const top100Films =
+    data != null
+      ? data.map((song) => ({ title: song.title, _id: song._id }))
+      : [];
+
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
@@ -48,8 +51,9 @@ export default function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSignInButtonClick = () => {setIsSignInModalOpen(true)};
-
+  const handleSignInButtonClick = () => {
+    setIsSignInModalOpen(true);
+  };
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -70,38 +74,60 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={() => navigate("/cart")}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
-        <p>Cart</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-      <MenuItem onClick={() => {}}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <LogoutIcon />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem>
+      {isLoggedIn && (
+        <>
+          <MenuItem onClick={() => navigate("/cart")}>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} color="error">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+            <p>Cart</p>
+          </MenuItem>
+          <MenuItem onClick={handleProfileMenuOpen}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+          <MenuItem onClick = {()=> setIsLoggedIn(false)}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <LogoutIcon />
+            </IconButton>
+            <p>Logout</p>
+          </MenuItem>
+        </>
+      )}
+
+      {!isLoggedIn && (
+        <MenuItem onClick={handleSignInButtonClick}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <Typography>Login</Typography>
+          </IconButton>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -115,22 +141,27 @@ export default function Navbar() {
           }}
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography className={css["moozika-logo"]}
+            <Typography
+              className={css["moozika-logo"]}
               onClick={() => navigate("/")}
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-            <MoozikaLogo />
+              <MoozikaLogo />
             </Typography>
             <StyledAutocomplete
               disablePortal
               id="combo-box-demo"
               options={top100Films}
+              getOptionLabel={(option) => option.title}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Search..." />
               )}
+              onChange={(e, value) => {
+                value ? navigate(`/song/${value._id}`) : "";
+              }}
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -162,13 +193,18 @@ export default function Navbar() {
                   aria-controls={menuId}
                   aria-haspopup="true"
                   color="inherit"
-                  onClick={handleSignInButtonClick}
+                  onClick = {()=> setIsLoggedIn(false)}
                 >
-                  <Typography>SignIn</Typography>
+                  <Typography>Logout</Typography>
                 </IconButton>
               </Box>
             ) : (
-              <MenuItem onClick={() => {}}>Login</MenuItem>
+              <MenuItem
+                onClick={handleSignInButtonClick}
+                sx={{ display: { xs: "none", md: "flex" } }}
+              >
+                Login
+              </MenuItem>
             )}
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -189,8 +225,10 @@ export default function Navbar() {
       <main style={{ flex: "1" }}>
         <Outlet />
       </main>
-      <SignInModal openModal={isSignInModalOpen} setOpenModal={setIsSignInModalOpen} />
-
+      <SignInModal
+        openModal={isSignInModalOpen}
+        setOpenModal={setIsSignInModalOpen}
+      />
     </div>
   );
 }

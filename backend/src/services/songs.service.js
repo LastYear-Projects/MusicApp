@@ -1,5 +1,4 @@
 const Song = require('../models/SongScheme');
-const getToken = require('../config/spotifyApi');
 
 
 const getAllSongs = async () => {
@@ -113,10 +112,6 @@ const getSongsByYear = async (year) => {
 const createSong = async (song) => {
     //create song and return it
 
-    const { title, artist, album, year, duration, price, album_image, preview_url, youtube_id } = song;
-    if (!title || !artist || !album || year === undefined || duration === undefined || youtube_id === undefined) {
-        throw new Error('All fields are required');
-    }
     //let id = title + artist + album + year;
     //id = id.replace(/\s+/g, '_');
 
@@ -154,10 +149,6 @@ const deleteSong = async (id) => {
 
 const updateSong = async (id, newSong) => {
     if (id) {
-        const { title, artist, album, year, genre, duration, youtube_id } = newSong;
-        if (!title || !artist || !album || year === undefined || !genre || duration === undefined || youtube_id === undefined) {
-            throw new Error('All fields are required');
-        }
         await Song.findOneAndUpdate({ _id: id }, newSong);
         return;
     }
@@ -180,6 +171,21 @@ const increaseNumOfPurchases = async (id) => {
     throw new Error('Id is required');
 }
 
+const getSongByCommentId = async (id) => {
+    if (id) {
+        try {
+            const song = await Song.findOne({ comments: id });
+            if (song) {
+                return song;
+            }
+            throw new Error('Song not found');
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+    throw new Error('Id is required');
+}
+
 
 module.exports = {
     getAllSongs,
@@ -192,5 +198,6 @@ module.exports = {
     getSongsByAlbum,
     getSongsByGenre,
     getSongsByYear,
-    increaseNumOfPurchases
+    increaseNumOfPurchases,
+    getSongByCommentId
 }
