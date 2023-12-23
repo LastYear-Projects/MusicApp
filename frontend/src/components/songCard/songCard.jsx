@@ -37,12 +37,13 @@ export default function SongCard({
 
     const handleDeleteSong = async () => {
         try {
-            const token = localStorage.getItem("moozikaToken");
-           console.log("the _id is " , _id);
-           console.log("the token is " , token);
+            const userToken = localStorage.getItem("moozikaToken");
+           console.log("the _id of the song is: " , _id);
+           console.log("the song creator is   : " , creator);
+           console.log("the userToken is      : " , userToken);
             await axios.delete(`http://localhost:6969/songs/${_id}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${userToken}`,
                 },
             });
         } catch (err) {
