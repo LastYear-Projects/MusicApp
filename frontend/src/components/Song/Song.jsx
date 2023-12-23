@@ -8,8 +8,8 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
-import CheckIcon from '@mui/icons-material/Check';
-
+import CheckIcon from "@mui/icons-material/Check";
+import Loader from "../loader/loader";
 
 function Song({
   title,
@@ -20,11 +20,12 @@ function Song({
   duration,
   price,
   album_image,
-  youtube_id ,
+  youtube_id,
 }) {
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isSongExist, setIsSongExist] = useState(false);
-  const [isSongInCart,setIsSongInCart]=useState(false);
+  const [isSongInCart, setIsSongInCart] = useState(false);
   const { id: songId } = useParams();
   const songDurationInSeconds = duration / 1000;
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
@@ -34,19 +35,18 @@ function Song({
   }`;
 
   function addToCartHandler() {
-    if(!localStorage.getItem("cart")){
-      localStorage.setItem("cart",JSON.stringify([songId]))
-    }
-    else
-    {
-      const cart=JSON.parse(localStorage.getItem("cart"));
+    if (localStorage.getItem("cart").length === 0) {
+      localStorage.setItem("cart", JSON.stringify([songId]));
+    } else {
+      const cart = JSON.parse(localStorage.getItem("cart"));
       cart.push(songId);
-      localStorage.setItem("cart",JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
     setIsSongInCart(true);
   }
 
   const getUser = async () => {
+    setIsLoading(true);
     const userToken = localStorage.getItem("moozikaToken");
     if (!userToken) return;
     const { data } = await axios.post(
@@ -54,21 +54,26 @@ function Song({
       { token: userToken }
     );
     setUser(data);
+    setIsLoading(false);
   };
 
-  const checkSongInCart=()=>{
-  const cart=JSON.parse(localStorage.getItem("cart"));
-  setIsSongInCart(cart?.find(id=>id==songId)?true:false)
+  const checkSongInCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart"));
+    setIsSongInCart(cart?.find((id) => id == songId) ? true : false);
+  };
   
-  }
-
   useEffect(() => {
     getUser();
-    setIsSongExist(user?.songs?.find(song=>song._id===songId)?true:false)
-    checkSongInCart();
-    console.log("ive been rendered")
   }, []);
-  
+
+  useEffect(()=>{
+    setIsSongExist(
+      user?.songs?.find((song) => song._id === songId) ? true : false
+    );
+    checkSongInCart();
+    console.log("ive been rendered");
+  },[user])
+
   return (
     <Box>
       <Card
@@ -141,6 +146,7 @@ function Song({
             <Typography variant="subtitle1" color="#b8b8b8" component="div">
               {album}
             </Typography>
+            <Loader isLoading={isLoading}>
             {isSongExist && (
               <Box sx={{ "@media (max-width:959px)": { marginTop: "3rem" } }}>
                 <ReactPlayer
@@ -151,7 +157,8 @@ function Song({
                 />
               </Box>
             )}
-            {!isSongExist &&isSongInCart&& <Box
+            {!isSongExist && isSongInCart && (
+              <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -166,7 +173,6 @@ function Song({
                   },
                 }}
               >
-                
                 <Typography
                   variant="subtitle1"
                   color="#b8b8b8"
@@ -175,9 +181,10 @@ function Song({
                 >
                   The song is already in your cart
                 </Typography>
-                <CheckIcon sx={{color:"green"}}/>
-                </Box>}
-            {!isSongExist&&!isSongInCart && (
+                <CheckIcon sx={{ color: "green" }} />
+              </Box>
+            )}
+            {!isSongExist && !isSongInCart && (
               <Box
                 sx={{
                   display: "flex",
@@ -220,6 +227,7 @@ function Song({
                 </Button>
               </Box>
             )}
+             </Loader>
           </CardContent>
         </Box>
       </Card>
