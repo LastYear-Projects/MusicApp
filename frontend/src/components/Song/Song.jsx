@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CheckIcon from "@mui/icons-material/Check";
 import Loader from "../loader/loader";
+import { message } from "antd";
 
 function Song({
   title,
@@ -43,6 +44,7 @@ function Song({
       localStorage.setItem("cart", JSON.stringify(cart));
     }
     setIsSongInCart(true);
+    message.success("Song added to cart");
   }
 
   const getUser = async () => {
@@ -179,7 +181,7 @@ function Song({
                   component="div"
                   marginRight="10px"
                 >
-                  The song is already in your cart
+                  This song is in the shopping cart
                 </Typography>
                 <CheckIcon sx={{ color: "green" }} />
               </Box>
