@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   TextField,
   Button,
@@ -18,6 +18,7 @@ const Chat = ({ isOpen, handleOpen }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     // Fetch user details when the component mounts
@@ -45,6 +46,16 @@ const Chat = ({ isOpen, handleOpen }) => {
       socket.off("message");
     };
   }, []);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat when new messages are added
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== "") {
@@ -99,6 +110,7 @@ const Chat = ({ isOpen, handleOpen }) => {
               )}
             </ListItem>
           ))}
+          <div ref={messagesEndRef} />
         </List>
         <div
           style={{
