@@ -18,9 +18,10 @@ import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import { gapi } from "gapi-script";
+import PrivateRoutes from "./components/privateRoutes/PrivateRoutes";
 
 const routes = [
-  { path: "/", element: <HomePage /> },
+  // { path: "/", element: <HomePage /> },
   { path: "/cart", element: <CartPage /> },
   { path: "/signup", element: <SignUpPage /> },
   { path: "/song/:id", element: <SongPage /> },
@@ -40,9 +41,12 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Navbar />}>
         <Route path="/" element={<Footer />}>
-          {routes.map(({ path, element }) => {
-            return <Route key={path} path={path} element={element} />;
-          })}
+          <Route path="/" element={<HomePage />} />
+          <Route element={<PrivateRoutes />}>
+            {routes.map(({ path, element }) => {
+              return <Route key={path} path={path} element={element} />;
+            })}
+          </Route>
         </Route>
       </Route>
     </>
