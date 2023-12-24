@@ -10,23 +10,49 @@ import {
   ListItemText,
 } from "@mui/material";
 import io from "socket.io-client";
+import axios from "axios";
 
 const socket = io("http://localhost:7070"); // Replace with your server URL
 
 const Chat = ({ isOpen, handleOpen }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
+    // Fetch user details when the component mounts
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:6969/users/user-details",
+          { token: localStorage.getItem("moozikaToken") }
+        );
+        setUserDetails(response.data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+
     // Listen for messages from the server
     socket.on("message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
+
+    // Clean up the socket listener when the component unmounts
+    return () => {
+      socket.off("message");
+    };
   }, []);
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== "") {
-      socket.emit("message", newMessage);
+      const messageObject = {
+        message: newMessage,
+        userDetails: userDetails,
+      };
+      socket.emit("message", messageObject);
       setNewMessage("");
     }
   };
@@ -38,6 +64,7 @@ const Chat = ({ isOpen, handleOpen }) => {
           display: "flex",
           flexDirection: "column",
           height: "100%",
+          maxWidth: "23rem",
           padding: (theme) => theme.spacing(2),
         }}
       >
@@ -52,7 +79,24 @@ const Chat = ({ isOpen, handleOpen }) => {
         >
           {messages.map((message, index) => (
             <ListItem key={index}>
-              <ListItemText primary={message} />
+              {message.userDetails && message.userDetails.profile_image && (
+                <img
+                  src={message.userDetails.profile_image}
+                  alt="User Avatar"
+                  style={{
+                    marginRight: "8px",
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+              )}
+              {message.userDetails && message.userDetails.name && (
+                <ListItemText
+                  primary={message.userDetails.name}
+                  secondary={message.message}
+                />
+              )}
             </ListItem>
           ))}
         </List>
