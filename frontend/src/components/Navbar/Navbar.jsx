@@ -18,9 +18,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import LogoutIcon from "@mui/icons-material/Logout";
-
+import {useState,useEffect} from "react";
 import { StyledAutocomplete } from "../../constants/index";
-
+import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal.jsx";
 
@@ -30,10 +30,10 @@ import Chat from "../chat/Chat.jsx";
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
+  const [cart,setCart]=useState(0);
   const [isChatOpen, setIsChatOpen] = React.useState(false);
-
   const navigate = useNavigate();
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
@@ -42,6 +42,46 @@ export default function Navbar() {
       : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const getCartSize=()=>{
+    const currentCart=JSON.parse(localStorage.getItem("cart"));
+    console.log(currentCart.length,"currentCart")
+    if(currentCart)
+    {
+      setCart(currentCart.length);
+    }
+    else{
+     setCart(0)
+    }
+  }
+
+  async function checkLoggedIn  () {
+  if (!localStorage.getItem("moozikaToken")) {
+    message.error("You must be logged in before accessing this page");
+    return setIsLoggedIn(false);
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:6969/users/user-details",
+      { token: localStorage.getItem("moozikaToken") }
+    );
+    if (response.status !== 200) {
+      message.error("You must be logged in before accessing this page");
+      setIsLoggedIn(false);
+      return;
+    }
+
+    setIsLoggedIn(true);
+  } catch (error) {
+    message.error("You must be logged in before accessing this page");
+    setIsLoggedIn(false);
+  }
+};
+
+  useEffect(()=>{
+    checkLoggedIn();
+    getCartSize();
+  },[])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -62,7 +102,6 @@ export default function Navbar() {
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
-
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -100,12 +139,11 @@ export default function Navbar() {
           >
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              {cart?<Badge badgeContent={cart} color="error">
                 <ShoppingCartIcon />
-              </Badge>
+              </Badge>:<ShoppingCartIcon />}
             </IconButton>
             <p>Cart</p>
           </MenuItem>
@@ -201,13 +239,12 @@ export default function Navbar() {
                 </IconButton>
                 <IconButton
                   size="large"
-                  aria-label="show 4 new mails"
                   color="inherit"
                   onClick={() => navigate("/cart")}
                 >
-                  <Badge badgeContent={4} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
+                  {cart?<Badge badgeContent={cart} color="error">
+                <ShoppingCartIcon />
+              </Badge>:<ShoppingCartIcon />}
                 </IconButton>
                 <IconButton
                   size="large"

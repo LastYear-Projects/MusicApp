@@ -13,6 +13,27 @@ import AddSong from "../addSongModal/addSong.jsx";
 import EditSongModal from "../modal/editSongModal.jsx";
 
 export default function SongCard({
+  _id,
+  album_image,
+  title,
+  album,
+  artist,
+  genre,
+  year,
+  duration,
+  price,
+  numOfPurchases,
+  comments,
+}) {
+  const songDurationInSeconds = duration / 1000;
+  const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
+  const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
+  const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
+    seconds > 9 ? seconds : "0" + seconds
+  }`;
+  const numOfComments = comments ? comments.length : 0;
+  const navigate = useNavigate();
+  return (
                                      _id,
                                      album_image,
                                      title,
