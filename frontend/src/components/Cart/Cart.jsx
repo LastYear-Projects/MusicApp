@@ -1,34 +1,35 @@
-import { Stack, Card, Divider, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { Grid, Card, Divider, Typography, Button, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import CartItem from "../CartItem/CartItem";
 import classes from "./Cart.module.css";
 import Loader from "../loader/loader";
 import axios from "axios";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
+
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [cartExist, setCartExist] = useState(false);
 
-  function getCart() {
+  async function getCart() {
     const cart = JSON.parse(localStorage.getItem("cart"));
     if (cart.length === 0) {
       setCartExist(false);
       setIsLoading(false);
       return;
     }
-    cart.forEach(async (itemId) => {
-      const { data: songData } = await axios.get(
-        `http://localhost:6969/songs/${itemId}`
-      );
-      setCartItems((prev) => [...prev, songData]);
+    const promises = cart.map(async (itemId) => {
+      const { data: songData } = await axios.get(`http://localhost:6969/songs/${itemId}`);
+      return songData;
     });
+    const cartSongs = await Promise.all(promises);
+    setCartItems(cartSongs);
     setCartExist(true);
     setIsLoading(false);
   }
+
   function handeleDeleteSong(id) {
     setIsLoading(true);
     const cartIds = JSON.parse(localStorage.getItem("cart"));
@@ -40,26 +41,31 @@ const Cart = () => {
     }
     setIsLoading(false);
   }
+
   async function handleCheckout() {
     setIsLoading(true);
-    const response = await axios.post("http://localhost:6969/orders", {
-      token: localStorage.getItem("moozikaToken"),
-      order: { songs: cartItems.map((item) => item._id) },
-    });
-    if(response.status==200){
-    message.success("Order created successfully");
-    localStorage.setItem("cart", JSON.stringify([]));
-    setCartItems([]);
-    setCartExist(false);
-    setIsLoading(false);
-    setTimeout(() => {
-      navigate("/");
-    }, 750);
-  }
-  else{
-    message.error("Order failed");
-    setIsLoading(false);
-  }
+    try {
+      const response = await axios.post("http://localhost:6969/orders", {
+        token: localStorage.getItem("moozikaToken"),
+        order: { songs: cartItems.map((item) => item._id) },
+      });
+
+      if (response.status === 200) {
+        message.success("Order created successfully");
+        localStorage.setItem("cart", JSON.stringify([]));
+        setCartItems([]);
+        setCartExist(false);
+        setTimeout(() => {
+          navigate("/");
+        }, 750);
+      } else {
+        message.error("Order failed");
+      }
+    } catch (error) {
+      message.error("An error occurred during checkout");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -74,103 +80,69 @@ const Cart = () => {
 
   return (
     <Loader isLoading={isLoading}>
-      <Card elevation={7} style={{ backgroundColor: "#181818", width: "65%" }}>
-        <Stack
-          direction={"row"}
-          divider={
-            <Divider
-              orientation="vertical"
-              flexItem
-              color="white"
-              style={{ width: "0.075rem" }}
-            />
-          }
-        >
-          <Stack
-            direction={"column"}
-            style={{
-              width: "30%",
-              alignContent: "center",
-              marginLeft: "1rem",
-              marginRight: "1rem",
-            }}
-          >
-            <h2 className={classes.title}>Order Summery</h2>
+      <Card elevation={7} style={{ backgroundColor: "#181818", minWidth:"65%" }}>
+        <Grid container spacing={4} sx={{padding:"1rem"}}>
+          <Grid item xs={12} md={4}  >
+            <Typography variant="h4" className={classes.title}>
+              Order Summary
+            </Typography>
             <div className={classes.cartText}>
-              <h4>Total items:</h4>
-              <h5>{cartItems.length}</h5>
+              <Typography variant="h5">Total items:</Typography>
+              <Typography variant="h6">{cartItems.length}</Typography>
             </div>
             <div className={classes.cartText}>
-              <h4>Subtotal:</h4>
-              <h5>{subtotal}</h5>
+              <Typography variant="h5">Subtotal:</Typography>
+              <Typography variant="h6">{subtotal}</Typography>
             </div>
             <div className={classes.cartText}>
-              <h4>Discount:</h4>
-              <h5>Free</h5>
+              <Typography variant="h5">Discount:</Typography>
+              <Typography variant="h6">Free</Typography>
             </div>
             <div className={classes.cartText}>
-              <h4>Total:</h4>
-              <h5>{subtotal}</h5>
+              <Typography variant="h5">Total:</Typography>
+              <Typography variant="h6">{subtotal}</Typography>
             </div>
-            <button className={classes.checkoutButton} onClick={handleCheckout}>
+            <Box sx={{display:"flex",justifyContent:"center"}}>
+            <Button variant="contained" sx={{margin: "2rem 0.5rem 2rem 0.5rem",
+    borderRadius: "10px",
+    outline: "white",fontWeight:"bold",backgroundColor:"#5A5A5A",border:"1px solid white",width:"65%",}} onClick={handleCheckout}>
               Checkout
-            </button>
-          </Stack>
-          <Stack
-            direction={"column"}
-            sx={{
-              "&::-webkit-scrollbar": {
+            </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={8} sx={{padding:"1rem"}}>
+            <Typography variant="h4" className={classes.title} sx={{marginBottom:"0.5rem"}}>
+              Shopping Cart
+            </Typography>
+            <Box sx={{maxHeight:"40vh",marginBottom:"1.5rem",overflow:"auto","&::-webkit-scrollbar": {
                 width: "8px",
               },
               "&::-webkit-scrollbar-thumb": {
                 backgroundColor: "#6A6A6A",
                 borderRadius: "4px",
-              },
-            }}
-            style={{
-              paddingLeft: "2rem",
-              paddingBottom: "2rem",
-              width: "100%",
-              maxHeight: "400px",
-              overflow: "auto",
-            }}
-          >
-            <h2 className={classes.title}>Shopping Cart</h2>
+              }}}>
             {cartExist ? (
-              cartItems.map((item) => {
-                return (
-                  <CartItem
-                    album_image={item.album_image}
-                    title={item.title}
-                    price={item.price}
-                    removeSong={() => handeleDeleteSong(item._id)}
-                  />
-                );
-              })
+              cartItems.map((item) => (
+                <CartItem
+                  key={item._id}
+                  album_image={item.album_image}
+                  title={item.title}
+                  price={item.price}
+                  removeSong={() => handeleDeleteSong(item._id)}
+                />
+              ))
             ) : (
-              <div
-                style={{
-                  padding: "0.25rem",
-                  color: "black",
-                  backgroundColor: "#9A9A9A",
-                  marginRight: "3rem",
-                  marginTop: "1rem",
-                  borderRadius: "8px",
-                  fontWeight: "bold",
-                }}
-              >
-                <Typography variant="p" style={{ display: "block" }}>
-                  Cart is Empty...
-                </Typography>
-                <Typography variant="p">
-                  Please add items to the cart...
-                </Typography>
-              </div>
+              <Box sx={{color:"white",backgroundColor:"#5A5A5A",borderRadius:"1rem",padding:"0.5rem"}}>
+                <Typography variant="body1">Cart is Empty...</Typography>
+                <Typography variant="body1">Please add items to the cart...</Typography>
+              </Box>
             )}
-          </Stack>
-        </Stack>
+            </Box>
+          </Grid>
+        </Grid>
       </Card>
     </Loader>
   );
 };
+
 export default Cart;
