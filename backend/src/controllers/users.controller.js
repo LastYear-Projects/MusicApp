@@ -39,6 +39,9 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
+const list = [];
+list.fin
+
 const getUserDetails = async (req, res) => {
   try {
     const { token } = req.body;
@@ -83,11 +86,11 @@ const updateUser = async (req, res) => {
     const decodedToken = jwt.decode(token);
     const userId = decodedToken.id;
     const user = await userService.getUserById(userId);
-    updatedUser.name = updatedUser.name
+    if(updatedUser.name) updatedUser.name = updatedUser.name
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
       .join(" ");
-    updatedUser.email = updatedUser.email.toLowerCase();
+    if(updatedUser.email) updatedUser.email = updatedUser.email.toLowerCase();
     const userAfterUpdate = await userService.updateUser(userId, updatedUser);
     userAfterUpdate.password = undefined;
     res.status(200).json({ message: "User updated successfully" });

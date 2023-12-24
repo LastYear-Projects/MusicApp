@@ -1,78 +1,96 @@
-import * as React from "react";
-import {
-    Box,
-    Modal,
-    Fade,
-    Typography,
-    Button,
-    Container,
-    IconButton,
-    TextField,
-} from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
-import css from "./style.module.css";
-import { modalStyle } from "../../constants";
+import React, { useState, useEffect } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {message} from "antd";
 
-const editSongModal = ({
-                              children,
-                              openModal,
-                              setOpenModal,
-                              title,
-                              closeOnOverlay,
-                              btnText,
-                              btnOnClick,
-                          }) => {
+const EditSongModal = ({ open, onClose, songDetails, onUpdate,songId,creator }) => {
+    const [editedSong, setEditedSong] = useState({ ...songDetails });
+
+    const navigate=useNavigate();
+
+    useEffect(() => {
+        setEditedSong({ ...songDetails });
+    }, [songDetails]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditedSong((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleEditSong = async () => {
+        await axios.put(
+            `http://localhost:6969/admin/songs/${songId}`,
+            {
+                token: localStorage.getItem("moozikaToken"),
+                updatedSong: {
+                    title: editedSong.title,
+                    album: editedSong.album,
+                    artist: editedSong.artist,
+                    genre:editedSong.genre,
+                    year:editedSong.year,
+                    duration:editedSong.duration,
+                    price:editedSong.price,
+                    album_image: editedSong.album_image},
+                song:{
+                    creator:creator}
+
+            }
+        ).then((response) => {
+            if(response.status ===200) {
+                message.success(response.data.message)
+                setTimeout(() => {navigate(0);},1500);
+
+            }
+        }).catch((error) => {
+            message.error("error while edit song - call Yuval for backend complains ")
+            console.error(error.error)
+        })
+    };
+
     return (
-        <div>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={openModal}
-                onClose={closeOnOverlay ? () => setOpenModal(false) : undefined}
-                closeAfterTransition
+        <Modal open={open} onClose={onClose}>
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 400,
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                }}
             >
-                <Fade in={openModal}>
-                    <Box sx={modalStyle}>
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            onClick={() => setOpenModal(false)}
-                            aria-label="close"
-                            sx={{ position: "absolute", top: "8px", right: "8px" }}
-                        >
-                            <ClearIcon />
-                        </IconButton>
-                        <Typography
-                            id="transition-modal-title"
-                            variant="h6"
-                            component="h2"
-                            sx={{ fontWeight: "bold" }}
-                        >
-                            {title}
-                        </Typography>
-                        {children}
-                        {btnText && (
-                            <Container
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Button
-                                    variant="contained"
-                                    onClick={btnOnClick}
-                                    className={css["button"]}
-                                >
-                                    {btnText}
-                                </Button>
-                            </Container>
-                        )}
-                    </Box>
-                </Fade>
-            </Modal>
-        </div>
+                <Typography variant="h6" component="div">
+                    Edit Song
+                </Typography>
+                {Object.keys(editedSong).map((field) => (
+                    <TextField
+                        key={field}
+                        label={field.charAt(0).toUpperCase() + field.slice(1)}
+                        name={field}
+                        value={editedSong[field]}
+                        onChange={handleInputChange}
+                        fullWidth
+                        margin="normal"
+                    />
+                ))}
+                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                    <Button variant="contained" onClick={handleEditSong}>
+                        Save Changes
+                    </Button>
+                    <Button variant="contained" onClick={onClose}>
+                        Cancel
+                    </Button>
+                </Box>
+            </Box>
+        </Modal>
     );
 };
 
-export default editSongModal;
+export default EditSongModal;

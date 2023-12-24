@@ -27,7 +27,7 @@ const List = ({
                 {...item}
                 func={func}
                 editFunc={testFunc}
-                creator={creator}
+                // creator={creator}
               />
             </Grid>
           );

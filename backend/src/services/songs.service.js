@@ -112,10 +112,6 @@ const getSongsByYear = async (year) => {
 const createSong = async (song) => {
     //create song and return it
 
-    const { title, artist, album, year, duration, price, album_image, preview_url} = song;
-    if (!title || !artist || !album || year === undefined || duration === undefined) {
-        throw new Error('All fields are required');
-    }
     //let id = title + artist + album + year;
     //id = id.replace(/\s+/g, '_');
 
@@ -175,6 +171,21 @@ const increaseNumOfPurchases = async (id) => {
     throw new Error('Id is required');
 }
 
+const getSongByCommentId = async (id) => {
+    if (id) {
+        try {
+            const song = await Song.findOne({ comments: id });
+            if (song) {
+                return song;
+            }
+            throw new Error('Song not found');
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+    throw new Error('Id is required');
+}
+
 
 module.exports = {
     getAllSongs,
@@ -187,5 +198,6 @@ module.exports = {
     getSongsByAlbum,
     getSongsByGenre,
     getSongsByYear,
-    increaseNumOfPurchases
+    increaseNumOfPurchases,
+    getSongByCommentId
 }

@@ -41,9 +41,8 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = ({ openModal, setOpenModal }) => {
+const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
   const { register, handleSubmit } = useForm();
-  const [successfullyMessage, setSuccessfullyMessage] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
@@ -67,7 +66,6 @@ const AddSong = ({ openModal, setOpenModal }) => {
       "duration",
       "price",
       "album_image",
-      "preview_url",
       "youtube_id",
       "genre",
     ];
@@ -109,11 +107,13 @@ const AddSong = ({ openModal, setOpenModal }) => {
       return;
     }
 
-    // await axios.post("http://localhost:6969/songs", formData);
-    setSuccessfullyMessage(true);
-    setTimeout(() => {
-      navigate("/profile");
-    }, 1500);
+    const response = await axios.post("http://localhost:6969/admin/songs/create", {
+      song: formData,
+      token: localStorage.getItem("moozikaToken"),
+    });
+
+    onSuccess(response.data);
+    message.success("Song was successfully added");
     setOpenModal(false);
   };
 
@@ -170,17 +170,6 @@ const AddSong = ({ openModal, setOpenModal }) => {
           </Form.Item>
         </Form>
       </TransitionsModal>
-      {successfullyMessage && (
-        <Snackbar
-          open={open}
-          autoHideDuration={1000}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        >
-          <Alert severity="success" sx={{ width: "100%" }}>
-            Song was successfully added, redirecting to profile page...
-          </Alert>
-        </Snackbar>
-      )}
     </Box>
   );
 };

@@ -16,20 +16,24 @@ import {
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
+import ChatIcon from "@mui/icons-material/Chat";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {useState,useEffect} from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal.jsx";
+
 import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
+import Chat from "../chat/Chat.jsx";
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
   const [cart,setCart]=useState(0);
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
   const navigate = useNavigate();
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
@@ -81,7 +85,6 @@ export default function Navbar() {
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    navigate("/profile");
   };
 
   const handleMobileMenuClose = () => {
@@ -94,6 +97,7 @@ export default function Navbar() {
 
   const handleSignInButtonClick = () => {
     setIsSignInModalOpen(true);
+    handleMobileMenuClose(); // Close mobile menu after clicking
   };
 
   const menuId = "primary-search-account-menu";
@@ -116,7 +120,23 @@ export default function Navbar() {
     >
       {isLoggedIn && (
         <>
-          <MenuItem onClick={() => navigate("/cart")}>
+          <MenuItem
+            onClick={() => {
+              setIsChatOpen(true);
+              handleMobileMenuClose();
+            }}
+          >
+            <IconButton sx={{ color: "black" }}>
+              <ChatIcon />
+            </IconButton>
+            <p>Chat</p>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigate("/cart");
+              handleMobileMenuClose();
+            }}
+          >
             <IconButton
               size="large"
               color="inherit"
@@ -127,7 +147,12 @@ export default function Navbar() {
             </IconButton>
             <p>Cart</p>
           </MenuItem>
-          <MenuItem onClick={handleProfileMenuOpen}>
+          <MenuItem
+            onClick={() => {
+              handleMobileMenuClose();
+              navigate("/profile");
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -139,7 +164,12 @@ export default function Navbar() {
             </IconButton>
             <p>Profile</p>
           </MenuItem>
-          <MenuItem onClick = {()=> setIsLoggedIn(false)}>
+          <MenuItem
+            onClick={() => {
+              setIsLoggedIn(false);
+              handleMobileMenuClose();
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -204,6 +234,9 @@ export default function Navbar() {
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <IconButton onClick={() => setIsChatOpen(true)}>
+                  <ChatIcon sx={{ color: "white" }} />
+                </IconButton>
                 <IconButton
                   size="large"
                   color="inherit"
@@ -231,7 +264,7 @@ export default function Navbar() {
                   aria-controls={menuId}
                   aria-haspopup="true"
                   color="inherit"
-                  onClick = {()=> setIsLoggedIn(false)}
+                  onClick={() => setIsLoggedIn(false)}
                 >
                   <Typography>Logout</Typography>
                 </IconButton>
@@ -267,6 +300,7 @@ export default function Navbar() {
         openModal={isSignInModalOpen}
         setOpenModal={setIsSignInModalOpen}
       />
+      <Chat isOpen={isChatOpen} handleOpen={() => setIsChatOpen(false)} />
     </div>
   );
 }
