@@ -150,7 +150,6 @@ const UserPage = () => {
   };
 
   const handleAddSongSuccess = (newSong) => {
-    console.log("the new song is", newSong);
     setUser((prevUser) => ({
       ...prevUser,
       songs: [...prevUser.songs, newSong],

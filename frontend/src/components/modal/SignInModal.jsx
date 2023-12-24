@@ -39,13 +39,11 @@ export default function SignInModal({
         password: userNameAndPassword.password,
       })
       .then((userToken) => {
-        console.log("userToken: ", userToken.data.token);
         localStorage.setItem("moozikaToken", userToken.data.token);
         message.success("Sign in success");
       })
       .catch((err) => {
         message.error("Sign in failed - wrong Email or password");
-        console.log("error: ", err.response.data);
       });
     localStorage.setItem("cart", []);
     setTimeout(() => {
@@ -54,7 +52,6 @@ export default function SignInModal({
     setOpenModal(false);
   };
   const onSuccessFromGoogle = async (response) => {
-    console.log("Google sign in success: ", response.accessToken);
     // localStorage.setItem("moozikaToken", response.accessToken);
     message.success("Google sign in success");
     setOpenModal(false);
@@ -73,7 +70,6 @@ export default function SignInModal({
 
     // Now you have additional user information in the `userData` object
     const { email, name, picture } = userData;
-    console.log("User details:", email, name, picture);
 
     await axios
       .post("http://localhost:6969/auth/google-login", {
@@ -84,9 +80,7 @@ export default function SignInModal({
       .then((res) => {
         localStorage.setItem("moozikaToken", res.data.token);
       })
-      .catch((err) => {
-        console.log("err: ", err.response.data);
-      });
+      .catch((err) => {});
 
     setTimeout(() => {
       navigate(0);
@@ -94,7 +88,6 @@ export default function SignInModal({
   };
   const onFailure = (response) => {
     message.failure("Google sign in failure" + response);
-    console.log("Google sign in failure:", response);
   };
 
   const handleModalClose = () => {

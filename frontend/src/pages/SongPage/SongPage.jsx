@@ -159,7 +159,7 @@ const SongPage = () => {
                               fetchComments();
                               setNewComment("");
                             })
-                            .catch((err) => console.log(err))
+                            .catch((err) => {})
                             .finally(() => setIsCommentsLoading(false));
                         }}
                       >

@@ -43,17 +43,12 @@ export default function SongCard({
   const handleDeleteSong = async () => {
     try {
       const userToken = localStorage.getItem("moozikaToken");
-      console.log("the _id of the song is: ", _id);
-      console.log("the song creator is   : ", creator);
-      console.log("the userToken is      : ", userToken);
       await axios.delete(`http://localhost:6969/songs/${_id}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
-    } catch (err) {
-      console.log("error with deleting song: ", err);
-    }
+    } catch (err) {}
   };
 
   const isSongOwnedByUserCheck = async () => {

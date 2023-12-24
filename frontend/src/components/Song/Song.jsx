@@ -85,7 +85,6 @@ function Song({
       user?.songs?.find((song) => song._id === songId) ? true : false
     );
     checkSongInCart();
-    console.log("ive been rendered");
   }, [user]);
 
   return (
