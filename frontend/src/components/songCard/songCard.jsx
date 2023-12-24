@@ -8,7 +8,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {Delete} from "@mui/icons-material";
+import {Delete, Edit} from "@mui/icons-material";
 
 export default function SongCard({
                                      _id,
@@ -33,6 +33,7 @@ export default function SongCard({
     const numOfComments = comments ? comments.length : 0;
     const navigate = useNavigate();
     const {pathname} = useLocation();
+    const [isOwnedByUser, setIsOwnedByUser] = React.useState(false);
 
 
     const handleDeleteSong = async () => {
@@ -51,17 +52,26 @@ export default function SongCard({
         }
     }
 
-    const getSongFromServer = async () => {
+    const isSongOwnedByUserCheck = async () => {
         const {data} = await axios.post("http://localhost:6969/users/user-details",
             {token: localStorage.getItem("moozikaToken")})
         console.log("the data  ID is: ", data._id);
         console.log("the creator is: ", creator);
-        if(!data)
-            return false;
-        return data._id === creator;
+
+        if(creator===data._id) {
+            console.log("setIsOwnedByUser to true");
+            setIsOwnedByUser(true)
+            return;
+        }
+        console.log("setIsOwnedByUser to false");
+        setIsOwnedByUser(false)
     }
 
 
+    const handleEditSong = () => {
+        // Add your logic for editing the song here
+        console.log(`Editing song with ID: ${_id}`);
+    };
 
     return (
         <Card
@@ -181,8 +191,14 @@ export default function SongCard({
 
 
             </CardActions>
-            {pathname === '/profile' && getSongFromServer() &&
-                <Box margin='0.5rem' textAlign={"center"}>
+            {pathname === '/profile' && isSongOwnedByUserCheck() &&
+                isOwnedByUser &&
+                <Box margin='0.5rem' textAlign={"center"}
+                     border={0.5}
+                     borderRadius={5}
+                     p={0.5}
+                     borderColor="grey.500"
+                >
                     <Button
                         onClick={handleDeleteSong}
                         size="small"
@@ -192,7 +208,27 @@ export default function SongCard({
                     >
                         Delete This Song
                     </Button>
+
+
                 </Box>}
+            {pathname === '/profile' &&
+                isOwnedByUser &&
+            <Box margin='0.5rem' textAlign={"center"}
+                 border={0.5}
+                 borderRadius={5}
+                 p={0.5}
+                 borderColor="grey.500"
+            >
+                <Button
+
+                    onClick={handleEditSong}
+                    size="small"
+                    sx={{ color: "Green", marginLeft: 1 }}
+                    startIcon={<Edit/>}
+                >
+                    Edit This Song
+                </Button>
+            </Box>}
         </Card>
     );
 }
