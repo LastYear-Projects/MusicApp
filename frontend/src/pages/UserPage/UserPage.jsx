@@ -55,11 +55,11 @@ const UserPage = () => {
         }
 
         await axios.post("http://localhost:6969/auth/login", {
-                email: user.email,
-                password: passwordForm.currentPassword,
-            })
+            email: user.email,
+            password: passwordForm.currentPassword,
+        })
             .then((res) => {
-                if(res.status !==200){
+                if (res.status !== 200) {
                     message.error("Wrong password");
                     return;
                 }
@@ -73,18 +73,18 @@ const UserPage = () => {
                     }
                 })
             )).then((res) => {
-                if(res.status === 200)
+                if (res.status === 200)
                     message.success("Password updated successfully");
             }).catch((err) => {
                     message.error("Error updating password");
                 }
             );
 
-            setPasswordForm({
-                currentPassword: "",
-                newPassword: "",
-                confirmNewPassword: ""
-            });
+        setPasswordForm({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: ""
+        });
         setIsNameFormOpen(false);
     };
 
@@ -100,8 +100,12 @@ const UserPage = () => {
                 handleCloseForm();
                 fetchUserData();
                 setNewName("")
-            };
-    }).catch((err) => {message.error("Error updating name")});}
+            }
+            ;
+        }).catch((err) => {
+            message.error("Error updating name")
+        });
+    }
 
 
     const fetchUserData = async () => {
@@ -173,24 +177,25 @@ const UserPage = () => {
                 </Typography>
 
                 <Upload
+                    style={{padding: "5rem"}}
                     showUploadList={false}
                     beforeUpload={(file) => {
                         setNewProfilePicture(file);
                         return false;
                     }}
                 >
-                    <Button icon={<UploadOutlined/>} size="small" style={{marginBottom: "1rem"}}>
-                        Change Profile Picture
-                    </Button>
-
+                    {/*<Button icon={<UploadOutlined/>} size="small" style={{marginBottom: "1rem"}}>*/}
+                    {/*    Change Profile Picture*/}
+                    {/*</Button>*/}
 
                 </Upload>
 
-                <Button icon={<EditRounded/>}  size=" small"
-                onClick={handleOpenForm}>
+                <Button
+                style={{display: "flex", alignItems: "center"}}
+                    icon={<Edit/>} size=" small"
+                        onClick={handleOpenForm}>
                     Change User Name
                 </Button>
-
 
 
                 {isNameFormOpen && (
@@ -208,7 +213,6 @@ const UserPage = () => {
                         }}>
                             Update Name
                         </Typography>
-
 
 
                         <form>
@@ -239,10 +243,10 @@ const UserPage = () => {
                                     sx={{width: "40%"}}
                                 />
 
-                                <Box sx={{ display: "flex", flexDirection: "row", marginTop: 3 ,marginBottom: 3}}>
+                                <Box sx={{display: "flex", flexDirection: "row", marginTop: 3, marginBottom: 3}}>
                                     <Button
-                                        marginLeft = "2rem"
-                                        marginRight = "2rem"
+                                        marginLeft="2rem"
+                                        marginRight="2rem"
                                         onClick={handleChangeName}
                                         variant="contained"
                                         style={{
@@ -265,22 +269,8 @@ const UserPage = () => {
                             </Box>
                         </form>
 
-
-
-
-
-
-
-
-
-
                     </Box>
                 )}
-
-
-
-
-
 
                 <Typography
                     variant="h6"
@@ -340,20 +330,15 @@ const UserPage = () => {
                     {ownSongs.length > 0
                         ? (<List list={ownSongs}/>)
                         :
-                        (<Typography
-                            variant="h6"
-                            gutterBottom
-                            sx={{
-                                borderBottom: "2px solid white",
-                                display: "inline-block",
-                                marginTop: 7,
-                                paddingRight: windowWidth <= 600 ? 10 : 90,
-                                paddingLeft: 3,
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textTransform: 'uppercase',
-                                whiteSpace: 'nowrap'
-                            }}
+                        (<Typography variant="h6" color="white" gutterBottom
+                                     sx={{
+                                         paddingLeft: 15,
+                                         fontWeight: 'bold',
+                                         color: 'white',
+                                         textTransform: 'uppercase',
+                                         paddingRight: windowWidth <= 600 ? 10 : 90,
+                                         whiteSpace: 'nowrap'
+                                     }}
                         >
                             No songs created by you. Be the first to create one!
                         </Typography>)
@@ -371,11 +356,9 @@ const UserPage = () => {
                     onSuccess={handleAddSongSuccess}
                 />
 
-
             </Box>
         </Loader>
-    )
-        ;
+    );
 };
 
 export default UserPage;
