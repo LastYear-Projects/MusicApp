@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -12,16 +12,14 @@ import {
 import io from "socket.io-client";
 import axios from "axios";
 
-const socket = io("http://localhost:7070"); // Replace with your server URL
+const socket = io("http://localhost:7070");
 
 const Chat = ({ isOpen, handleOpen }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [userDetails, setUserDetails] = useState({});
-  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    // Fetch user details when the component mounts
     const fetchUserDetails = async () => {
       try {
         const response = await axios.post(
@@ -36,26 +34,14 @@ const Chat = ({ isOpen, handleOpen }) => {
 
     fetchUserDetails();
 
-    // Listen for messages from the server
     socket.on("message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    // Clean up the socket listener when the component unmounts
     return () => {
       socket.off("message");
     };
   }, []);
-
-  useEffect(() => {
-    // Scroll to the bottom of the chat when new messages are added
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
-    }
-  }, [messages]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== "") {
@@ -110,7 +96,6 @@ const Chat = ({ isOpen, handleOpen }) => {
               )}
             </ListItem>
           ))}
-          <div ref={messagesEndRef} />
         </List>
         <div
           style={{
