@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {useState,useEffect} from "react";
 import { StyledAutocomplete } from "../../constants/index";
-
+import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal.jsx";
 import useFetch from "../../hooks/useFetch.jsx";
@@ -27,9 +27,9 @@ import css from "./styles.module.css";
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
-  const [cart,setCart]=useState([]);
+  const [cart,setCart]=useState(0);
   const navigate = useNavigate();
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
@@ -40,19 +40,43 @@ export default function Navbar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const getCartSize=()=>{
     const currentCart=JSON.parse(localStorage.getItem("cart"));
+    console.log(currentCart.length,"currentCart")
     if(currentCart)
     {
-      setCart(currentCart);
+      setCart(currentCart.length);
     }
     else{
-     setCart([])
+     setCart(0)
     }
   }
 
+  async function checkLoggedIn  () {
+  if (!localStorage.getItem("moozikaToken")) {
+    message.error("You must be logged in before accessing this page");
+    return setIsLoggedIn(false);
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:6969/users/user-details",
+      { token: localStorage.getItem("moozikaToken") }
+    );
+    if (response.status !== 200) {
+      message.error("You must be logged in before accessing this page");
+      setIsLoggedIn(false);
+      return;
+    }
+
+    setIsLoggedIn(true);
+  } catch (error) {
+    message.error("You must be logged in before accessing this page");
+    setIsLoggedIn(false);
+  }
+};
+
   useEffect(()=>{
+    checkLoggedIn();
     getCartSize();
-    window.addEventListener("storage",getCartSize);
-    return ()=>window.removeEventListener("storage",getCartSize);
   },[])
 
   const handleProfileMenuOpen = (event) => {
@@ -97,7 +121,7 @@ export default function Navbar() {
               size="large"
               color="inherit"
             >
-              {cart.length?<Badge badgeContent={cart.length} color="error">
+              {cart?<Badge badgeContent={cart} color="error">
                 <ShoppingCartIcon />
               </Badge>:<ShoppingCartIcon />}
             </IconButton>
@@ -185,7 +209,7 @@ export default function Navbar() {
                   color="inherit"
                   onClick={() => navigate("/cart")}
                 >
-                  {cart.length?<Badge badgeContent={cart.length} color="error">
+                  {cart?<Badge badgeContent={cart} color="error">
                 <ShoppingCartIcon />
               </Badge>:<ShoppingCartIcon />}
                 </IconButton>
