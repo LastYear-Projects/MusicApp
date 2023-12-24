@@ -18,7 +18,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
@@ -32,7 +32,7 @@ export default function Navbar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = React.useState(false);
-  const [cart,setCart]=useState(0);
+  const [cart, setCart] = useState(0);
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const navigate = useNavigate();
   const { data } = useFetch("http://localhost:6969/songs");
@@ -42,46 +42,45 @@ export default function Navbar() {
       : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const getCartSize=()=>{
-    const currentCart=JSON.parse(localStorage.getItem("cart"));
-    console.log(currentCart.length,"currentCart")
-    if(currentCart)
-    {
+  const getCartSize = () => {
+    const currentCart = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+    if (currentCart) {
       setCart(currentCart.length);
+    } else {
+      setCart(0);
     }
-    else{
-     setCart(0)
+  };
+
+  async function checkLoggedIn() {
+    if (!localStorage.getItem("moozikaToken")) {
+      message.error("You must be logged in before accessing this page");
+      return setIsLoggedIn(false);
     }
-  }
 
-  async function checkLoggedIn  () {
-  if (!localStorage.getItem("moozikaToken")) {
-    message.error("You must be logged in before accessing this page");
-    return setIsLoggedIn(false);
-  }
+    try {
+      const response = await axios.post(
+        "http://localhost:6969/users/user-details",
+        { token: localStorage.getItem("moozikaToken") }
+      );
+      if (response.status !== 200) {
+        message.error("You must be logged in before accessing this page");
+        setIsLoggedIn(false);
+        return;
+      }
 
-  try {
-    const response = await axios.post(
-      "http://localhost:6969/users/user-details",
-      { token: localStorage.getItem("moozikaToken") }
-    );
-    if (response.status !== 200) {
+      setIsLoggedIn(true);
+    } catch (error) {
       message.error("You must be logged in before accessing this page");
       setIsLoggedIn(false);
-      return;
     }
-
-    setIsLoggedIn(true);
-  } catch (error) {
-    message.error("You must be logged in before accessing this page");
-    setIsLoggedIn(false);
   }
-};
 
-  useEffect(()=>{
+  useEffect(() => {
     checkLoggedIn();
     getCartSize();
-  },[])
+  }, []);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -98,6 +97,11 @@ export default function Navbar() {
   const handleSignInButtonClick = () => {
     setIsSignInModalOpen(true);
     handleMobileMenuClose(); // Close mobile menu after clicking
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("moozikaToken");
+    navigate("/");
   };
 
   const menuId = "primary-search-account-menu";
@@ -137,13 +141,14 @@ export default function Navbar() {
               handleMobileMenuClose();
             }}
           >
-            <IconButton
-              size="large"
-              color="inherit"
-            >
-              {cart?<Badge badgeContent={cart} color="error">
+            <IconButton size="large" color="inherit">
+              {cart ? (
+                <Badge badgeContent={cart} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              ) : (
                 <ShoppingCartIcon />
-              </Badge>:<ShoppingCartIcon />}
+              )}
             </IconButton>
             <p>Cart</p>
           </MenuItem>
@@ -168,6 +173,7 @@ export default function Navbar() {
             onClick={() => {
               setIsLoggedIn(false);
               handleMobileMenuClose();
+              handleLogOut();
             }}
           >
             <IconButton
@@ -242,9 +248,13 @@ export default function Navbar() {
                   color="inherit"
                   onClick={() => navigate("/cart")}
                 >
-                  {cart?<Badge badgeContent={cart} color="error">
-                <ShoppingCartIcon />
-              </Badge>:<ShoppingCartIcon />}
+                  {cart ? (
+                    <Badge badgeContent={cart} color="error">
+                      <ShoppingCartIcon />
+                    </Badge>
+                  ) : (
+                    <ShoppingCartIcon />
+                  )}
                 </IconButton>
                 <IconButton
                   size="large"
@@ -264,7 +274,10 @@ export default function Navbar() {
                   aria-controls={menuId}
                   aria-haspopup="true"
                   color="inherit"
-                  onClick={() => setIsLoggedIn(false)}
+                  onClick={() => {
+                    setIsLoggedIn(false);
+                    handleLogOut();
+                  }}
                 >
                   <Typography>Logout</Typography>
                 </IconButton>

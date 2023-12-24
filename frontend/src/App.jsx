@@ -21,12 +21,14 @@ import { gapi } from "gapi-script";
 import PrivateRoutes from "./components/privateRoutes/PrivateRoutes";
 
 const routes = [
-  // { path: "/", element: <HomePage /> },
-  { path: "/cart", element: <CartPage /> },
+  { path: "/", element: <HomePage /> },
   { path: "/signup", element: <SignUpPage /> },
   { path: "/song/:id", element: <SongPage /> },
-  { path: "/profile", element: <UserProfile /> },
   { path: "*", element: <NotFoundPage /> },
+];
+const privateRoutes = [
+  { path: "/cart", element: <CartPage /> },
+  { path: "/profile", element: <UserProfile /> },
 ];
 
 gapi.load("client:auth2", () => {
@@ -42,8 +44,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<Navbar />}>
         <Route path="/" element={<Footer />}>
           <Route path="/" element={<HomePage />} />
+          {routes.map(({ path, element }) => {
+            return <Route key={path} path={path} element={element} />;
+          })}
           <Route element={<PrivateRoutes />}>
-            {routes.map(({ path, element }) => {
+            {privateRoutes.map(({ path, element }) => {
               return <Route key={path} path={path} element={element} />;
             })}
           </Route>

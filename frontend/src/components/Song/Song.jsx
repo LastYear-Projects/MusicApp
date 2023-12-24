@@ -27,6 +27,7 @@ function Song({
   const [isLoading, setIsLoading] = useState(true);
   const [isSongExist, setIsSongExist] = useState(false);
   const [isSongInCart, setIsSongInCart] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { id: songId } = useParams();
   const songDurationInSeconds = duration / 1000;
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
@@ -36,6 +37,10 @@ function Song({
   }`;
 
   function addToCartHandler() {
+    if (!isLoggedIn) {
+      message.error("You must be logged in before adding to cart");
+      return;
+    }
     if (localStorage.getItem("cart").length === 0) {
       localStorage.setItem("cart", JSON.stringify([songId]));
     } else {
@@ -50,31 +55,38 @@ function Song({
   const getUser = async () => {
     setIsLoading(true);
     const userToken = localStorage.getItem("moozikaToken");
-    if (!userToken) return;
+    if (!userToken) {
+      setIsLoggedIn(false);
+      setIsLoading(false);
+      return;
+    }
     const { data } = await axios.post(
       "http://localhost:6969/users/user-details",
       { token: userToken }
     );
     setUser(data);
+    setIsLoggedIn(true);
     setIsLoading(false);
   };
 
   const checkSongInCart = () => {
-    const cart = JSON.parse(localStorage.getItem("cart"));
+    const cart = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
     setIsSongInCart(cart?.find((id) => id == songId) ? true : false);
   };
-  
+
   useEffect(() => {
     getUser();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setIsSongExist(
       user?.songs?.find((song) => song._id === songId) ? true : false
     );
     checkSongInCart();
     console.log("ive been rendered");
-  },[user])
+  }, [user]);
 
   return (
     <Box>
@@ -149,87 +161,87 @@ function Song({
               {album}
             </Typography>
             <Loader isLoading={isLoading}>
-            {isSongExist && (
-              <Box sx={{ "@media (max-width:959px)": { marginTop: "3rem" } }}>
-                <ReactPlayer
-                  url={`https://www.youtube.com/watch?v=${youtube_id}`}
-                  controls={true}
-                  width="100%"
-                  height="50%"
-                />
-              </Box>
-            )}
-            {!isSongExist && isSongInCart && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: "5rem",
-                  "@media (max-width:959px)": {
-                    justifyContent: "center",
-                    textAlign: "center",
-                  },
-                  "@media (min-width:600px)": {
-                    justifyContent: "flex-end",
-                    textAlign: "right",
-                  },
-                }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  color="#b8b8b8"
-                  component="div"
-                  marginRight="10px"
-                >
-                  This song is in the shopping cart
-                </Typography>
-                <CheckIcon sx={{ color: "green" }} />
-              </Box>
-            )}
-            {!isSongExist && !isSongInCart && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: "5rem",
-                  "@media (max-width:959px)": {
-                    justifyContent: "center",
-                    textAlign: "center",
-                  },
-                  "@media (min-width:600px)": {
-                    justifyContent: "flex-end",
-                    textAlign: "right",
-                  },
-                }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  color="#b8b8b8"
-                  component="div"
-                  marginRight="10px"
-                >
-                  ${price}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
+              {isSongExist && (
+                <Box sx={{ "@media (max-width:959px)": { marginTop: "3rem" } }}>
+                  <ReactPlayer
+                    url={`https://www.youtube.com/watch?v=${youtube_id}`}
+                    controls={true}
+                    width="100%"
+                    height="50%"
+                  />
+                </Box>
+              )}
+              {!isSongExist && isSongInCart && (
+                <Box
                   sx={{
-                    borderRadius: "30px",
-                    backgroundColor: "#353839",
-                    color: "#d6d6d6",
-                    border: "1px solid #fff",
-                    "&:hover": {
-                      backgroundColor: "#d6d6d6",
-                      color: "black",
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "5rem",
+                    "@media (max-width:959px)": {
+                      justifyContent: "center",
+                      textAlign: "center",
+                    },
+                    "@media (min-width:600px)": {
+                      justifyContent: "flex-end",
+                      textAlign: "right",
                     },
                   }}
-                  onClick={addToCartHandler}
                 >
-                  Add to Cart
-                </Button>
-              </Box>
-            )}
-             </Loader>
+                  <Typography
+                    variant="subtitle1"
+                    color="#b8b8b8"
+                    component="div"
+                    marginRight="10px"
+                  >
+                    This song is in the shopping cart
+                  </Typography>
+                  <CheckIcon sx={{ color: "green" }} />
+                </Box>
+              )}
+              {!isSongExist && !isSongInCart && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "5rem",
+                    "@media (max-width:959px)": {
+                      justifyContent: "center",
+                      textAlign: "center",
+                    },
+                    "@media (min-width:600px)": {
+                      justifyContent: "flex-end",
+                      textAlign: "right",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    color="#b8b8b8"
+                    component="div"
+                    marginRight="10px"
+                  >
+                    ${price}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      borderRadius: "30px",
+                      backgroundColor: "#353839",
+                      color: "#d6d6d6",
+                      border: "1px solid #fff",
+                      "&:hover": {
+                        backgroundColor: "#d6d6d6",
+                        color: "black",
+                      },
+                    }}
+                    onClick={addToCartHandler}
+                  >
+                    Add to Cart
+                  </Button>
+                </Box>
+              )}
+            </Loader>
           </CardContent>
         </Box>
       </Card>
