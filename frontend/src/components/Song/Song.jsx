@@ -12,6 +12,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import Loader from "../loader/loader";
 import { message } from "antd";
 
+import io from "socket.io-client";
+const socket = io("http://localhost:7070");
+
 function Song({
   title,
   artist,
@@ -46,6 +49,12 @@ function Song({
     } else {
       const cart = JSON.parse(localStorage.getItem("cart"));
       cart.push(songId);
+      socket.emit("cart", {
+        token: localStorage.getItem("moozikaToken"),
+        cart: cart,
+        numberInCart: cart.length,
+      });
+
       localStorage.setItem("cart", JSON.stringify(cart));
     }
     setIsSongInCart(true);

@@ -27,6 +27,12 @@ import SignInModal from "../modal/SignInModal.jsx";
 import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
 import Chat from "../chat/Chat.jsx";
+import { message } from "antd";
+
+import io from "socket.io-client";
+
+const socket = io("http://localhost:7070");
+
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -80,6 +86,12 @@ export default function Navbar() {
   useEffect(() => {
     checkLoggedIn();
     getCartSize();
+
+    socket.on("cart", ({ cart, token, numberInCart }) => {
+      if (token === localStorage.getItem("moozikaToken")) {
+        setCart(numberInCart);
+      }
+    });
   }, []);
 
   const handleProfileMenuOpen = (event) => {
