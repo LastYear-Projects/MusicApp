@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/mongo");
 const socketio = require("socket.io");
 const { setSocket } = require("./utils/socketService");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 
 const PORT = process.env.PORT || 5000;
 const SOCKET_PORT = process.env.SOCKET_PORT || 3010;
@@ -42,6 +44,8 @@ app.use("/orders", require("./routes/orders.routes"));
 app.use("/auth", require("./routes/auth.routes"));
 app.use("/admin", require("./routes/admin.routes"));
 app.use("/comments", require("./routes/comments.routes"));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
