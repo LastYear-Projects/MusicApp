@@ -195,6 +195,10 @@ const googleLogin = async (req, res) => {
   }
 }
 
+const checkToken = (req, res) => {
+  return res.status(200).json({ isValidToken: true });
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -210,4 +214,5 @@ module.exports = {
   userLogin,
   checkSong,
   googleLogin,
+  checkToken
 };

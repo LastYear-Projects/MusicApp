@@ -8,6 +8,7 @@ router
 .post("/login",userController.userLogin)
 .post("/register", validations.registerAuth, userController.createUser)
 .post("/google-login", userController.googleLogin)
+.post("check-token", validations.checkToken, userController.checkToken)
 
 
   module.exports = router;
