@@ -18,6 +18,18 @@ const handleClient = (io) => {
       });
     });
 
+    // Listen for incoming song comments
+    socket.on("cart", (cartObject) => {
+      console.log("cartObject: ", cartObject);
+
+      // Broadcast the sanitized comment to all connected clients
+      io.emit("cart", {
+        token: cartObject.token,
+        cart: cartObject.cart,
+        numberInCart: cartObject.numberInCart,
+      });
+    });
+
     socket.on("disconnect", () => {
       io.emit("message", "A user has left the chat");
       console.log("Client has closed the socket");
