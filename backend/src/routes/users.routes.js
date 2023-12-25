@@ -136,7 +136,7 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '$ref: '#/models/UserScheme''
  *     responses:
  *       200:
  *         description: Successful response

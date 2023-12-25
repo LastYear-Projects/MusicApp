@@ -83,7 +83,7 @@ router.get("/user/:user", orderController.getOrdersByUser);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Order'
+ *             $ref: '#/models/OrderSchema'
  *     responses:
  *       201:
  *         description: Order created successfully

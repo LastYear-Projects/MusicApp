@@ -90,7 +90,7 @@ router.get("/:id", commentController.getCommentById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Comment'
+ *             $ref: '#/models/CommentScheme'
  *     responses:
  *       201:
  *         description: Comment created successfully
@@ -113,7 +113,7 @@ router.post("/", validations.checkToken, commentController.createComment);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Comment'
+ *             $ref: '#/models/CommentScheme'
  *     parameters:
  *       - in: path
  *         name: id
