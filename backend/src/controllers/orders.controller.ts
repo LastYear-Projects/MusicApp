@@ -1,8 +1,8 @@
-const ordersService = require("../services/orders.service");
-const songService = require("../services/songs.service");
-const userService = require("../services/users.service");
-const jwt = require("jsonwebtoken");
-const { getSocket } = require("../utils/socketService");
+import ordersService from "../services/orders.service"
+import songService from"../services/songs.service"
+import userService from"../services/users.service"
+import jwt from"jsonwebtoken"
+import { getSocket } from "../utils/socketService"
 
 /**
  * @swagger
@@ -24,7 +24,7 @@ const { getSocket } = require("../utils/socketService");
  *       500:
  *         description: Internal Server Error
  */
-const getAllOrders = async (req, res) => {
+const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await ordersService.getAllOrders();
     res.status(200).json(orders);
@@ -53,7 +53,7 @@ const getAllOrders = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const getOrdersByUser = async (req, res) => {
+const getOrdersByUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const orders = await ordersService.getOrdersByUser(userId);
@@ -83,7 +83,7 @@ const getOrdersByUser = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const getOrderById = async (req, res) => {
+const getOrderById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const order = await ordersService.getOrderById(id);
@@ -120,7 +120,7 @@ const getOrderById = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const createOrder = async (req, res) => {
+const createOrder = async (req: Request, res: Response) => {
   try {
     const { order, token } = req.body;
     const decodedToken = jwt.decode(token);
@@ -178,7 +178,7 @@ const createOrder = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const deleteOrder = async (req, res) => {
+const deleteOrder = async (req: Request, res: Response) => {
   try {
     const id = req.params.orderId;
     const order = await ordersService.deleteOrder(id);
@@ -229,7 +229,7 @@ const deleteOrder = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const deleteAllOrders = async (req, res) => {
+const deleteAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await ordersService.deleteAllOrders();
     res.status(200).json(orders);
@@ -269,7 +269,7 @@ const deleteAllOrders = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const updateOrder = async (req, res) => {
+const updateOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
     const { updatedOrder } = req.body;
@@ -310,7 +310,7 @@ const updateOrder = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getAllOrders,
   getOrdersByUser,
   getOrderById,

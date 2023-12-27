@@ -1,11 +1,20 @@
-const xss = require("xss");
+import * as xss from "xss";
+import { Server, Socket } from "socket.io";
+import mongoose from "mongoose";
+import { IUser } from "../models/UserScheme";
 
-const handleClient = (io) => {
-  io.on("connection", (socket) => {
+export type ICart = {
+  token: string;
+  cart: mongoose.Types.ObjectId[];
+  numberInCart: number;
+};
+
+const handleClient = (io: Server): void => {
+  io.on("connection", (socket: Socket) => {
     console.log("New WebSocket Connection...");
 
     // Listen for incoming chat messages
-    socket.on("message", (messageObject) => {
+    socket.on("message", (messageObject: { message: string; userDetails: IUser }) => {
       console.log("messageObject: ", messageObject);
 
       // Sanitize the message before broadcasting
@@ -19,7 +28,7 @@ const handleClient = (io) => {
     });
 
     // Listen for incoming song comments
-    socket.on("cart", (cartObject) => {
+    socket.on("cart", (cartObject: { token: string; cart: ICart[]; numberInCart: number }) => {
       console.log("cartObject: ", cartObject);
 
       // Broadcast the sanitized comment to all connected clients
@@ -37,4 +46,4 @@ const handleClient = (io) => {
   });
 };
 
-module.exports = { handleClient };
+export { handleClient };

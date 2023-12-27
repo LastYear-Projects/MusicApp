@@ -5,10 +5,11 @@
  *   description: Comment management
  */
 
-const express = require("express");
+
+import express from "express"
 const router = express.Router();
-const commentController = require("../controllers/comments.controller");
-const validations = require("../validations/index");
+import commentController from "../controllers/comments.controller"
+import validations from "../validations/index"
 
 /**
  * @swagger
@@ -165,5 +166,4 @@ router.delete("/:id", commentController.deleteCommentById);
  *         description: Internal Server Error
  */
 router.delete("/", commentController.deleteAllComments);
-
-module.exports = router;
+export default router;

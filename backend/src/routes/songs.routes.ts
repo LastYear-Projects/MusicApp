@@ -5,10 +5,9 @@
  *   description: Song management
  */
 
-const express = require("express");
+import express from "express"
 const router = express.Router();
-const songController = require("../controllers/songs.controller");
-const validations = require("../validations/index");
+import songController from "../controllers/songs.controller"
 
 /**
  * @swagger
@@ -159,4 +158,4 @@ router.get("/genre/:genre", songController.getSongsByGenre);
  */
 router.get("/year/:year", songController.getSongsByYear);
 
-module.exports = router;
+export default router;

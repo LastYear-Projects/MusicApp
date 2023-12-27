@@ -1,6 +1,6 @@
-const userService = require("../services/users.service");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import userService from "../services/users.service"
+import jwt from"jsonwebtoken"
+import bcrypt from"bcrypt"
 
 /**
  * @swagger
@@ -25,7 +25,7 @@ const bcrypt = require("bcrypt");
         description: Internal Server Error
 
  */
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await userService.getAllUsers();
     res.status(200).json(users);
@@ -61,7 +61,7 @@ const getAllUsers = async (req, res) => {
         description: Internal Server Error
  */
 
-const getUserById = async (req, res) => {
+const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await userService.getUserById(req.params.userId);
     res.status(200).json(user);
@@ -70,7 +70,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-const getUserByName = async (req, res) => {
+const getUserByName = async (req: Request, res: Response) => {
   //TODO: LO MEANYEN
   try {
     const user = await userService.getUserByName(req.params.name);
@@ -107,7 +107,7 @@ const getUserByName = async (req, res) => {
         description: Internal Server Error
 
  */
-const getUserByEmail = async (req, res) => {
+const getUserByEmail = async (req: Request, res: Response) => {
   try {
     const user = await userService.getUserByEmail(req.body.email);
     res.status(200).json(user);
@@ -141,7 +141,7 @@ list.fin;
       500:
         description: Internal Server Error
  */
-const getUserDetails = async (req, res) => {
+const getUserDetails = async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
     const decodedToken = jwt.decode(token);
@@ -179,7 +179,7 @@ const getUserDetails = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const createUser = async (req, res) => {
+const createUser = async (req: Request, res: Response) => {
   try {
     const user = { ...req.body };
     user.name = user.name
@@ -213,7 +213,7 @@ const createUser = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const deleteUser = async (req, res) => {
+const deleteUser = async (req: Request, res: Response) => {
   try {
     const user = await userService.deleteUser(req.params.userId);
     res.status(200).json(user);
@@ -246,7 +246,7 @@ const deleteUser = async (req, res) => {
         description: Internal Server Error
 
  */
-const updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response) => {
   try {
     const userIdParams = req.params.userId;
     const { token, updatedUser } = req.body;
@@ -295,7 +295,7 @@ const updateUser = async (req, res) => {
         description: Internal Server Error
 
  */
-const getUserSongs = async (req, res) => {
+const getUserSongs = async (req: Request, res: Response) => {
   try {
     const user = await userService.getUserSongs(req.params.id);
     res.status(200).json(user);
@@ -334,7 +334,7 @@ const getUserSongs = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const addSongToUser = async (req, res) => {
+const addSongToUser = async (req: Request, res: Response) => {
   try {
     const user = await userService.addSongsToUser(req.params.id, req.body);
     res.status(200).json(user);
@@ -373,7 +373,7 @@ const addSongToUser = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const removeSongFromUser = async (req, res) => {
+const removeSongFromUser = async (req: Request, res: Response) => {
   try {
     const user = await userService.removeSongFromUser(req.params.id, req.body);
     res.status(200).json(user);
@@ -413,7 +413,7 @@ const removeSongFromUser = async (req, res) => {
         description: Internal Server Error
 
  */
-const userLogin = async (req, res) => {
+const userLogin = async (req: Request, res: Response) => {
   try {
     const user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
@@ -469,7 +469,7 @@ const userLogin = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const checkSong = async (req, res) => {
+const checkSong = async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
     const { songId } = req.params;
@@ -516,7 +516,7 @@ const checkSong = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const googleLogin = async (req, res) => {
+const googleLogin = async (req: Request, res: Response) => {
   try {
     let user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
@@ -558,11 +558,27 @@ const googleLogin = async (req, res) => {
       500:
         description: Internal Server Error
  */
-const checkToken = (req, res) => {
+const checkToken = (req: Request, res: Response) => {
   return res.status(200).json({ isValidToken: true });
 };
-
-module.exports = {
+// const userController = {
+//   getAllUsers,
+//   getUserById,
+//   getUserByName,
+//   getUserByEmail,
+//   getUserDetails,
+//   createUser,
+//   deleteUser,
+//   updateUser,
+//   getUserSongs,
+//   addSongToUser,
+//   removeSongFromUser,
+//   userLogin,
+//   checkSong,
+//   googleLogin,
+//   checkToken,
+// };
+export default {
   getAllUsers,
   getUserById,
   getUserByName,

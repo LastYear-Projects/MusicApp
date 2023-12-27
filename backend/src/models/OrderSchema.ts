@@ -21,6 +21,12 @@ import mongoose from "mongoose"
  *           description: The date and time when the order was created
  */
 
+export type OrderDocument = mongoose.Document & {
+  user: mongoose.Types.ObjectId;
+  songs: mongoose.Types.ObjectId[];
+  date: Date;
+};
+
 const OrderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,4 +50,7 @@ const OrderSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("order", OrderSchema, "orders");
+const Order = mongoose.model<OrderDocument>("order", OrderSchema);
+export default Order;
+
+

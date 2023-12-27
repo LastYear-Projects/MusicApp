@@ -32,7 +32,7 @@ const {
  *       500:
  *         description: Internal Server Error
  */
-const getCommentById = async (req, res) => {
+const getCommentById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const comment = await commentService.getCommentById(id);
@@ -62,7 +62,7 @@ const getCommentById = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const getCommentsBySongId = async (req, res) => {
+const getCommentsBySongId = async (req: Request, res: Response) => {
   try {
     const { songId } = req.params;
     console.log("songId", songId);
@@ -103,7 +103,7 @@ const getCommentsBySongId = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const createComment = async (req, res) => {
+const createComment = async (req: Request, res: Response) => {
   try {
     const { comment, songId, token } = req.body;
     const userId = jwt.decode(token).id;
@@ -151,7 +151,7 @@ const createComment = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const updateCommentById = async (req, res) => {
+const updateCommentById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const comment = { ...req.body };
@@ -183,7 +183,7 @@ const updateCommentById = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const deleteCommentById = async (req, res) => {
+const deleteCommentById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     // Find the song that contains the comment
@@ -212,7 +212,7 @@ const deleteCommentById = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const deleteAllComments = async (req, res) => {
+const deleteAllComments = async (req: Request, res: Response) => {
   try {
     const deletedComments = await commentService.deleteAllComments();
     res.status(200).json(deletedComments);
@@ -241,7 +241,7 @@ const deleteAllComments = async (req, res) => {
  *       500:
  *         description: Internal Server Error
  */
-const getCommentsByUserId = async (req, res) => {
+const getCommentsByUserId = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const comments = await commentService.getCommentsByUserId(userId);
@@ -251,7 +251,7 @@ const getCommentsByUserId = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getCommentById,
   getCommentsBySongId,
   createComment,

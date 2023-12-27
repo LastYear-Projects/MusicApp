@@ -1,4 +1,5 @@
-const Song = require("../models/SongScheme");
+import mongoose from "mongoose";
+import Song from "../models/SongScheme"
 
 /**
  * @swagger
@@ -340,7 +341,7 @@ const updateSong = async (id, newSong) => {
  *           application/json:
  *             example: {"id": 1, "title": "Song Title", "artist": "Artist Name", "album": "Album Name", "year": 2022, "genre": "Genre", "numOfPurchases": 1}
  */
-const increaseNumOfPurchases = async (id) => {
+const increaseNumOfPurchases = async (id: mongoose.ObjectId) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -375,7 +376,7 @@ const increaseNumOfPurchases = async (id) => {
  *           application/json:
  *             example: {"id": 1, "title": "Song Title", "artist": "Artist Name", "album": "Album Name", "year": 2022, "genre": "Genre", "numOfPurchases": 0}
  */
-const getSongByCommentId = async (id) => {
+const getSongByCommentId = async (id: mongoose.ObjectId) => {
   if (id) {
     try {
       const song = await Song.findOne({ comments: id });
@@ -390,7 +391,7 @@ const getSongByCommentId = async (id) => {
   throw new Error("Id is required");
 };
 
-module.exports = {
+export default  {
   getAllSongs,
   getSongsByIds,
   createSong,

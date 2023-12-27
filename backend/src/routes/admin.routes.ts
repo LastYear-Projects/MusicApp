@@ -22,19 +22,31 @@
  *       500:
  *         description: Internal Server Error
  */
-const express = require("express");
+
+
+import express from "express"
 const router = express.Router();
-const orderController = require("../controllers/orders.controller");
-const userController = require("../controllers/users.controller");
-const songController = require("../controllers/songs.controller");
-const validations = require("../validations/index");
+import {  getAllUsers,
+  deleteUser,
+  updateUser,
+  } from "../controllers/users.controller"
+import validations from "../validations/index"
+import   {getAllOrders,
+deleteOrder,
+updateOrder} from "../controllers/orders.controller"
+import   {getAllSongs,
+createSong,
+deleteSong,
+updateSong,
+} from "../controllers/songs.controller"
+
 
 router
   .post(
     "/users/",
     validations.checkToken,
     validations.adminAuth,
-    userController.getAllUsers
+    getAllUsers
   ) //TODO:LO MEANYEN
 
   /**
@@ -65,7 +77,7 @@ router
     "/users/:userId",
     validations.checkToken,
     validations.updatedUserAuth,
-    userController.updateUser
+    updateUser
   )
 
   /**
@@ -92,7 +104,7 @@ router
    *       500:
    *         description: Internal Server Error
    */
-  .delete("/users/:userId", validations.checkToken, userController.deleteUser)
+  .delete("/users/:userId", validations.checkToken, deleteUser)
 
   /**
    * @swagger
@@ -122,7 +134,7 @@ router
     "/songs/",
     validations.checkToken,
     validations.adminAuth,
-    songController.getAllSongs
+    getAllSongs
   ) //TODO:LO MEANYEN
 
   /**
@@ -142,7 +154,7 @@ router
    *       500:
    *         description: Internal Server Error
    */
-  .post("/songs/create", validations.checkToken, songController.createSong)
+  .post("/songs/create", validations.checkToken, createSong)
 
   /**
    * @swagger
@@ -172,7 +184,7 @@ router
     "/songs/:songId",
     validations.checkToken,
     validations.songCreatorAuth,
-    songController.updateSong
+    updateSong
   ) //TODO:songCreatorAuth
 
   /**
@@ -203,7 +215,7 @@ router
     "/songs/:songId",
     validations.checkToken,
     validations.songCreatorAuth,
-    songController.deleteSong
+    deleteSong
   ) //TODO:songCreatorAuth
 
   /**
@@ -234,7 +246,7 @@ router
     "/orders/",
     validations.checkToken,
     validations.adminAuth,
-    orderController.getAllOrders
+    getAllOrders
   ) //TODO:LO MEANYEN
 
   /**
@@ -265,7 +277,7 @@ router
     "/orders/:orderId",
     validations.checkToken,
     validations.adminAuth,
-    orderController.updateOrder
+    updateOrder
   ) //TODO:LO MEANYEN
 
   /**
@@ -296,7 +308,7 @@ router
     "/orders/:orderId",
     validations.checkToken,
     validations.adminAuth,
-    orderController.deleteOrder
+    deleteOrder
   ); //TODO:LO MEANYEN
 
-module.exports = router;
+export default router;

@@ -5,10 +5,10 @@
  *   description: User management
  */
 
-const express = require("express");
+import express from "express"
 const router = express.Router();
-const userController = require("../controllers/users.controller");
-const validations = require("../validations/index");
+import userController from "../controllers/users.controller"
+import validations from "../validations/index"
 
 /**
  * @swagger
@@ -152,4 +152,4 @@ router.put(
   userController.updateUser
 );
 
-module.exports = router;
+export default router;

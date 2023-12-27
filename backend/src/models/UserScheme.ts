@@ -1,4 +1,14 @@
 import mongoose from "mongoose"
+
+
+export type IUser = mongoose.Document & {
+  name: string;
+  email: string;
+  password: string;
+  songs?: mongoose.Types.ObjectId[];
+  profile_image?: string;
+};
+
 /**
  * @swagger
  * components:
@@ -61,4 +71,6 @@ const UserScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("user", UserScheme, "users");
+const User = mongoose.model<IUser>("user", UserScheme);
+
+export default User;

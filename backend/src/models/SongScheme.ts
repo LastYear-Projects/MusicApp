@@ -1,5 +1,19 @@
-import mongoose from "mongoose"
+import mongoose, { Document, Schema } from "mongoose";
 
+export type ISong = Document & {
+  title: string;
+  artist: string;
+  album: string;
+  genre?: string[];
+  duration: number;
+  album_image?: string;
+  comments?: mongoose.Types.ObjectId[];
+  creator: mongoose.Types.ObjectId;
+  price?: number;
+  preview_url?: string;
+  youtube_id?: string;
+  numOfPurchases?: number;
+}
 /**
  * @swagger
  * components:
@@ -48,7 +62,7 @@ import mongoose from "mongoose"
  *           type: number
  *           description: The number of purchases made for the song
  */
-const SongScheme = new mongoose.Schema({
+const SongSchema: Schema<ISong> = new mongoose.Schema<ISong>({
   title: {
     type: String,
     required: true,
@@ -128,4 +142,4 @@ const SongScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("song", SongScheme, "songs");
+export default mongoose.model<ISong>("song", SongSchema, "songs");

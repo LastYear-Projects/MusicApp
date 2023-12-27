@@ -1,15 +1,23 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import { createServer } from "http";
-import socketio, { Server as SocketIOServer } from "socket.io";
+import  { Server as SocketIOServer } from "socket.io";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 import { setSocket } from "./utils/socketService";
 import { handleClient } from "./utils/sockets";
 import connectDB from "./config/mongo";
+import { Server as HTTPServer } from "http";
+
+import SongRoutes from "./routes/songs.routes"
+import UserRoutes from "./routes/users.routes"
+import OrderRoutes from "./routes/orders.routes"
+import AuthRoutes from "./routes/auth.routes"
+import AdminRoutes from "./routes/admin.routes"
+import CommentRoutes from "./routes/comments.routes"
+
 
 dotenv.config();
 
@@ -24,8 +32,8 @@ app.use(express.json());
 app.use(cors());
 
 // Socket.io
-const server = createServer(app);
-const io: SocketIOServer = socketio(server, {
+const server: HTTPServer = createServer(app);
+const io: SocketIOServer = new SocketIOServer(server, {
   cors: {
     origin: "*", // adjust this to your frontend URL in production for security
     methods: ["GET", "POST"],
@@ -40,12 +48,12 @@ server.listen(Number(SOCKET_PORT), () => {
 });
 
 // Routes
-app.use("/songs", require("./routes/songs.routes"));
-app.use("/users", require("./routes/users.routes"));
-app.use("/orders", require("./routes/orders.routes"));
-app.use("/auth", require("./routes/auth.routes"));
-app.use("/admin", require("./routes/admin.routes"));
-app.use("/comments", require("./routes/comments.routes"));
+app.use("/songs", SongRoutes);
+app.use("/users", UserRoutes);
+app.use("/orders",OrderRoutes);
+app.use("/auth", AuthRoutes);
+app.use("/admin", AdminRoutes);
+app.use("/comments", CommentRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(Number(PORT), () => {

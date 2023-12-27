@@ -18,6 +18,12 @@ import mongoose from "mongoose"
  *           format: date-time
  *           description: The date and time when the comment was created
  */
+
+export type IComment = mongoose.Document & {
+  user: string;
+  comment: string;
+  date?: Date;
+};
 const CommentScheme = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -41,4 +47,4 @@ const CommentScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("comment", CommentScheme, "comments");
+export default mongoose.model<IComment>("comment", CommentScheme);

@@ -1,14 +1,13 @@
-/**
- * @swagger
- * tags:
- *   name: Orders
- *   description: Order management
- */
-
-const express = require("express");
-const router = express.Router();
-const orderController = require("../controllers/orders.controller");
-const validations = require("../validations/index");
+import express, { Request, Response, Router } from "express";
+const router: Router = express.Router();
+import {  getAllOrders,
+    getOrdersByUser,
+    getOrderById,
+    createOrder,
+    deleteOrder,
+    deleteAllOrders,
+    updateOrder, } from "../controllers/orders.controller";
+import validations from "../validations/index";
 
 /**
  * @swagger
@@ -23,7 +22,7 @@ const validations = require("../validations/index");
  *       500:
  *         description: Internal Server Error
  */
-router.get("/", orderController.getAllOrders);
+router.get("/", getAllOrders);
 
 /**
  * @swagger
@@ -45,7 +44,7 @@ router.get("/", orderController.getAllOrders);
  *       500:
  *         description: Internal Server Error
  */
-router.get("/:id", orderController.getOrderById);
+router.get("/:id", getOrderById);
 
 /**
  * @swagger
@@ -67,7 +66,7 @@ router.get("/:id", orderController.getOrderById);
  *       500:
  *         description: Internal Server Error
  */
-router.get("/user/:user", orderController.getOrdersByUser);
+router.get("/user/:user", getOrdersByUser);
 
 /**
  * @swagger
@@ -92,7 +91,7 @@ router.get("/user/:user", orderController.getOrdersByUser);
  *       500:
  *         description: Internal Server Error
  */
-router.post("/", validations.checkToken, orderController.createOrder);
+router.post("/", validations.checkToken, createOrder);
 
 /**
  * @swagger
@@ -107,6 +106,6 @@ router.post("/", validations.checkToken, orderController.createOrder);
  *       500:
  *         description: Internal Server Error
  */
-router.delete("/", orderController.deleteAllOrders);
+router.delete("/", deleteAllOrders);
 
-module.exports = router;
+export default router;

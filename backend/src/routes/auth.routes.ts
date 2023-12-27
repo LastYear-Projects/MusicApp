@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express"
 const router = express.Router();
-const userController = require("../controllers/users.controller");
-const validations = require("../validations/index");
+import userController from "../controllers/users.controller"
+import validations from "../validations/index"
+
 
 /**
  * @swagger
@@ -121,5 +122,4 @@ router.post("/google-login", userController.googleLogin);
  *         description: Internal Server Error
  */
 router.post("/check-token", validations.checkToken, userController.checkToken);
-
-module.exports = router;
+export default router;

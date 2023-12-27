@@ -1,9 +1,9 @@
-const Order = require("../models/OrderSchema");
-const {
-  Types: { ObjectId },
-} = require("mongoose");
-const usersService = require("./users.service");
-const OrderSchema = require("../models/OrderSchema");
+import Order, {OrderDocument} from "../models/OrderSchema";
+import { Schema } from "mongoose";
+import usersService from "./users.service";
+import songsService from "./songs.service";
+const OrderSchema: Schema<OrderDocument> = Order;
+
 
 /**
  * @swagger
@@ -212,7 +212,7 @@ const deleteAllOrders = async () => {
   return orders;
 };
 
-module.exports = {
+export default  {
   getAllOrders,
   getOrdersByUser,
   getOrderById,

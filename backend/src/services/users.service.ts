@@ -32,7 +32,7 @@
  *           description: An array of song IDs associated with the user
  */
 
-const User = require("../models/UserScheme");
+import User from "../models/UserScheme"
 
 /**
  * @swagger
@@ -445,7 +445,7 @@ const addSongsToUser = async (id, songs) => {
   }
 };
 
-module.exports = {
+export default  {
   addOrderToUser,
   addSongsToUser,
   getAllUsers,
