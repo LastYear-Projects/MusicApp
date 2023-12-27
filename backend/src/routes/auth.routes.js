@@ -107,18 +107,25 @@ router.post("/google-login", userController.googleLogin);
  * @swagger
  * /auth/check-token:
  *   post:
- *     summary: Check user token validity
- *     description: Check if a user token is valid
+ *     summary: User login
+ *     description: Check if a token is valid
  *     tags: [Authentication]
- *     security:
- *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *             required:
+ *               - token
  *     responses:
- *       200:
- *         description: Token is valid
  *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal Server Error
+ *         description: No token provided
+ *       403:
+ *         description: Invalid token
  */
 router.post("/check-token", validations.checkToken, userController.checkToken);
 

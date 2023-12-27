@@ -23,6 +23,9 @@ const validations = require("../validations/index");
  *       500:
  *         description: Internal Server Error
  */
+
+
+
 router.get("/", orderController.getAllOrders);
 
 /**

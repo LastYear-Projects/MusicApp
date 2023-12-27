@@ -25,76 +25,12 @@ const validations = require("../validations/index");
  */
 router.get("/", userController.getAllUsers);
 
-/**
- * @swagger
- * /users/{userId}:
- *   get:
- *     summary: Get user by ID
- *     description: Retrieve a user based on their ID
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the user
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 router.get("/:userId", userController.getUserById);
 
-/**
- * @swagger
- * /users/email/{email}:
- *   get:
- *     summary: Get user by email
- *     description: Retrieve a user based on their email
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: email
- *         schema:
- *           type: string
- *         required: true
- *         description: Email of the user
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 router.get("/email/:email", userController.getUserByEmail);
 
-/**
- * @swagger
- * /users/check-song/{userId}:
- *   post:
- *     summary: Check user's song
- *     description: Check a specific song for the user
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the user
- *     security:
- *       - BearerAuth: []
- *     responses:
- *       200:
- *         description: Successful response
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal Server Error
- */
 router.post(
-  "/check-song/:userId",
+  "/check-song/:songId",
   validations.checkToken,
   userController.checkSong
 );
@@ -103,18 +39,25 @@ router.post(
  * @swagger
  * /users/user-details:
  *   post:
- *     summary: Get user details
- *     description: Retrieve details of the authenticated user
+ *     summary: User login
+ *     description: Get the user details by the token
  *     tags: [Users]
- *     security:
- *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *             required:
+ *               - token
  *     responses:
- *       200:
- *         description: Successful response
  *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal Server Error
+ *         description: No token provided
+ *       403:
+ *         description: Invalid token
  */
 router.post(
   "/user-details",
@@ -122,30 +65,43 @@ router.post(
   userController.getUserDetails
 );
 
+
 /**
  * @swagger
  * /users/:
  *   put:
  *     summary: Update user
- *     description: Update user details
+ *     description: Get the user details by the token
  *     tags: [Users]
- *     security:
- *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '../models/UserScheme.js'
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *               user:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   password:
+ *                     type: string
+ *             required:
+ *               - token
+ *               - user
  *     responses:
  *       200:
- *         description: Successful response
- *       401:
- *         description: Unauthorized
+ *         description: updated user
  *       500:
  *         description: Internal Server Error
  */
 router.put(
+  //TODO: create a middleware to check if the user is the same as the one in the token
   "/",
   validations.checkToken,
   validations.updatedUserAuth,
