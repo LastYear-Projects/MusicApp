@@ -44,9 +44,7 @@ export default function SongCard({
     try {
       const userToken = localStorage.getItem("moozikaToken");
       await axios.delete(`http://localhost:6969/songs/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
+        token: userToken,
       });
     } catch (err) {}
   };
