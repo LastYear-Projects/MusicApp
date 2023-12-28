@@ -1,27 +1,9 @@
-/**
- * @swagger
- * tags:
- *   name: Songs
- *   description: API endpoints for managing songs
- */
+
 
 const songService = require("../services/songs.service");
 const userService = require("../services/users.service");
 const jwt = require("jsonwebtoken");
 
-/**
- * @swagger
- * /songs:
- *   get:
- *     summary: Get all songs
- *     description: Retrieve a list of all songs
- *     tags: [Songs]
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 const getAllSongs = async (req, res) => {
   try {
     const songs = await songService.getAllSongs();
@@ -31,32 +13,7 @@ const getAllSongs = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/get-songs:
- *   post:
- *     summary: Get songs by IDs
- *     description: Retrieve a list of songs by their IDs
- *     tags: [Songs]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               ids:
- *                 type: array
- *                 items:
- *                   type: string
- *             required:
- *               - ids
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getSongsByIds = async (req, res) => {
   try {
     const { ids } = req.body;
@@ -67,26 +24,6 @@ const getSongsByIds = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/artist/{artist}:
- *   get:
- *     summary: Get songs by artist
- *     description: Retrieve a list of songs by a specific artist
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: artist
- *         schema:
- *           type: string
- *         required: true
- *         description: Name of the artist
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 const getSongsByArtist = async (req, res) => {
   try {
     const { artist } = req.params;
@@ -97,26 +34,7 @@ const getSongsByArtist = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/album/{album}:
- *   get:
- *     summary: Get songs by album
- *     description: Retrieve a list of songs from a specific album
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: album
- *         schema:
- *           type: string
- *         required: true
- *         description: Name of the album
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getSongsByAlbum = async (req, res) => {
   try {
     const { album } = req.params;
@@ -127,26 +45,7 @@ const getSongsByAlbum = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/genre/{genre}:
- *   get:
- *     summary: Get songs by genre
- *     description: Retrieve a list of songs from a specific genre
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: genre
- *         schema:
- *           type: string
- *         required: true
- *         description: Name of the genre
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getSongsByGenre = async (req, res) => {
   try {
     const { genre } = req.params;
@@ -157,27 +56,7 @@ const getSongsByGenre = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/year/{year}:
- *   get:
- *     summary: Get songs by year
- *     description: Retrieve a list of songs from a specific year
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: year
- *
- *         schema:
- *           type: string
- *         required: true
- *         description: Release year of the songs
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getSongsByYear = async (req, res) => {
   try {
     const { year } = req.params;
@@ -188,26 +67,7 @@ const getSongsByYear = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/{songId}:
- *   get:
- *     summary: Get a song by ID
- *     description: Retrieve detailed information about a specific song by its ID
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: songId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the song
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getSongById = async (req, res) => {
   try {
     const id = req.params.songId;
@@ -218,30 +78,6 @@ const getSongById = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/create:
- *   post:
- *     summary: Create a new song
- *     description: Create a new song with the provided details
- *     tags: [Songs]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               song:
- *                 type: object
- *             required:
- *               - song
- *     responses:
- *       201:
- *         description: Successful response
- *       409:
- *         description: Conflict - Song creation failed
- */
 const createSong = async (req, res) => {
   try {
     const { song, token } = req.body;
@@ -284,26 +120,6 @@ const createSong = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/{songId}:
- *   delete:
- *     summary: Delete a song by ID
- *     description: Delete a specific song by its ID
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: songId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the song
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 const deleteSong = async (req, res) => {
   try {
     const id = req.params.songId;
@@ -314,37 +130,6 @@ const deleteSong = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /songs/{songId}:
- *   put:
- *     summary: Update a song by ID
- *     description: Update details of a specific song by its ID
- *     tags: [Songs]
- *     parameters:
- *       - in: path
- *         name: songId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the song
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               updatedSong:
- *                 type: object
- *             required:
- *               - updatedSong
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 const updateSong = async (req, res) => {
   try {
     const id = req.params.songId;

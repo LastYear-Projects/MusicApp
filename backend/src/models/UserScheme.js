@@ -1,29 +1,4 @@
 const mongoose = require("mongoose");
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: The name of the user
- *         email:
- *           type: string
- *           description: The email of the user
- *         password:
- *           type: string
- *           description: The password of the user
- *         songs:
- *           type: array
- *           items:
- *             type: string
- *           description: An array of song IDs associated with the user
- *         profile_image:
- *           type: string
- *           description: The URL of the profile image for the user
- */
 
 const UserScheme = new mongoose.Schema({
   name: {

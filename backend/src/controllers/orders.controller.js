@@ -4,26 +4,6 @@ const userService = require("../services/users.service");
 const jwt = require("jsonwebtoken");
 const { getSocket } = require("../utils/socketService");
 
-/**
- * @swagger
- * tags:
- *   name: Orders
- *   description: Operations related to orders
- */
-
-/**
- * @swagger
- * /orders:
- *   get:
- *     summary: Get all orders
- *     description: Retrieve all orders in the system
- *     tags: [Orders]
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
 const getAllOrders = async (req, res) => {
   try {
     const orders = await ordersService.getAllOrders();
@@ -33,26 +13,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders/{userId}:
- *   get:
- *     summary: Get orders by user ID
- *     description: Retrieve orders associated with a specific user
- *     tags: [Orders]
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the user
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getOrdersByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -63,26 +24,7 @@ const getOrdersByUser = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders/{id}:
- *   get:
- *     summary: Get an order by ID
- *     description: Retrieve an order based on its ID
- *     tags: [Orders]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the order
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const getOrderById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -93,33 +35,7 @@ const getOrderById = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders:
- *   post:
- *     summary: Create a new order
- *     description: Create a new order for a specific user
- *     tags: [Orders]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               order:
- *                 type: object
- *               token:
- *                 type: string
- *             required:
- *               - order
- *               - token
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const createOrder = async (req, res) => {
   try {
     const { order, token } = req.body;
@@ -158,26 +74,7 @@ const createOrder = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders/{orderId}:
- *   delete:
- *     summary: Delete an order by ID
- *     description: Delete an order based on its ID
- *     tags: [Orders]
- *     parameters:
- *       - in: path
- *         name: orderId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the order to be deleted
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const deleteOrder = async (req, res) => {
   try {
     const id = req.params.orderId;
@@ -216,19 +113,7 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders:
- *   delete:
- *     summary: Delete all orders
- *     description: Delete all orders in the system
- *     tags: [Orders]
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const deleteAllOrders = async (req, res) => {
   try {
     const orders = await ordersService.deleteAllOrders();
@@ -238,37 +123,7 @@ const deleteAllOrders = async (req, res) => {
   }
 };
 
-/**
- * @swagger
- * /orders/{orderId}:
- *   put:
- *     summary: Update an order by ID
- *     description: Update an order based on its ID
- *     tags: [Orders]
- *     parameters:
- *       - in: path
- *         name: orderId
- *         schema:
- *           type: string
- *         required: true
- *         description: ID of the order to be updated
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               updatedOrder:
- *                 type: object
- *             required:
- *               - updatedOrder
- *     responses:
- *       200:
- *         description: Successful response
- *       500:
- *         description: Internal Server Error
- */
+
 const updateOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;

@@ -113,7 +113,7 @@ router.post("/", validations.checkToken, commentController.createComment);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/models/CommentScheme'
+ *             $ref: '#/models/CommentScheme.js'
  *     parameters:
  *       - in: path
  *         name: id

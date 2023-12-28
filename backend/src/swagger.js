@@ -4,7 +4,7 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Music App API",
+      title: "MoozikApp API",
       version: "1.0.0",
       description: "A simple Music App Application",
     },

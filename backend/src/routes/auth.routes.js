@@ -107,7 +107,7 @@ router.post("/google-login", userController.googleLogin);
  * @swagger
  * /auth/check-token:
  *   post:
- *     summary: User login
+ *     summary: Check token
  *     description: Check if a token is valid
  *     tags: [Authentication]
  *     requestBody:

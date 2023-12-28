@@ -1,53 +1,6 @@
 const mongoose = require("mongoose");
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Song:
- *       type: object
- *       properties:
- *         title:
- *           type: string
- *           description: The title of the song
- *         artist:
- *           type: string
- *           description: The artist of the song
- *         album:
- *           type: string
- *           description: The album of the song
- *         genre:
- *           type: array
- *           items:
- *             type: string
- *           description: An array of genres associated with the song
- *         duration:
- *           type: number
- *           description: The duration of the song in seconds
- *         album_image:
- *           type: string
- *           description: The URL of the album image for the song
- *         comments:
- *           type: array
- *           items:
- *             type: string
- *           description: An array of comment IDs associated with the song
- *         creator:
- *           type: string
- *           description: The ID of the user who created the song
- *         price:
- *           type: number
- *           description: The price of the song
- *         preview_url:
- *           type: string
- *           description: The URL for a preview of the song
- *         youtube_id:
- *           type: string
- *           description: The YouTube ID associated with the song
- *         numOfPurchases:
- *           type: number
- *           description: The number of purchases made for the song
- */
+
 const SongScheme = new mongoose.Schema({
   title: {
     type: String,

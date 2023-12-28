@@ -39,7 +39,7 @@ router.post(
  * @swagger
  * /users/user-details:
  *   post:
- *     summary: User login
+ *     summary: User details
  *     description: Get the user details by the token
  *     tags: [Users]
  *     requestBody:
@@ -82,7 +82,7 @@ router.post(
  *             properties:
  *               token:
  *                 type: string
- *               user:
+ *               updatedUser:
  *                 type: object
  *                 properties:
  *                   name:
