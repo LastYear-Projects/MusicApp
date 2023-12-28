@@ -47,49 +47,49 @@ const UserPage = () => {
     setIsNameFormOpen(true);
   };
 
-  const handleUpdatePassword = async () => {
-    if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
-      // Show an error message or handle password mismatch
-      message.error("New password and confirmation do not match");
-      return;
-    }
-
-    await axios
-      .post("http://localhost:6969/auth/login", {
-        email: user.email,
-        password: passwordForm.currentPassword,
-      })
-      .then((res) => {
-        if (res.status !== 200) {
-          message.error("Wrong password");
-          return;
-        }
-      })
-      .then(
-        await axios.put("http://localhost:6969/users", {
-          token: localStorage.getItem("moozikaToken"),
-          updatedUser: {
-            password: passwordForm.newPassword,
-            name: user.name,
-            email: user.email,
-          },
-        })
-      )
-      .then((res) => {
-        if (res.status === 200)
-          message.success("Password updated successfully");
-      })
-      .catch((err) => {
-        message.error("Error updating password");
-      });
-
-    setPasswordForm({
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    });
-    setIsNameFormOpen(false);
-  };
+  // const handleUpdatePassword = async () => {
+  //   if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
+  //     // Show an error message or handle password mismatch
+  //     message.error("New password and confirmation do not match");
+  //     return;
+  //   }
+  //
+  //   await axios
+  //     .post("http://localhost:6969/auth/login", {
+  //       email: user.email,
+  //       password: passwordForm.currentPassword,
+  //     })
+  //     .then((res) => {
+  //       if (res.status !== 200) {
+  //         message.error("Wrong password");
+  //         return;
+  //       }
+  //     })
+  //     .then(
+  //       await axios.put("http://localhost:6969/users", {
+  //         token: localStorage.getItem("moozikaToken"),
+  //         updatedUser: {
+  //           password: passwordForm.newPassword,
+  //           name: user.name,
+  //           email: user.email,
+  //         },
+  //       })
+  //     )
+  //     .then((res) => {
+  //       if (res.status === 200)
+  //         message.success("Password updated successfully");
+  //     })
+  //     .catch((err) => {
+  //       message.error("Error updating password");
+  //     });
+  //
+  //   setPasswordForm({
+  //     currentPassword: "",
+  //     newPassword: "",
+  //     confirmNewPassword: "",
+  //   });
+  //   setIsNameFormOpen(false);
+  // };
 
   const handleChangeName = async () => {
     await axios
@@ -306,7 +306,7 @@ const UserPage = () => {
             textTransform: "uppercase",
           }}
         >
-          Songs Owned By User
+          Songs Bought By User
         </Typography>
         <Grid container spacing={2} marginTop="2rem">
           {user.songs.length > 0 ? (
@@ -316,13 +316,7 @@ const UserPage = () => {
               variant="h6"
               color="white"
               gutterBottom
-              sx={{
-                paddingLeft: 15,
-                fontWeight: "bold",
-                color: "white",
-                textTransform: "uppercase",
-                paddingRight: windowWidth <= 600 ? 10 : 90,
-                whiteSpace: "nowrap",
+              sx={{paddingLeft: 15, fontWeight: "bold", color: "white", textTransform: "uppercase", paddingRight: windowWidth <= 600 ? 10 : 90, whiteSpace: "nowrap",
               }}
             >
               No songs found. Start adding some amazing songs!
@@ -333,16 +327,7 @@ const UserPage = () => {
         <Typography
           variant="h6"
           gutterBottom
-          sx={{
-            borderBottom: "2px solid white",
-            display: "inline-block",
-            marginTop: 7,
-            paddingRight: windowWidth <= 600 ? 10 : 90,
-            paddingLeft: 3,
-            fontWeight: "bold",
-            color: "white",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
+          sx={{borderBottom: "2px solid white", display: "inline-block", marginTop: 7, paddingRight: windowWidth <= 600 ? 10 : 90, paddingLeft: 3, fontWeight: "bold", color: "white", textTransform: "uppercase", whiteSpace: "nowrap",
           }}
         >
           Songs created By User
@@ -356,13 +341,7 @@ const UserPage = () => {
               variant="h6"
               color="white"
               gutterBottom
-              sx={{
-                paddingLeft: 15,
-                fontWeight: "bold",
-                color: "white",
-                textTransform: "uppercase",
-                paddingRight: windowWidth <= 600 ? 10 : 90,
-                whiteSpace: "nowrap",
+              sx={{paddingLeft: 15, fontWeight: "bold", color: "white", textTransform: "uppercase", paddingRight: windowWidth <= 600 ? 10 : 90, whiteSpace: "nowrap",
               }}
             >
               No songs created by you. Be the first to create one!
