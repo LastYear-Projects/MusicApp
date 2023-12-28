@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TransitionsModal from "../modal/modal";
-import { Alert, Box, Button, Snackbar } from "@mui/material";
+import  {Box, Button } from "@mui/material";
 
 import { Form, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -14,7 +14,6 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -43,7 +42,9 @@ const enumFields = [
 
 const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     album: "",
