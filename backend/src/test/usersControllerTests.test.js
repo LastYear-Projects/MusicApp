@@ -1,12 +1,9 @@
-const UsersController = require('../src/controllers/users.controller');
-const userService = require('../src/services/users.service');
+const UsersController = require('../controllers/users.controller');
+const userService = require('../services/users.service');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
-
-
-jest.mock('../src/services/users.service');
+jest.mock('../services/users.service');
 
 
 
