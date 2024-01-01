@@ -8,6 +8,7 @@
     "test": "jest --detectOpenHandles --forceExit --coverage",
     "testE": "jest --detectOpenHandles --forceExit --coverage ./src/test/tessExample.test.js",
     "testC": "jest --forceExit --coverage src/test/comments.test.js",
+    "testA": "jest --forceExit --coverage src/test/auth.test.js",
     "start": "nodemon src/index.js"
   },
   "repository": {
