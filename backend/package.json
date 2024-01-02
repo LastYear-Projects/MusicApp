@@ -6,10 +6,10 @@
   "scripts": {
     "type": "module",
 
-    "testComment": "jest --forceExit --coverage src/test/comments.test.js",
-    "testAuth": "jest --forceExit --coverage src/test/auth.test.js",
+    "testComment": "jest --forceExit  src/test/comments.test.js",
+    "testAuth": "jest --forceExit src/test/auth.test.js",
     "testSong": "jest --forceExit --coverage src/test/song.test.js",
-    "test": "npm run testC && npm run testA && npm run testS && npm run aggregateCoverage",
+    "test": "npm run testComment && npm run testAuth && npm run aggregateCoverage",
     "aggregateCoverage": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
     "start": "nodemon src/index.js"
   },
