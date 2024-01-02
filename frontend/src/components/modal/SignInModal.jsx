@@ -41,15 +41,15 @@ export default function SignInModal({
       .then((userToken) => {
         localStorage.setItem("moozikaToken", userToken.data.token);
         message.success("Sign in success");
+        localStorage.setItem("cart", []);
+        setTimeout(() => {
+          navigate(0);
+        }, 1000);
+        setOpenModal(false);
       })
       .catch((err) => {
         message.error("Sign in failed - wrong Email or password");
       });
-    localStorage.setItem("cart", []);
-    setTimeout(() => {
-      navigate(0);
-    }, 1000);
-    setOpenModal(false);
   };
   const onSuccessFromGoogle = async (response) => {
     // localStorage.setItem("moozikaToken", response.accessToken);

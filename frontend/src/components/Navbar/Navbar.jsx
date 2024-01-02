@@ -61,7 +61,6 @@ export default function Navbar() {
 
   async function checkLoggedIn() {
     if (!localStorage.getItem("moozikaToken")) {
-      message.error("You must be logged in before accessing this page");
       return setIsLoggedIn(false);
     }
 
