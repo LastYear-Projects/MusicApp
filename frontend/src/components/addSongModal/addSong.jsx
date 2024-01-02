@@ -32,7 +32,6 @@ const enumFields = [
     placeholder: "Album Image Url",
     Icon: <AlbumIcon />,
   },
-  { field: "preview_url", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
   {
     field: "youtube_id",
     placeholder: "Song Id From Youtube",
@@ -41,7 +40,7 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
+const AddSong = ({ openModal, setOpenModal, onSuccess }) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -52,7 +51,6 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
     duration: "",
     price: "",
     album_image: "",
-    preview_url: "",
     youtube_id: "",
     genre: "",
   });
@@ -107,10 +105,13 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
       return;
     }
 
-    const response = await axios.post("http://localhost:6969/admin/songs/create", {
-      song: formData,
-      token: localStorage.getItem("moozikaToken"),
-    });
+    const response = await axios.post(
+      "http://localhost:6969/admin/songs/create",
+      {
+        song: formData,
+        token: localStorage.getItem("moozikaToken"),
+      }
+    );
 
     onSuccess(response.data);
     message.success("Song was successfully added");
@@ -139,7 +140,7 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
                 name={field}
                 rules={[
                   {
-                    required: field === "preview_url" ? false : true,
+                    required: true,
                     message: `Please input ${placeholder}`,
                   },
                 ]}
