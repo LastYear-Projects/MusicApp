@@ -115,7 +115,7 @@ router
    *             required:
    *               - token
    *               - song
-   *      
+   *
    *     responses:
    *       201:
    *         description: Song created successfully
@@ -243,8 +243,6 @@ router
    *   description: Order management
    */
 
- 
-
   .post(
     "/orders/",
     validations.checkToken,
@@ -252,14 +250,12 @@ router
     orderController.getAllOrders
   ) //TODO:LO MEANYEN
 
-
   .put(
     "/orders/:orderId",
     validations.checkToken,
-    validations.adminAuth,
+    // validations.adminAuth,
     orderController.updateOrder
   ) //TODO:LO MEANYEN
-
 
   .delete(
     "/orders/:orderId",

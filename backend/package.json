@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "type": "module",
-
-    "testComment": "jest --forceExit --coverage src/test/comments.test.js",
-    "testAuth": "jest --forceExit src/test/auth.test.js",
-    "testSong": "jest --forceExit --coverage src/test/song.test.js",
-    "test": "npm run testComment && npm run testAuth && npm run aggregateCoverage",
-    "aggregateCoverage": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
+    "testComment": "jest --forceExit --coverage --coverageDirectory=coverage/comments src/test/comments.test.js",
+    "testAuth": "jest --forceExit --coverage --coverageDirectory=coverage/auth src/test/auth.test.js",
+    "testSong": "jest --forceExit --coverage --coverageDirectory=coverage/song src/test/song.test.js",
+    "testOrder": "jest --forceExit --coverage --coverageDirectory=coverage/order src/test/order.test.js",
+    "aggregateCoverage": "jest --coverage --coverageDirectory=coverage --collectCoverageFrom=src/*/.js --forceExit",
+    "test": "npm run testComment && npm run testAuth && npm run testOrder && npm run aggregateCoverage",
     "start": "nodemon src/index.js"
   },
   "repository": {
