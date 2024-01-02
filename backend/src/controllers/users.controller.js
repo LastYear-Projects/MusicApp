@@ -11,8 +11,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-
-
 const getUserById = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.userId);
@@ -31,7 +29,6 @@ const getUserByName = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const getUserByEmail = async (req, res) => {
   try {
@@ -65,7 +62,9 @@ const createUser = async (req, res) => {
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
       .join(" ");
+    salt = bcrypt.genSaltSync(10);
     user.email = user.email.toLowerCase();
+    user.password = bcrypt.hashSync(user.password, salt);
     const createdUser = await userService.createUser(user);
     res.status(201).json(createdUser);
   } catch (error) {
@@ -81,7 +80,6 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const updateUser = async (req, res) => {
   try {
@@ -104,7 +102,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-
 const getUserSongs = async (req, res) => {
   try {
     const user = await userService.getUserSongs(req.params.id);
@@ -113,7 +110,6 @@ const getUserSongs = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const addSongToUser = async (req, res) => {
   try {
@@ -124,7 +120,6 @@ const addSongToUser = async (req, res) => {
   }
 };
 
-
 const removeSongFromUser = async (req, res) => {
   try {
     const user = await userService.removeSongFromUser(req.params.id, req.body);
@@ -134,20 +129,23 @@ const removeSongFromUser = async (req, res) => {
   }
 };
 
-
 const userLogin = async (req, res) => {
   try {
     const user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
-    if (bcrypt.compareSync(req.body.password, user.password)) {
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "365d",
+      expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
-    res.status(200).json({ token: token });
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+    })
+    userService.addRefreshToken(user._id, refreshToken);
+    res.status(200).json({ token: token, refreshToken: refreshToken });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -170,7 +168,6 @@ const checkSong = async (req, res) => {
   }
 };
 
-
 const googleLogin = async (req, res) => {
   try {
     let user = await userService.getUserByEmail(req.body.email.toLowerCase());
@@ -188,7 +185,7 @@ const googleLogin = async (req, res) => {
       user = createdUser;
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "365d",
+      expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
     return res.status(200).json({ token: token });
   } catch (error) {
@@ -199,6 +196,60 @@ const googleLogin = async (req, res) => {
 const checkToken = (req, res) => {
   return res.status(200).json({ isValidToken: true });
 };
+
+const isRefreshTokenExist = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    const decodedToken = jwt.decode(refreshToken);
+    const user = await userService.getUserById(decodedToken.id);
+    if (!user) {
+      return res.status(403).json({ message: "Invalid token" });
+    }
+    const isTokenExist = user.refreshTokens.find((token) => token === refreshToken);
+    if (!isTokenExist) {
+      await userService.removeRefreshTokens(user._id);
+      return res.status(403).json({ message: "Invalid token" });
+    }
+    next();
+  }catch(error){
+    res.status(500).json({ message: error.message });
+  }
+}
+
+const verifyRefreshToken = (req, res, next) => {
+  const {refreshToken} = req.body;
+  const decodedToken = jwt.decode(refreshToken);
+  const user = await userService.getUserById(decodedToken.id);
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err) => {
+      if (err) {
+        //refreshToken is valid!! but expired
+        userService.removeRefreshToken(user._id, refreshToken);
+        const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+        })
+        userService.addRefreshToken(user._id, newRefreshToken);
+        req.body.refreshToken = newRefreshToken;
+      }
+      next();
+  });
+
+}
+
+const generateAccessToken = async (req, res) => {
+  try{
+    const { refreshToken } = req.body;
+    const decodedToken = jwt.decode(refreshToken);
+    const user = await userService.getUserById(decodedToken.id);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.TOKEN_EXPIRATION_TIME,
+    });
+    res.status(200).json({ token: token, refreshToken: refreshToken });
+  }catch(error){
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
 
 module.exports = {
   getAllUsers,
@@ -216,4 +267,7 @@ module.exports = {
   checkSong,
   googleLogin,
   checkToken,
+  isRefreshTokenExist,
+  verifyRefreshToken,
+  generateAccessToken
 };

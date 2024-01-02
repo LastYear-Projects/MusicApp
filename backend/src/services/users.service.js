@@ -151,6 +151,58 @@ const addSongsToUser = async (id, songs) => {
   }
 };
 
+const removeRefreshTokens = async (id) => {
+  if(id){
+    try{
+      const user = await User.findById(id);
+      if(user){
+        user.refreshTokens = [];
+        await updateUser(id, user);
+        return user;
+      }
+      throw new Error("User not found");
+    }catch(error){
+      throw new Error(error.message);
+    }
+  }
+}
+
+const removeRefreshToken = async (id, refreshToken) => {
+  if(id && refreshToken){
+    try{
+      const user = await User.findById(id);
+      if(user){
+        user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
+        await updateUser(id, user);
+        return user;
+      }
+      throw new Error("User not found");
+    }catch(error){
+      throw new Error(error.message);
+    }
+  }
+}
+
+const addRefreshToken = async (id, refreshToken) => {
+  if(id && refreshToken){
+    try{
+      const user = await User.findById(id);
+      if(user){
+        user.refreshTokens.push(refreshToken);
+        await updateUser(id, user);
+        return user;
+      }
+      throw new Error("User not found");
+    }catch(error){
+      throw new Error(error.message);
+    }
+  }
+}
+
+
+
+
+
 module.exports = {
   addOrderToUser,
   addSongsToUser,
@@ -162,4 +214,7 @@ module.exports = {
   deleteUser,
   updateUser,
   createGoogleUser,
+  removeRefreshTokens,
+  removeRefreshToken,
+  addRefreshToken
 };

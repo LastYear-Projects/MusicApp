@@ -34,6 +34,10 @@ const UserScheme = new mongoose.Schema({
     trim: true,
     default: "https://www.freeiconspng.com/uploads/no-image-icon-4.png",
   },
+  refreshTokens: {
+    type: [String],
+    default: [],
+  },
 });
 
 module.exports = mongoose.model("user", UserScheme, "users");
