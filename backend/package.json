@@ -6,7 +6,7 @@
   "scripts": {
     "type": "module",
 
-    "testComment": "jest --forceExit  src/test/comments.test.js",
+    "testComment": "jest --forceExit --coverage src/test/comments.test.js",
     "testAuth": "jest --forceExit src/test/auth.test.js",
     "testSong": "jest --forceExit --coverage src/test/song.test.js",
     "test": "npm run testComment && npm run testAuth && npm run aggregateCoverage",
