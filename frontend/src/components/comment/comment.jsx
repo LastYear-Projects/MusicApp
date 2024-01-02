@@ -8,6 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { handleRequestWithToken } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 const Comment = ({
   comment,
@@ -21,9 +23,11 @@ const Comment = ({
   const [isEditing, setIsEditing] = React.useState(false);
   const [editedComment, setEditedComment] = React.useState(comment);
   const [validate, setValidate] = React.useState(false);
+  const navigate = useNavigate();
 
   const validateUser = async () => {
     const userToken = localStorage.getItem("moozikaToken");
+    if (!handleRequestWithToken()) return navigate("/");
     const { data } = await axios.post(
       "http://localhost:6969/users/user-details",
       {

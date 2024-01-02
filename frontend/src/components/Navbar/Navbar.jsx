@@ -30,6 +30,7 @@ import Chat from "../chat/Chat.jsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
+import { handleRequestWithToken } from "../../utils/index.js";
 
 const socket = io("http://localhost:7070");
 
@@ -65,6 +66,7 @@ export default function Navbar() {
     }
 
     try {
+      if (!handleRequestWithToken()) return navigate("/");
       const response = await axios.post(
         "http://localhost:6969/users/user-details",
         { token: localStorage.getItem("moozikaToken") }

@@ -15,6 +15,7 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { handleRequestWithToken } from "../../utils";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -41,7 +42,7 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
+const AddSong = ({ openModal, setOpenModal, onSuccess }) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -106,11 +107,14 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
       message.error("Youtube Id must be 11 characters long");
       return;
     }
-
-    const response = await axios.post("http://localhost:6969/admin/songs/create", {
-      song: formData,
-      token: localStorage.getItem("moozikaToken"),
-    });
+    if (!handleRequestWithToken()) return navigate("/");
+    const response = await axios.post(
+      "http://localhost:6969/admin/songs/create",
+      {
+        song: formData,
+        token: localStorage.getItem("moozikaToken"),
+      }
+    );
 
     onSuccess(response.data);
     message.success("Song was successfully added");
