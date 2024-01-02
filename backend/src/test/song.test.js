@@ -19,40 +19,11 @@ afterAll(async () => {
 
 
 describe("Auth Tests", () => {
-    //TODO: after fixing the delete route we can remove the comment
-   // it("test register new user", async () => {
-   //     const response = await request(app).post("/auth/register").send(userOne);
-   //     expect(response.statusCode).toEqual(201);
-   //     expect(response.body).toBeDefined();
-   //     userId = response.body._id
-   //
-   // })
-    it("test register new user to fail 400", async () => {
-        const response = await request(app).post("/auth/register").send();
-        expect(response.statusCode).toEqual(400);
-
-    })
-    //TODO: after fixing the delete route we can remove the comment
-
-    // it("delete user", async () => {
-    //     const response = await request(app).delete("/users/"+userId);
-    //     expect(response.statusCode).toEqual(200);
-
-    // })
-
-    it("test login", async () => {
-        const response = await request(app).post("/auth/login").send(userOne);
+    it("test get song by id", async () => {
+const response = await request(app).get("/songs/:songId/64e30d14fc68b9a5b37ba5bd");
         expect(response.statusCode).toEqual(200);
-        token= response.body.token
-    })
-
-    it("test login fail-wrong email", async () => {
-        const response = await request(app).post("/auth/login").send(userTwo);
-        expect(response.statusCode).toEqual(400);
+        expect(response.body).toBeDefined();
 
     })
 
-
-
-
-})
+});

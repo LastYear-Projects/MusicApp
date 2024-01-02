@@ -6,9 +6,9 @@
   "scripts": {
     "type": "module",
 
-    "testC": "jest --forceExit --coverage src/test/comments.test.js",
-    "testA": "jest --forceExit --coverage src/test/auth.test.js",
-    "testS": "jest --forceExit --coverage src/test/song.test.js",
+    "testComment": "jest --forceExit --coverage src/test/comments.test.js",
+    "testAuth": "jest --forceExit --coverage src/test/auth.test.js",
+    "testSong": "jest --forceExit --coverage src/test/song.test.js",
     "test": "npm run testC && npm run testA && npm run testS && npm run aggregateCoverage",
     "aggregateCoverage": "jest --coverage --collectCoverageFrom=src/**/*.js --forceExit",
     "start": "nodemon src/index.js"
