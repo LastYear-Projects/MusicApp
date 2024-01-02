@@ -129,6 +129,6 @@ router.post("/google-login", userController.googleLogin);
  */
 router.post("/check-token", validations.checkToken, userController.checkToken);
 
-roter.post("/refresh-token", userController.isRefreshTokenExist, userController.verifyRefreshToken, userController.generateAccessToken);
+router.post("/refresh-token", userController.isRefreshTokenExist, userController.verifyRefreshToken, userController.generateAccessToken);
 
 module.exports = router;

@@ -216,7 +216,7 @@ const isRefreshTokenExist = async (req, res) => {
   }
 }
 
-const verifyRefreshToken = (req, res, next) => {
+const verifyRefreshToken = async (req, res, next) => {
   const {refreshToken} = req.body;
   const decodedToken = jwt.decode(refreshToken);
   const user = await userService.getUserById(decodedToken.id);
