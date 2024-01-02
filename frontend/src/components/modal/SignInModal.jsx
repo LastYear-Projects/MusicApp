@@ -40,6 +40,7 @@ export default function SignInModal({
       })
       .then((userToken) => {
         localStorage.setItem("moozikaToken", userToken.data.token);
+        localStorage.setItem("refreshToken", userToken.data.refreshToken);
         message.success("Sign in success");
         localStorage.setItem("cart", []);
         setTimeout(() => {

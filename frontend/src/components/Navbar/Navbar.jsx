@@ -110,8 +110,11 @@ export default function Navbar() {
     handleMobileMenuClose(); // Close mobile menu after clicking
   };
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     localStorage.removeItem("moozikaToken");
+    await axios.post("http://localhost:6969/auth/logout", {
+      refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
+    });
     navigate("/");
   };
 
