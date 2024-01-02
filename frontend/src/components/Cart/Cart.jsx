@@ -18,7 +18,10 @@ const Cart = () => {
   const [cartExist, setCartExist] = useState(false);
 
   async function getCart() {
-    const cart = JSON.parse(localStorage.getItem("cart"));
+    const cart =
+      localStorage.getItem("cart").length > 0
+        ? JSON.parse(localStorage.getItem("cart"))
+        : [];
     if (cart.length === 0) {
       setCartExist(false);
       setIsLoading(false);
