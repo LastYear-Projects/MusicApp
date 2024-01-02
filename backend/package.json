@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "type": "module",
-    "test": "jest --detectOpenHandles --forceExit --coverage",
-    "testE": "jest --detectOpenHandles --forceExit --coverage ./src/test/tessExample.test.js",
+    "test": "jest --forceExit --coverage",
     "testC": "jest --forceExit --coverage src/test/comments.test.js",
     "testA": "jest --forceExit --coverage src/test/auth.test.js",
+    "testS": "jest --forceExit --coverage src/test/song.test.js",
     "start": "nodemon src/index.js"
   },
   "repository": {
