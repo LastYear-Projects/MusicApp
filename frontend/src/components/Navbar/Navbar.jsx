@@ -79,7 +79,7 @@ export default function Navbar() {
 
       setIsLoggedIn(true);
     } catch (error) {
-      message.error("You must be logged in before accessing this page");
+      // message.error("You must be logged in before accessing this page");
       setIsLoggedIn(false);
     }
   }
