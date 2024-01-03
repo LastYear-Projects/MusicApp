@@ -26,6 +26,7 @@ const Chat = ({ isOpen, handleOpen }) => {
     const fetchUserDetails = async () => {
       try {
         if (!handleRequestWithToken()) return navigate("/");
+        if (!localStorage.getItem("moozikaToken")) return;
         const response = await axios.post(
           "http://localhost:6969/users/user-details",
           { token: localStorage.getItem("moozikaToken") }

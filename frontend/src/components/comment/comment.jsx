@@ -28,6 +28,7 @@ const Comment = ({
   const validateUser = async () => {
     const userToken = localStorage.getItem("moozikaToken");
     if (!handleRequestWithToken()) return navigate("/");
+    if (!userToken) return;
     const { data } = await axios.post(
       "http://localhost:6969/users/user-details",
       {

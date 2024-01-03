@@ -117,6 +117,7 @@ const UserPage = () => {
   const fetchUserData = async () => {
     try {
       if (!handleRequestWithToken()) return navigate("/");
+      if (!localStorage.getItem("moozikaToken")) return;
       const myUser = await axios.post(
         "http://localhost:6969/users/user-details",
         { token: localStorage.getItem("moozikaToken") }
