@@ -46,9 +46,18 @@ app.use("/admin", require("./routes/admin.routes"));
 app.use("/comments", require("./routes/comments.routes"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(PORT, () => {
+const expressServer =app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  closeServers: async () => {
+    return new Promise((resolve) => {
+      expressServer.close(() => {
+        server.close(resolve);
+      });
+    });
+  },
+};
