@@ -1,6 +1,7 @@
-const app = require("../index")
+const { app, closeServers } = require("../index");
 const request = require("supertest");
 const {connection} = require("mongoose");
+
 
 
 const song = {
@@ -39,10 +40,12 @@ let creator
 beforeAll(async () => {
 
 
+
 });
 
 
 afterAll(async () => {
+    await closeServers();
     await connection.close();
 
 

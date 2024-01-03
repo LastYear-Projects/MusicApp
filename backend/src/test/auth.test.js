@@ -1,5 +1,5 @@
 
-const app = require("../index")
+const { app, closeServers } = require("../index");
 const request = require("supertest");
 const {connection} = require("mongoose");
 const jwt = require('jsonwebtoken')
@@ -23,10 +23,13 @@ let token
 beforeAll(async () => {
 
 
+
 });
 
 afterAll(async () => {
+    await closeServers();
     await connection.close();
+
 
 });
 

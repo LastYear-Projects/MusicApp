@@ -1,4 +1,4 @@
-const app = require("../index");
+const { app, closeServers } = require("../index");
 const request = require("supertest");
 const { connection } = require("mongoose");
 
@@ -6,9 +6,12 @@ let orderId = "64e89a3861acef3b5b6aea77";
 let orderId2;
 let userId = "64e1e2eff734e0042c496a46";
 
-beforeAll(async () => {});
+beforeAll(async () => {
+
+});
 
 afterAll(async () => {
+  await closeServers();
   await connection.close();
 });
 

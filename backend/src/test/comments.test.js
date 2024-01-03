@@ -1,5 +1,5 @@
 const commentController = require('../controllers/comments.controller.js');
-const app = require("../index")
+const { app, closeServers } = require("../index");
 const request = require("supertest");
 const data = require('../config/mongo.js')
 const {connection} = require("mongoose");
@@ -30,9 +30,11 @@ let commentId
 beforeAll(async () => {
 
 
+
 });
 
 afterAll(async () => {
+    await closeServers();
     await connection.close();
 
 });
