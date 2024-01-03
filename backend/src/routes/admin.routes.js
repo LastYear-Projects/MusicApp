@@ -51,7 +51,7 @@ router
    *       500:
    *         description: Internal Server Error
    */
-  .delete("/users/:userId", validations.checkToken, userController.deleteUser)
+  // .delete("/users/:userId", validations.checkToken, userController.deleteUser)
 
   /**
    * @swagger
@@ -255,13 +255,13 @@ router
     validations.checkToken,
     // validations.adminAuth,
     orderController.updateOrder
-  ) //TODO:LO MEANYEN
-
-  .delete(
-    "/orders/:orderId",
-    validations.checkToken,
-    validations.adminAuth,
-    orderController.deleteOrder
   ); //TODO:LO MEANYEN
+
+// .delete(
+//   "/orders/:orderId",
+//   validations.checkToken,
+//   validations.adminAuth,
+//   orderController.deleteOrder
+// ); //TODO:LO MEANYEN
 
 module.exports = router;

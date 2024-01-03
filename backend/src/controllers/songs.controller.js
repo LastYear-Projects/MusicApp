@@ -1,5 +1,3 @@
-
-
 const songService = require("../services/songs.service");
 const userService = require("../services/users.service");
 const jwt = require("jsonwebtoken");
@@ -12,7 +10,6 @@ const getAllSongs = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const getSongsByIds = async (req, res) => {
   try {
@@ -34,7 +31,6 @@ const getSongsByArtist = async (req, res) => {
   }
 };
 
-
 const getSongsByAlbum = async (req, res) => {
   try {
     const { album } = req.params;
@@ -44,7 +40,6 @@ const getSongsByAlbum = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const getSongsByGenre = async (req, res) => {
   try {
@@ -56,17 +51,15 @@ const getSongsByGenre = async (req, res) => {
   }
 };
 
-
-const getSongsByYear = async (req, res) => {
-  try {
-    const { year } = req.params;
-    const songs = await songService.getSongsByYear(year);
-    res.status(200).json(songs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
+// const getSongsByYear = async (req, res) => {
+//   try {
+//     const { year } = req.params;
+//     const songs = await songService.getSongsByYear(year);
+//     res.status(200).json(songs);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 const getSongById = async (req, res) => {
   try {
@@ -166,5 +159,5 @@ module.exports = {
   getSongsByArtist,
   getSongsByAlbum,
   getSongsByGenre,
-  getSongsByYear,
+  // getSongsByYear,
 };

@@ -7,11 +7,9 @@ const getAllUsers = async (req, res) => {
     const users = await userService.getAllUsers();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // res.status(500).json({ message: error.message });
   }
 };
-
-
 
 const getUserById = async (req, res) => {
   try {
@@ -23,15 +21,14 @@ const getUserById = async (req, res) => {
 };
 
 const getUserByName = async (req, res) => {
-  //TODO: LO MEANYEN
-  try {
-    const user = await userService.getUserByName(req.params.name);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  // //TODO: LO MEANYEN
+  // try {
+  //   const user = await userService.getUserByName(req.params.name);
+  //   res.status(200).json(user);
+  // } catch (error) {
+  //   res.status(500).json({ message: error.message });
+  // }
 };
-
 
 const getUserByEmail = async (req, res) => {
   try {
@@ -73,15 +70,14 @@ const createUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
-  try {
-    const user = await userService.deleteUser(req.params.userId);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
+// const deleteUser = async (req, res) => {
+//   try {
+//     const user = await userService.deleteUser(req.params.userId);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 const updateUser = async (req, res) => {
   try {
@@ -104,7 +100,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-
 const getUserSongs = async (req, res) => {
   try {
     const user = await userService.getUserSongs(req.params.id);
@@ -114,16 +109,14 @@ const getUserSongs = async (req, res) => {
   }
 };
 
-
-const addSongToUser = async (req, res) => {
-  try {
-    const user = await userService.addSongsToUser(req.params.id, req.body);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
+// const addSongToUser = async (req, res) => {
+//   try {
+//     const user = await userService.addSongsToUser(req.params.id, req.body);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 const removeSongFromUser = async (req, res) => {
   try {
@@ -133,7 +126,6 @@ const removeSongFromUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const userLogin = async (req, res) => {
   try {
@@ -169,7 +161,6 @@ const checkSong = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const googleLogin = async (req, res) => {
   try {
@@ -207,10 +198,10 @@ module.exports = {
   getUserByEmail,
   getUserDetails,
   createUser,
-  deleteUser,
+  // deleteUser,
   updateUser,
   getUserSongs,
-  addSongToUser,
+  // addSongToUser,
   removeSongFromUser,
   userLogin,
   checkSong,

@@ -83,20 +83,20 @@ const getSongsByGenre = async (genre) => {
   throw new Error("Genre is required");
 };
 
-const getSongsByYear = async (year) => {
-  if (year) {
-    try {
-      const songs = await Song.find({ year });
-      if (songs) {
-        return songs;
-      }
-      throw new Error("Year not found");
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-  throw new Error("Year is required");
-};
+// const getSongsByYear = async (year) => {
+//   if (year) {
+//     try {
+//       const songs = await Song.find({ year });
+//       if (songs) {
+//         return songs;
+//       }
+//       throw new Error("Year not found");
+//     } catch (error) {
+//       throw new Error(error.message);
+//     }
+//   }
+//   throw new Error("Year is required");
+// };
 
 const createSong = async (song) => {
   const checkSong = await Song.findOne(song);
@@ -174,7 +174,7 @@ module.exports = {
   getSongsByArtist,
   getSongsByAlbum,
   getSongsByGenre,
-  getSongsByYear,
+  // getSongsByYear,
   increaseNumOfPurchases,
   getSongByCommentId,
 };

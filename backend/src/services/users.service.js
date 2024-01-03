@@ -133,27 +133,27 @@ const addOrderToUser = async (id, orderID) => {
   }
 };
 
-const addSongsToUser = async (id, songs) => {
-  if (id) {
-    try {
-      const user = await User.findById(id);
-      if (user) {
-        for (let i = 0; i < songs.length; i++) {
-          user.songs.push(songs[i]);
-        }
-        await updateUser(id, user);
-        return user;
-      }
-      throw new Error("User not found");
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-};
+// const addSongsToUser = async (id, songs) => {
+//   if (id) {
+//     try {
+//       const user = await User.findById(id);
+//       if (user) {
+//         for (let i = 0; i < songs.length; i++) {
+//           user.songs.push(songs[i]);
+//         }
+//         await updateUser(id, user);
+//         return user;
+//       }
+//       throw new Error("User not found");
+//     } catch (error) {
+//       throw new Error(error.message);
+//     }
+//   }
+// };
 
 module.exports = {
   addOrderToUser,
-  addSongsToUser,
+  // addSongsToUser,
   getAllUsers,
   getUserById,
   getUserByName,

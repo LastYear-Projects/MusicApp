@@ -27,7 +27,7 @@ router.get("/", userController.getAllUsers);
 
 router.get("/:userId", userController.getUserById);
 
-router.get("/email/:email", userController.getUserByEmail);
+router.post("/email", userController.getUserByEmail);
 
 router.post(
   "/check-song/:songId",
@@ -64,7 +64,6 @@ router.post(
   validations.checkToken,
   userController.getUserDetails
 );
-
 
 /**
  * @swagger

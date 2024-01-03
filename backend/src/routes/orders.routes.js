@@ -24,8 +24,6 @@ const validations = require("../validations/index");
  *         description: Internal Server Error
  */
 
-
-
 router.get("/", orderController.getAllOrders);
 
 /**
@@ -110,6 +108,6 @@ router.post("/", validations.checkToken, orderController.createOrder);
  *       500:
  *         description: Internal Server Error
  */
-router.delete("/", orderController.deleteAllOrders);
+// router.delete("/", orderController.deleteAllOrders);
 
 module.exports = router;

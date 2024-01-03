@@ -71,14 +71,14 @@ const deleteCommentById = async (req, res) => {
   }
 };
 
-const deleteAllComments = async (req, res) => {
-  try {
-    const deletedComments = await commentService.deleteAllComments();
-    res.status(200).json(deletedComments);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// const deleteAllComments = async (req, res) => {
+//   try {
+//     const deletedComments = await commentService.deleteAllComments();
+//     res.status(200).json(deletedComments);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 const getCommentsByUserId = async (req, res) => {
   try {
@@ -96,6 +96,6 @@ module.exports = {
   createComment,
   updateCommentById,
   deleteCommentById,
-  deleteAllComments,
+  // deleteAllComments,
   getCommentsByUserId,
 };

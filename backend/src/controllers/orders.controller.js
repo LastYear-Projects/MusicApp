@@ -13,7 +13,6 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-
 const getOrdersByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -24,7 +23,6 @@ const getOrdersByUser = async (req, res) => {
   }
 };
 
-
 const getOrderById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -34,7 +32,6 @@ const getOrderById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const createOrder = async (req, res) => {
   try {
@@ -74,55 +71,52 @@ const createOrder = async (req, res) => {
   }
 };
 
+// const deleteOrder = async (req, res) => {
+// try {
+//   const id = req.params.orderId;
+//   const order = await ordersService.deleteOrder(id);
+//   const user = await userService.getUserById(order.user);
+//   const orderSongs = [];
+//   for (let i = 0; i < order.songs.length; i++) {
+//     const songi = await songService.getSongById(order.songs[i]);
+//     songi.numOfPurchases--;
+//     orderSongs.push(songi);
+//     songService.updateSong(songi._id, songi);
+//     if (user)
+//       user.songs = user.songs.filter(
+//         (song) => song.toHexString() !== songi._id.toHexString()
+//       );
+//   }
+//   if (user) {
+//     user.orders = user.orders.filter((order) => order !== id);
+//     userService.updateUser(user._id, user);
+//   }
+//   try {
+//     const socket = getSocket();
+//     socket.emit(
+//       "updateSongNumOfPurchases",
+//       orderSongs.map((song) => ({
+//         songId: song._id,
+//         numOfPurchases: song.numOfPurchases,
+//       }))
+//     );
+//   } catch (error) {
+//     console.log("error in socket", error);
+//   }
+//   res.status(200).json(order);
+// } catch (error) {
+//   res.status(500).json({ message: error.message });
+// }
+// };
 
-const deleteOrder = async (req, res) => {
-  try {
-    const id = req.params.orderId;
-    const order = await ordersService.deleteOrder(id);
-    const user = await userService.getUserById(order.user);
-    const orderSongs = [];
-    for (let i = 0; i < order.songs.length; i++) {
-      const songi = await songService.getSongById(order.songs[i]);
-      songi.numOfPurchases--;
-      orderSongs.push(songi);
-      songService.updateSong(songi._id, songi);
-      if (user)
-        user.songs = user.songs.filter(
-          (song) => song.toHexString() !== songi._id.toHexString()
-        );
-    }
-    if (user) {
-      user.orders = user.orders.filter((order) => order !== id);
-      userService.updateUser(user._id, user);
-    }
-    try {
-      const socket = getSocket();
-      socket.emit(
-        "updateSongNumOfPurchases",
-        orderSongs.map((song) => ({
-          songId: song._id,
-          numOfPurchases: song.numOfPurchases,
-        }))
-      );
-    } catch (error) {
-      console.log("error in socket", error);
-    }
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-
-const deleteAllOrders = async (req, res) => {
-  try {
-    const orders = await ordersService.deleteAllOrders();
-    res.status(200).json(orders);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
+// const deleteAllOrders = async (req, res) => {
+// try {
+//   const orders = await ordersService.deleteAllOrders();
+//   res.status(200).json(orders);
+// } catch (error) {
+//   res.status(500).json({ message: error.message });
+// }
+// };
 
 const updateOrder = async (req, res) => {
   try {
@@ -170,7 +164,7 @@ module.exports = {
   getOrdersByUser,
   getOrderById,
   createOrder,
-  deleteOrder,
-  deleteAllOrders,
+  // deleteOrder,
+  // deleteAllOrders,
   updateOrder,
 };

@@ -38,22 +38,22 @@ const createOrder = async (order) => {
   return newOrder;
 };
 
-const deleteOrder = async (id) => {
-  if (id) {
-    try {
-      const order = await Order.findByIdAndDelete(id);
-      if (order) {
-        return order;
-      } else {
-        throw new Error("Order not found");
-      }
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  } else {
-    throw new Error("Id is required");
-  }
-};
+// const deleteOrder = async (id) => {
+//   if (id) {
+//     try {
+//       const order = await Order.findByIdAndDelete(id);
+//       if (order) {
+//         return order;
+//       } else {
+//         throw new Error("Order not found");
+//       }
+//     } catch (error) {
+//       throw new Error(error.message);
+//     }
+//   } else {
+//     throw new Error("Id is required");
+//   }
+// };
 
 const updateOrder = async (id, order) => {
   if (id) {
@@ -72,28 +72,28 @@ const updateOrder = async (id, order) => {
   }
 };
 
-const deleteAllOrders = async () => {
-  const orders = await OrderSchema.deleteMany();
-  //delete all order songs from the users song list
-  for (let i = 0; i < orders.length; i++) {
-    const user = await usersService.getUserById(orders[i].user);
-    user.songs = user.songs.filter((song) => !orders[i].songs.includes(song));
-    await usersService.updateUser(user._id, user);
-    for (let j = 0; j < orders[i].songs.length; j++) {
-      const song = await songsService.getSongById(orders[i].songs[j]);
-      song.numOfPurchases--;
-      await songsService.updateSong(song._id, song);
-    }
-  }
-  return orders;
-};
+// const deleteAllOrders = async () => {
+//   const orders = await OrderSchema.deleteMany();
+//   //delete all order songs from the users song list
+//   for (let i = 0; i < orders.length; i++) {
+//     const user = await usersService.getUserById(orders[i].user);
+//     user.songs = user.songs.filter((song) => !orders[i].songs.includes(song));
+//     await usersService.updateUser(user._id, user);
+//     for (let j = 0; j < orders[i].songs.length; j++) {
+//       const song = await songsService.getSongById(orders[i].songs[j]);
+//       song.numOfPurchases--;
+//       await songsService.updateSong(song._id, song);
+//     }
+//   }
+//   return orders;
+// };
 
 module.exports = {
   getAllOrders,
   getOrdersByUser,
   getOrderById,
   createOrder,
-  deleteOrder,
-  deleteAllOrders,
+  // deleteOrder,
+  // deleteAllOrders,
   updateOrder,
 };

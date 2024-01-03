@@ -39,10 +39,10 @@ const deleteCommentById = async (id) => {
   return comment;
 };
 
-const deleteAllComments = async () => {
-  const comments = await Comment.deleteMany();
-  return comments;
-};
+// const deleteAllComments = async () => {
+//   const comments = await Comment.deleteMany();
+//   return comments;
+// };
 
 module.exports = {
   getCommentsByUserId,
@@ -51,5 +51,5 @@ module.exports = {
   createComment,
   updateCommentById,
   deleteCommentById,
-  deleteAllComments,
+  // deleteAllComments,
 };
