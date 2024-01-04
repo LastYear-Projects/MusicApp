@@ -16,6 +16,16 @@ import css from "./style.module.css";
 
 import { modalStyle } from "../../constants";
 
+type ModalProps = {
+  children: React.ReactNode;
+  openModal: boolean;
+  setOpenModal: (value: boolean) => void;
+  title: string;
+  closeOnOverlay?: boolean;
+  btnText?: string;
+  btnOnClick?: () => void;
+};
+
 export default function TransitionsModal({
   children,
   openModal,
@@ -24,7 +34,7 @@ export default function TransitionsModal({
   closeOnOverlay,
   btnText,
   btnOnClick,
-}) {
+} : ModalProps) {
   return (
     <div>
       <Modal
