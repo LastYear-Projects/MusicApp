@@ -5,7 +5,7 @@ import { Box, Typography, Avatar, Grid, TextField } from "@mui/material";
 import List from "../../components/list/List";
 import { Button, message, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import AddSong from "../../components/addSongModal/addSong.jsx";
+import AddSong from "../../components/addSongModal/addSong.tsx";
 import { Edit, EditRounded, Update } from "@mui/icons-material";
 
 const UserPage = () => {
@@ -47,49 +47,49 @@ const UserPage = () => {
     setIsNameFormOpen(true);
   };
 
-  const handleUpdatePassword = async () => {
-    if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
-      // Show an error message or handle password mismatch
-      message.error("New password and confirmation do not match");
-      return;
-    }
+  // const handleUpdatePassword = async () => {
+  //   if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
+  //     // Show an error message or handle password mismatch
+  //     message.error("New password and confirmation do not match");
+  //     return;
+  //   }
 
-    await axios
-      .post("http://localhost:6969/auth/login", {
-        email: user.email,
-        password: passwordForm.currentPassword,
-      })
-      .then((res) => {
-        if (res.status !== 200) {
-          message.error("Wrong password");
-          return;
-        }
-      })
-      .then(
-        await axios.put("http://localhost:6969/users", {
-          token: localStorage.getItem("moozikaToken"),
-          updatedUser: {
-            password: passwordForm.newPassword,
-            name: user.name,
-            email: user.email,
-          },
-        })
-      )
-      .then((res) => {
-        if (res.status === 200)
-          message.success("Password updated successfully");
-      })
-      .catch((err) => {
-        message.error("Error updating password");
-      });
+  //   await axios
+  //     .post("http://localhost:6969/auth/login", {
+  //       email: user.email,
+  //       password: passwordForm.currentPassword,
+  //     })
+  //     .then((res) => {
+  //       if (res.status !== 200) {
+  //         message.error("Wrong password");
+  //         return;
+  //       }
+  //     })
+  //     .then(
+  //       await axios.put("http://localhost:6969/users", {
+  //         token: localStorage.getItem("moozikaToken"),
+  //         updatedUser: {
+  //           password: passwordForm.newPassword,
+  //           name: user.name,
+  //           email: user.email,
+  //         },
+  //       })
+  //     )
+  //     .then((res) => {
+  //       if (res.status === 200)
+  //         message.success("Password updated successfully");
+  //     })
+  //     .catch((err) => {
+  //       message.error("Error updating password");
+  //     });
 
-    setPasswordForm({
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    });
-    setIsNameFormOpen(false);
-  };
+  //   setPasswordForm({
+  //     currentPassword: "",
+  //     newPassword: "",
+  //     confirmNewPassword: "",
+  //   });
+  //   setIsNameFormOpen(false);
+  // };
 
   const handleChangeName = async () => {
     await axios

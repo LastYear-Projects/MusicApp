@@ -9,7 +9,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
-import AddSong from "../addSongModal/addSong.jsx";
+import AddSong from "../addSongModal/addSong.tsx";
 import EditSongModal from "../modal/editSongModal.jsx";
 
 export default function SongCard({
