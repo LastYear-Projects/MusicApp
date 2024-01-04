@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import TransitionsModal from "../modal/modal";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
 
@@ -15,6 +15,7 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { SongType } from "../../types";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -41,15 +42,21 @@ const enumFields = [
   { field: "genre", placeholder: "Song Genre", Icon: <ListAltIcon /> },
 ];
 
-const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
+type ModalType = {
+  openModal: boolean;
+  setOpenModal: (openModal: boolean) => void;
+  onSuccess: (song: SongType) => void;
+};
+
+const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<SongType, 'creator'>>({
     title: "",
     album: "",
     artist: "",
     year: "",
-    duration: "",
+    duration: 0,
     price: "",
     album_image: "",
     preview_url: "",
@@ -76,19 +83,19 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
       return;
     }
 
-    if (isNaN(formData.duration)) {
+    if (formData.duration && isNaN(formData.duration)) {
       message.error("Duration must be a number");
       return;
     }
 
     const decimalNumberRegex = /^\d+(\.\d+)?$/;
-    if (!decimalNumberRegex.test(formData.price)) {
+    if (formData.price && !decimalNumberRegex.test(formData.price)) {
       message.error("Price must be a number");
       return;
     }
 
     const yearRegex = /^[0-9\/\.\-]+$/;
-    if (!yearRegex.test(formData.year)) {
+    if (formData.year && !yearRegex.test(formData.year)) {
       message.error(
         "Year must be a number with that format: 00/00/0000 or 00.00.0000"
       );
@@ -96,13 +103,13 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
     }
 
     const lettersRegex = /^[a-zA-Z]+$/;
-    if (!lettersRegex.test(formData.genre)) {
+    if (formData.genre && !lettersRegex.test(formData.genre)) {
       message.error("Genre must contain only letters and commas");
       return;
     }
 
     const youtubeVideoIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-    if (!youtubeVideoIdRegex.test(formData.youtube_id)) {
+    if (formData.youtube_id && !youtubeVideoIdRegex.test(formData.youtube_id)) {
       message.error("Youtube Id must be 11 characters long");
       return;
     }
@@ -117,7 +124,7 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
     setOpenModal(false);
   };
 
-  const handleInputChange = (name, value) => {
+  const handleInputChange = (name: string, value: string | number) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -132,31 +139,30 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }) => {
         title="Add Song"
       >
         <Form onFinish={handleSubmit(onSubmit)}>
-          {enumFields.map(({ field, placeholder, Icon }) => {
-            return (
-              <Form.Item
-                key={field}
-                name={field}
-                rules={[
-                  {
-                    required: field === "preview_url" ? false : true,
-                    message: `Please input ${placeholder}`,
-                  },
-                ]}
-              >
-                <Input
-                  prefix={Icon}
-                  placeholder={placeholder}
-                  {...register(field)}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                />
-              </Form.Item>
-            );
-          })}
+          {enumFields.map(({ field, placeholder, Icon }) => (
+            <Form.Item
+              key={field}
+              name={field}
+              rules={[
+                {
+                  required: field === "preview_url" ? false : true,
+                  message: `Please input ${placeholder}`,
+                },
+              ]}
+            >
+              <Input
+                prefix={Icon}
+                placeholder={placeholder}
+                {...register(field)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleInputChange(field, e.target.value)
+                }
+              />
+            </Form.Item>
+          ))}
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
+          <Button
+              color="primary"
               variant="contained"
               style={{
                 width: "100%",
