@@ -6,7 +6,7 @@
   "scripts": {
     "type": "module",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "tsc && nodemon ./dist/src/index.js "
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "xss": "^1.0.14"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
   }
 }

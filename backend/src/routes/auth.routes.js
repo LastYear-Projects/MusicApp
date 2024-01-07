@@ -131,4 +131,6 @@ router.post("/check-token", validations.checkToken, userController.checkToken);
 
 router.post("/refresh-token", userController.isRefreshTokenExist, userController.verifyRefreshToken, userController.generateAccessToken);
 
+router.post("/logout", userController.logout);
+
 module.exports = router;
