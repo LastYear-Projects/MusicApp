@@ -30,6 +30,7 @@ import Chat from "../chat/Chat.tsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
+import { SongType } from "../../types/index.tsx";
 
 const socket = io("http://localhost:7070");
 
@@ -44,7 +45,7 @@ export default function Navbar() {
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
     data != null
-      ? data.map((song) => ({ title: song.title, _id: song._id }))
+      ? data.map((song: SongType) => ({ title: song.title, _id: song._id }))
       : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);

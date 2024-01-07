@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.css";
 import {
   createBrowserRouter,
@@ -8,7 +9,7 @@ import {
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar/Navbar.tsx";
 import Footer from "./components/footer/footer.tsx";
 
 import HomePage from "./pages/HomePage/HomePage.tsx";
