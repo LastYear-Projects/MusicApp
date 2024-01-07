@@ -5,7 +5,7 @@ import axios from "axios";
 import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
-import Comment from "../../components/comment/Comment";
+import Comment from "../../components/comment/Comment.tsx";
 import { Button, Form } from "antd";
 
 const SongPage = () => {
