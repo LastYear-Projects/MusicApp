@@ -13,7 +13,7 @@ const List = ({
   return (
     <Grid container flexDirection={flexDirection} justifyContent="center">
       {list &&
-        list.map((item) => {
+        list.map((item, index) => {
           return (
             <Grid
               style={{
@@ -21,7 +21,7 @@ const List = ({
                 justifyContent: "center",
                 display: "flex",
               }}
-              key={item}
+              key={item + index}
             >
               <CardComponent
                 {...item}

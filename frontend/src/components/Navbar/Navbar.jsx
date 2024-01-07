@@ -30,6 +30,7 @@ import Chat from "../chat/Chat.jsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
+import { handleRequestWithToken } from "../../utils/index.js";
 
 const socket = io("http://localhost:7070");
 
@@ -65,6 +66,7 @@ export default function Navbar() {
     }
 
     try {
+      if (!handleRequestWithToken()) return navigate("/");
       const response = await axios.post(
         "http://localhost:6969/users/user-details",
         { token: localStorage.getItem("moozikaToken") }
@@ -77,7 +79,7 @@ export default function Navbar() {
 
       setIsLoggedIn(true);
     } catch (error) {
-      message.error("You must be logged in before accessing this page");
+      // message.error("You must be logged in before accessing this page");
       setIsLoggedIn(false);
     }
   }
@@ -112,10 +114,10 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     localStorage.removeItem("moozikaToken");
+    navigate("/");
     await axios.post("http://localhost:6969/auth/logout", {
       refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
     });
-    navigate("/");
   };
 
   const menuId = "primary-search-account-menu";

@@ -1,12 +1,13 @@
 import React from "react";
 import Song from "../../components/Song/Song";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
 import Comment from "../../components/comment/Comment";
-import { Button, Form } from "antd";
+import { Button, Form, message } from "antd";
+import { handleRequestWithToken } from "../../utils";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -16,9 +17,11 @@ const SongPage = () => {
   const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
   const [newComment, setNewComment] = React.useState("");
   const userToken = localStorage.getItem("moozikaToken");
+  const navigate = useNavigate();
 
   const fetchSong = async () => {
     try {
+      if (!handleRequestWithToken()) return navigate("/");
       const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
       setSong(data);
       setIsLoading(false);
@@ -149,6 +152,7 @@ const SongPage = () => {
                         htmlType="submit"
                         onClick={() => {
                           setIsCommentsLoading(true);
+                          if (!handleRequestWithToken()) return navigate("/");
                           axios
                             .post("http://localhost:6969/comments/", {
                               token: userToken,
@@ -159,7 +163,11 @@ const SongPage = () => {
                               fetchComments();
                               setNewComment("");
                             })
-                            .catch((err) => {})
+                            .catch((err) => {
+                              message.error(
+                                "Comment failed to post, minimum 3 characters required"
+                              );
+                            })
                             .finally(() => setIsCommentsLoading(false));
                         }}
                       >
