@@ -6,7 +6,7 @@ import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
 import Comment from "../../components/comment/Comment";
-import { Button, Form } from "antd";
+import { Button, Form, message } from "antd";
 import { handleRequestWithToken } from "../../utils";
 
 const SongPage = () => {
@@ -163,7 +163,11 @@ const SongPage = () => {
                               fetchComments();
                               setNewComment("");
                             })
-                            .catch((err) => {})
+                            .catch((err) => {
+                              message.error(
+                                "Comment failed to post, minimum 3 characters required"
+                              );
+                            })
                             .finally(() => setIsCommentsLoading(false));
                         }}
                       >
