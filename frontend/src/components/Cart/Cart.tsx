@@ -8,43 +8,46 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import io from "socket.io-client";
+import { OrderType, SongType } from "../../types";
 
 const socket = io("http://localhost:7070");
 
 const Cart = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<SongType[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [cartExist, setCartExist] = useState(false);
 
   async function getCart() {
+    const localStorageCart = localStorage.getItem("cart");
     const cart =
-      localStorage.getItem("cart").length > 0
-        ? JSON.parse(localStorage.getItem("cart"))
+    localStorageCart && localStorageCart.length > 0
+        ? JSON.parse(localStorageCart)
         : [];
     if (cart.length === 0) {
       setCartExist(false);
       setIsLoading(false);
       return;
     }
-    const promises = cart.map(async (itemId) => {
+    const promises = cart.map(async (itemId: string) => {
       const { data: songData } = await axios.get(
         `http://localhost:6969/songs/${itemId}`
       );
       return songData;
     });
-    const cartSongs = await Promise.all(promises);
+    const cartSongs: SongType[] = await Promise.all(promises);
     setCartItems(cartSongs);
     setCartExist(true);
     setIsLoading(false);
   }
 
-  function handeleDeleteSong(id) {
+  function handeleDeleteSong(id: string | undefined) {
+    if(!id) return;
     setIsLoading(true);
-    const cartIds = JSON.parse(localStorage.getItem("cart"));
+    const cartIds = JSON.parse(localStorage.getItem("cart") || "[]");
     const newCart = cartIds.filter((itemId) => itemId !== id);
     localStorage.setItem("cart", JSON.stringify(newCart));
-    setCartItems((prev) => prev.filter((item) => item._id !== id));
+    setCartItems((prev) => prev?.filter((item: SongType) => item._id !== id));
     socket.emit("cart", {
       token: localStorage.getItem("moozikaToken"),
       cart: newCart,
@@ -62,7 +65,7 @@ const Cart = () => {
     try {
       const response = await axios.post("http://localhost:6969/orders", {
         token: localStorage.getItem("moozikaToken"),
-        order: { songs: cartItems.map((item) => item._id) },
+        order: { songs: cartItems?.map((item) => item._id) },
       });
 
       if (response.status === 200) {
@@ -87,11 +90,11 @@ const Cart = () => {
     getCart();
   }, []);
 
-  let subtotal = 0;
-  cartItems.forEach((item) => {
-    subtotal += item.price;
+  let subtotal= 0;
+  cartItems?.forEach((item) => {
+    subtotal += Number(item.price);
   });
-  subtotal = subtotal.toFixed(2);
+  subtotal = Number(subtotal.toFixed(2));
 
   return (
     <Loader isLoading={isLoading}>
@@ -106,7 +109,7 @@ const Cart = () => {
             </Typography>
             <div className={classes.cartText}>
               <Typography variant="h5">Total items:</Typography>
-              <Typography variant="h6">{cartItems.length}</Typography>
+              <Typography variant="h6">{cartItems?.length}</Typography>
             </div>
             <div className={classes.cartText}>
               <Typography variant="h5">Subtotal:</Typography>
@@ -161,7 +164,7 @@ const Cart = () => {
               }}
             >
               {cartExist ? (
-                cartItems.map((item) => (
+                cartItems?.map((item: SongType) => (
                   <CartItem
                     key={item._id}
                     album_image={item.album_image}
