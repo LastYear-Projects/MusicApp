@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import useFetch from "../../hooks/useFetch";
-import List from "../../components/list/List";
+import List from "../../components/list/List.tsx";
 import Loader from "../../components/loader/loader";
 const HomePage = () => {
   const {

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
-import List from "../../components/list/List";
+import List from "../../components/list/List.tsx";
 import Comment from "../../components/comment/Comment.tsx";
 import { Button, Form } from "antd";
 
