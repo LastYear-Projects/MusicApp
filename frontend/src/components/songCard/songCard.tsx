@@ -11,6 +11,8 @@ import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
 import AddSong from "../addSongModal/addSong.tsx";
 import EditSongModal from "../modal/editSongModal.tsx";
+import { SongType } from "../../types/index.tsx";
+
 
 export default function SongCard({
   _id,
@@ -25,12 +27,12 @@ export default function SongCard({
   numOfPurchases,
   comments,
   creator,
-}) {
+}: SongType) {
   const songDurationInSeconds = duration / 1000;
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
   const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
-  const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
-    seconds > 9 ? seconds : "0" + seconds
+  const songDuration = `${Number(minutes) > 9 ? minutes : "0" + minutes}:${
+    Number(seconds) > 9 ? seconds : "0" + seconds
   }`;
   const numOfComments = comments ? comments.length : 0;
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ export default function SongCard({
   const { pathname } = useLocation();
   const [isOwnedByUser, setIsOwnedByUser] = React.useState(false);
   const [openEditModal, setOpenEditModal] = React.useState(false);
-  const [editedSong, setEditedSong] = React.useState({}); // State to store edited song details
+  const [editedSong, setEditedSong] = React.useState<SongType>({}); // State to store edited song details
 
   const handleDeleteSong = async () => {
     try {

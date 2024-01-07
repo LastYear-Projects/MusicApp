@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import DefaultCard from "../songCard/songCard";
+import DefaultCard from "../songCard/songCard.tsx";
 
 const List = ({
   list,
