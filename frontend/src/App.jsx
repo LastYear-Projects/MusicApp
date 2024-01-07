@@ -18,7 +18,7 @@ import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import { gapi } from "gapi-script";
-import PrivateRoutes from "./components/privateRoutes/PrivateRoutes";
+import PrivateRoutes from "./components/privateRoutes/PrivateRoutes.tsx";
 
 const routes = [
   { path: "/", element: <HomePage /> },
