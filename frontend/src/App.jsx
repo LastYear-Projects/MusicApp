@@ -13,7 +13,7 @@ import Footer from "./components/footer/footer.tsx";
 
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import CartPage from "./pages/CartPage/CartPage.tsx";
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage.tsx";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
