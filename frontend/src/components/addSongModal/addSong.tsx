@@ -7,7 +7,6 @@ import { UserOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import AlbumIcon from "@mui/icons-material/Album";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -33,7 +32,6 @@ const enumFields = [
     placeholder: "Album Image Url",
     Icon: <AlbumIcon />,
   },
-  { field: "preview_url", placeholder: "Preview Url", Icon: <PlayArrowIcon /> },
   {
     field: "youtube_id",
     placeholder: "Song Id From Youtube",
@@ -59,7 +57,6 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
     duration: 0,
     price: "",
     album_image: "",
-    preview_url: "",
     youtube_id: "",
     genre: "",
   });
@@ -145,7 +142,7 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
               name={field}
               rules={[
                 {
-                  required: field === "preview_url" ? false : true,
+                  required: true,
                   message: `Please input ${placeholder}`,
                 },
               ]}
