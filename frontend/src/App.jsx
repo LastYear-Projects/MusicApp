@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/footer/footer.tsx";
 
 import HomePage from "./pages/HomePage/HomePage";
-import CartPage from "./pages/CartPage/CartPage";
+import CartPage from "./pages/CartPage/CartPage.tsx";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
