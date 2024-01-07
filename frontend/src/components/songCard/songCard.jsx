@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
 import AddSong from "../addSongModal/addSong.tsx";
-import EditSongModal from "../modal/editSongModal.jsx";
+import EditSongModal from "../modal/editSongModal.tsx";
 
 export default function SongCard({
   _id,
