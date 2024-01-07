@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Song from "../../components/Song/Song.tsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -7,11 +7,12 @@ import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List.tsx";
 import Comment from "../../components/comment/Comment.tsx";
 import { Button, Form } from "antd";
+import { CommentType, SongType } from "../../types/index.tsx";
 
 const SongPage = () => {
   const { id } = useParams();
-  const [song, setSong] = React.useState({});
-  const [comments, setComments] = React.useState([]);
+  const [song, setSong] = React.useState<SongType>();
+  const [comments, setComments] = React.useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
   const [newComment, setNewComment] = React.useState("");
@@ -41,7 +42,7 @@ const SongPage = () => {
     }
   };
 
-  const removeComment = async (id) => {
+  const removeComment = async (id: string) => {
     setIsCommentsLoading(true);
     try {
       await axios.delete(`http://localhost:6969/comments/${id}`);
@@ -53,7 +54,7 @@ const SongPage = () => {
     }
   };
 
-  const editComment = async (id, editedComment) => {
+  const editComment = async (id: string, editedComment: CommentType) => {
     try {
       setIsCommentsLoading(true);
       const { data } = await axios.put(`http://localhost:6969/comments/${id}`, {
@@ -134,7 +135,7 @@ const SongPage = () => {
                         outline: "none",
                       }}
                       value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => setNewComment(e.target.value)}
                     />
                   </Form.Item>
                   <Box
