@@ -21,6 +21,10 @@ import { message } from "antd";
 import { gapi } from "gapi-script";
 import { useNavigate } from "react-router-dom";
 
+type SignInModalProps = {
+  openModal: boolean;
+  setOpenModal: (openModal: boolean)=> void;
+};
 export default function SignInModal({
   // eslint-disable-next-line react/prop-types
   openModal,
@@ -88,7 +92,7 @@ export default function SignInModal({
     }, 300);
   };
   const onFailure = (response) => {
-    message.failure("Google sign in failure" + response);
+    message.error("Google sign in failure");
   };
 
   const handleModalClose = () => {

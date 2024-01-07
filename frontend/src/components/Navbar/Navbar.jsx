@@ -22,7 +22,7 @@ import { useState, useEffect } from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
-import SignInModal from "../modal/SignInModal.jsx";
+import SignInModal from "../modal/SignInModal.tsx";
 
 import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
