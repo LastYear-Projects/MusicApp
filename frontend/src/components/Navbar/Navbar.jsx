@@ -21,7 +21,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
-import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
+import MoozikaLogo from "../moozikaLogo/MoozikaLogo.tsx";
 import SignInModal from "../modal/SignInModal.tsx";
 
 import useFetch from "../../hooks/useFetch.jsx";
