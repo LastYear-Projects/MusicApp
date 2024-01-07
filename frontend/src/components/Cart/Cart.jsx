@@ -73,6 +73,12 @@ const Cart = () => {
         localStorage.setItem("cart", JSON.stringify([]));
         setCartItems([]);
         setCartExist(false);
+
+        socket.emit("cart", {
+          token: localStorage.getItem("moozikaToken"),
+          cart: [],
+          numberInCart: 0,
+        });
         setTimeout(() => {
           navigate("/");
         }, 750);
