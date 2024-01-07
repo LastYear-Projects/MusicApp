@@ -24,7 +24,7 @@ import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo.tsx";
 import SignInModal from "../modal/SignInModal.tsx";
 
-import useFetch from "../../hooks/useFetch.jsx";
+import useFetch from "../../hooks/useFetch.tsx";
 import css from "./styles.module.css";
 import Chat from "../chat/Chat.tsx";
 import { message } from "antd";
