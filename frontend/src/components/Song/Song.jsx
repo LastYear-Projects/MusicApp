@@ -9,7 +9,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CheckIcon from "@mui/icons-material/Check";
-import Loader from "../loader/loader";
+import Loader from "../loader/loader.tsx";
 import { message } from "antd";
 
 import io from "socket.io-client";

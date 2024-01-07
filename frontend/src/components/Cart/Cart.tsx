@@ -2,7 +2,7 @@ import { Grid, Card, Divider, Typography, Button, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CartItem from "../CartItem/CartItem.tsx";
 import classes from "./Cart.module.css";
-import Loader from "../loader/loader";
+import Loader from "../loader/loader.tsx";
 import axios from "axios";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";

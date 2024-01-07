@@ -2,7 +2,7 @@ import React from "react";
 import Song from "../../components/Song/Song";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Loader from "../../components/loader/loader";
+import Loader from "../../components/loader/loader.tsx";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List.tsx";
 import Comment from "../../components/comment/Comment.tsx";

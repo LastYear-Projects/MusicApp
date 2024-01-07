@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../../components/loader/loader";
+import Loader from "../../components/loader/loader.tsx";
 import { Box, Typography, Avatar, Grid, TextField } from "@mui/material";
 import List from "../../components/list/List.tsx";
 import { Button, message, Upload } from "antd";
