@@ -114,10 +114,10 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     localStorage.removeItem("moozikaToken");
+    navigate("/");
     await axios.post("http://localhost:6969/auth/logout", {
       refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
     });
-    navigate("/");
   };
 
   const menuId = "primary-search-account-menu";
