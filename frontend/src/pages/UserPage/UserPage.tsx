@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../../components/loader/loader.tsx";
 import { Box, Typography, Avatar, Grid, TextField } from "@mui/material";
@@ -7,20 +7,27 @@ import { Button, message, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import AddSong from "../../components/addSongModal/addSong.tsx";
 import { Edit, EditRounded, Update } from "@mui/icons-material";
+import { SongType } from "../../types/index.tsx";
 
+type UserType = {
+  email: string;
+  name: string;
+  profile_image?: string;
+  songs?: SongType[];
+}
 const UserPage = () => {
-  const [user, setUser] = useState({
+  const [user, setUser] = useState<UserType>({
     email: "Pleas sign in to see your profile",
     name: "",
     profile_image: "unKnown",
     songs: [],
   });
-  const [songs, setSongs] = useState([]);
+  const [songs, setSongs] = useState<SongType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
   const [openAddSongModal, setOpenAddSongModal] = useState(false);
   const [isNameFormOpen, setIsNameFormOpen] = useState(false);
-  const [ownSongs, setOwnSongs] = useState([]);
+  const [ownSongs, setOwnSongs] = useState<SongType[]>([]);
 
   // const [passwordForm, setPasswordForm] = useState({
   //     currentPassword: "",
@@ -32,8 +39,8 @@ const UserPage = () => {
   });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const handleNameChange = (e) => {
-    const name = e.target.value;
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const name = event.target.value;
     setNewName((prevForm) => ({
       ...prevForm,
       newName: name,
@@ -122,7 +129,7 @@ const UserPage = () => {
       setSongs(myUser.data.songs);
       setIsLoading(false);
       setOwnSongs(
-        myUser.data.songs.filter((song) => song.creator === myUser.data._id)
+        myUser.data.songs.filter((song: SongType) => song.creator === myUser.data._id)
       );
     } catch (error) {
       console.error("Error fetching user data", error);
@@ -149,7 +156,7 @@ const UserPage = () => {
     setOpenAddSongModal(true);
   };
 
-  const handleAddSongSuccess = (newSong) => {
+  const handleAddSongSuccess = (newSong: SongType) => {
     setUser((prevUser) => ({
       ...prevUser,
       songs: [...prevUser.songs, newSong],

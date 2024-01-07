@@ -12,6 +12,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import AddSong from "../addSongModal/addSong.tsx";
 import EditSongModal from "../modal/editSongModal.tsx";
 import { SongType } from "../../types/index.tsx";
+import { message } from "antd";
 
 
 export default function SongCard({
@@ -44,11 +45,34 @@ export default function SongCard({
 
   const handleDeleteSong = async () => {
     try {
+      const song = {
+        _id: _id,
+        title: title,
+        album: album,
+        album_image: album_image,
+        artist: artist,
+        genre: genre,
+        year: year,
+        duration: duration,
+        price: price,
+        numOfPurchases: numOfPurchases,
+        comments: comments,
+        creator: creator,
+      }
       const userToken = localStorage.getItem("moozikaToken");
-      await axios.delete(`http://localhost:6969/songs/${_id}`, {
-        token: userToken,
+      await axios.delete(`http://localhost:6969/admin/songs/${_id}`, {
+        data: {
+          token: userToken,
+          song: song
+        },
       });
-    } catch (err) {}
+      message.success("Song deleted successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (err) {
+      // Handle errors here
+    }
   };
 
   const isSongOwnedByUserCheck = async () => {
