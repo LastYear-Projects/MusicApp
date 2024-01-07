@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import io from "socket.io-client";
 import axios from "axios";
+import { handleRequestWithToken } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 const socket = io("http://localhost:7070");
 
@@ -18,10 +20,13 @@ const Chat = ({ isOpen, handleOpen }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        if (!handleRequestWithToken()) return navigate("/");
+        if (!localStorage.getItem("moozikaToken")) return;
         const response = await axios.post(
           "http://localhost:6969/users/user-details",
           { token: localStorage.getItem("moozikaToken") }

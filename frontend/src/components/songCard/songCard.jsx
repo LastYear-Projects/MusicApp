@@ -11,6 +11,7 @@ import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
 import AddSong from "../addSongModal/addSong.jsx";
 import EditSongModal from "../modal/editSongModal.jsx";
+import { handleRequestWithToken } from "../../utils/index.js";
 
 export default function SongCard({
   _id,
@@ -43,6 +44,7 @@ export default function SongCard({
   const handleDeleteSong = async () => {
     try {
       const userToken = localStorage.getItem("moozikaToken");
+      if (!handleRequestWithToken()) return navigate("/");
       await axios.delete(`http://localhost:6969/songs/${_id}`, {
         token: userToken,
       });
@@ -50,6 +52,7 @@ export default function SongCard({
   };
 
   const isSongOwnedByUserCheck = async () => {
+    if (!handleRequestWithToken()) return navigate("/");
     const { data } = await axios.post(
       "http://localhost:6969/users/user-details",
       { token: localStorage.getItem("moozikaToken") }

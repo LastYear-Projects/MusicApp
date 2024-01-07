@@ -8,6 +8,7 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import io from "socket.io-client";
+import { handleRequestWithToken } from "../../utils";
 
 const socket = io("http://localhost:7070");
 
@@ -45,6 +46,7 @@ const Cart = () => {
     const newCart = cartIds.filter((itemId) => itemId !== id);
     localStorage.setItem("cart", JSON.stringify(newCart));
     setCartItems((prev) => prev.filter((item) => item._id !== id));
+    if (!handleRequestWithToken()) return navigate("/");
     socket.emit("cart", {
       token: localStorage.getItem("moozikaToken"),
       cart: newCart,
@@ -60,6 +62,7 @@ const Cart = () => {
   async function handleCheckout() {
     setIsLoading(true);
     try {
+      if (!handleRequestWithToken()) return navigate("/");
       const response = await axios.post("http://localhost:6969/orders", {
         token: localStorage.getItem("moozikaToken"),
         order: { songs: cartItems.map((item) => item._id) },
@@ -70,6 +73,12 @@ const Cart = () => {
         localStorage.setItem("cart", JSON.stringify([]));
         setCartItems([]);
         setCartExist(false);
+
+        socket.emit("cart", {
+          token: localStorage.getItem("moozikaToken"),
+          cart: [],
+          numberInCart: 0,
+        });
         setTimeout(() => {
           navigate("/");
         }, 750);

@@ -6,13 +6,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CheckIcon from "@mui/icons-material/Check";
 import Loader from "../loader/loader";
 import { message } from "antd";
 
 import io from "socket.io-client";
+import { handleRequestWithToken } from "../../utils";
 const socket = io("http://localhost:7070");
 
 function Song({
@@ -38,7 +39,7 @@ function Song({
   const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
     seconds > 9 ? seconds : "0" + seconds
   }`;
-
+  const navigate = useNavigate();
   function addToCartHandler() {
     if (!isLoggedIn) {
       message.error("You must be logged in before adding to cart");
@@ -49,6 +50,7 @@ function Song({
     } else {
       const cart = JSON.parse(localStorage.getItem("cart"));
       cart.push(songId);
+      if (!handleRequestWithToken()) return navigate("/");
       socket.emit("cart", {
         token: localStorage.getItem("moozikaToken"),
         cart: cart,
@@ -69,6 +71,7 @@ function Song({
       setIsLoading(false);
       return;
     }
+    if (!handleRequestWithToken()) return navigate("/");
     const { data } = await axios.post(
       "http://localhost:6969/users/user-details",
       { token: userToken }

@@ -15,6 +15,7 @@ import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { handleRequestWithToken } from "../../utils";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -104,7 +105,7 @@ const AddSong = ({ openModal, setOpenModal, onSuccess }) => {
       message.error("Youtube Id must be 11 characters long");
       return;
     }
-
+    if (!handleRequestWithToken()) return navigate("/");
     const response = await axios.post(
       "http://localhost:6969/admin/songs/create",
       {
