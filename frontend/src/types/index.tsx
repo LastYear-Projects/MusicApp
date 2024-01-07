@@ -1,16 +1,19 @@
 export type CommentType = {
+    _id?: string
     user: string
     comment: string
     date: Date
 }
 
 export type OrderType = {
+    _id?: string
     user: string
     songs: string[]
     date: Date
 }
 
 export type SongType = {
+    _id?: string
     title:string
     artist:string
     album:string
@@ -27,6 +30,7 @@ export type SongType = {
 }
 
 export type UserType = {
+    _id?: string
     name:string
     email:string
     password:string
