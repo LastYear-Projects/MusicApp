@@ -16,7 +16,7 @@ import CartPage from "./pages/CartPage/CartPage.tsx";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
 import UserProfile from "./pages/UserPage/UserPage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import { gapi } from "gapi-script";
 import PrivateRoutes from "./components/privateRoutes/PrivateRoutes.tsx";
 
