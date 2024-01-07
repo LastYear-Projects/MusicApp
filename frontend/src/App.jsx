@@ -11,7 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/footer/footer.tsx";
 
-import HomePage from "./pages/HomePage/HomePage";
+import HomePage from "./pages/HomePage/HomePage.tsx";
 import CartPage from "./pages/CartPage/CartPage.tsx";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import SongPage from "./pages/SongPage/SongPage";
