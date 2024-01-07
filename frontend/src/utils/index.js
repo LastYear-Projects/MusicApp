@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const handleRequestWithToken = async () => {
-  const token = JSON.parse(localStorage.getItem("moozikaToken"));
-  const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
+  const token = localStorage.getItem("moozikaToken");
+  const refreshToken = localStorage.getItem("refreshToken");
   if (!token || !refreshToken) return false;
   axios
     .post("http://localhost:6969/auth/check-token", {
