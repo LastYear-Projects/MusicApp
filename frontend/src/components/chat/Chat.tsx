@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   TextField,
@@ -11,13 +12,24 @@ import {
 } from "@mui/material";
 import io from "socket.io-client";
 import axios from "axios";
+import { UserType } from "../../types";
 
 const socket = io("http://localhost:7070");
 
-const Chat = ({ isOpen, handleOpen }) => {
-  const [messages, setMessages] = useState([]);
+type ChatProps = {
+  isOpen: boolean;
+  handleOpen: () => void;
+};
+
+type Message = {
+  message: string
+  userDetails: UserType,
+}
+
+const Chat = ({ isOpen, handleOpen }: ChatProps) => {
+  const [messages, setMessages] = useState<Message []>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState<UserType>();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -100,7 +112,7 @@ const Chat = ({ isOpen, handleOpen }) => {
         <div
           style={{
             display: "flex",
-            marginTop: (theme) => theme.spacing(2),
+            marginTop: (theme ) => theme.spacing(2),
           }}
         >
           <TextField

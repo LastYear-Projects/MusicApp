@@ -26,7 +26,7 @@ import SignInModal from "../modal/SignInModal.jsx";
 
 import useFetch from "../../hooks/useFetch.jsx";
 import css from "./styles.module.css";
-import Chat from "../chat/Chat.jsx";
+import Chat from "../chat/Chat.tsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
