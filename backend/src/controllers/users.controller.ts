@@ -220,12 +220,12 @@ const isRefreshTokenExist = async (req:Request, res:Response,next:NextFunction) 
   }
 };
 
-//next ?
-const verifyRefreshToken = async (req:Request, res:Response, next) => {
+//next- is it NextFunction? , error type -> string/any ?
+const verifyRefreshToken = async (req:Request, res:Response, next:NextFunction) => {
   const { refreshToken } = req.body;
   const decodedToken = jwt.decode(refreshToken);
   const user = await userService.getUserById(decodedToken.id);
-  jwt.verify(refreshToken, process.env.JWT_SECRET, (err) => {
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err:string) => {
     if (err) {
       //refreshToken is valid!! but expired
       userService.removeRefreshToken(user._id, refreshToken);
