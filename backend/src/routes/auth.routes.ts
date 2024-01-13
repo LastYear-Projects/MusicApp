@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const userController = require("../controllers/users.controller");
-const validations = require("../validations/index");
+import {Router} from "express";
+const router = Router();
+import userController from "../controllers/users.controller";
+import validations from "../validations/index";
 
 /**
  * @swagger
@@ -133,4 +133,4 @@ router.post("/refresh-token", userController.isRefreshTokenExist, userController
 
 router.post("/logout", userController.logout);
 
-module.exports = router;
+export default router

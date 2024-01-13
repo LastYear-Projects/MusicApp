@@ -1,6 +1,6 @@
-const xss = require("xss");
+import xss from "xss";
 
-const handleClient = (io) => {
+const handleClient = (io) => { //WHAT IS THE TYPE FOR IO ????????
   io.on("connection", (socket) => {
     console.log("New WebSocket Connection...");
 
@@ -37,4 +37,4 @@ const handleClient = (io) => {
   });
 };
 
-module.exports = { handleClient };
+export default { handleClient };

@@ -1,7 +1,23 @@
-const mongoose = require("mongoose");
+import mongoose,{ObjectId} from "mongoose"
 
 
-const SongScheme = new mongoose.Schema({
+export interface ISong {
+  title: string;
+  artist: string;
+  album: string;
+  genre: string[];
+  duration: number;
+  album_image: string;
+  comments: ObjectId[];
+  creator: ObjectId;
+  price: number;
+  preview_url: string;
+  youtube_id: string;
+  numOfPurchases: number;
+}
+
+
+const SongScheme = new mongoose.Schema<ISong>({
   title: {
     type: String,
     required: true,
@@ -81,4 +97,5 @@ const SongScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("song", SongScheme, "songs");
+const Song= mongoose.model<ISong>("song", SongScheme, "songs");
+export default Song

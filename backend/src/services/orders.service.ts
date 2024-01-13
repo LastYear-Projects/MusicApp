@@ -1,21 +1,20 @@
-const Order = require("../models/OrderSchema");
-const {
-  Types: { ObjectId },
-} = require("mongoose");
-const usersService = require("./users.service");
-const OrderSchema = require("../models/OrderSchema");
+import Order,{IOrder} from "../models/OrderSchema";
+import {ObjectId} from "mongoose"
+import usersService from "./users.service"
+import songsService from "./songs.service"
+import OrderSchema from "../models/OrderSchema"; // THE SAME AS FIRST LINE??
 
 const getAllOrders = async () => {
   const orders = await Order.find();
   return orders;
 };
 
-const getOrdersByUser = async (user) => {
+const getOrdersByUser = async (user:ObjectId) => {
   const orders = await Order.find({ user: user });
   return orders;
 };
 
-const getOrderById = async (id) => {
+const getOrderById = async (id:ObjectId) => {
   if (id) {
     try {
       const order = await Order.findById(id);
@@ -32,13 +31,13 @@ const getOrderById = async (id) => {
   }
 };
 
-const createOrder = async (order) => {
+const createOrder = async (order:IOrder) => {
   const newOrder = new Order({ user: order.user, songs: order.songs });
   await newOrder.save();
   return newOrder;
 };
 
-const deleteOrder = async (id) => {
+const deleteOrder = async (id:ObjectId) => {
   if (id) {
     try {
       const order = await Order.findByIdAndDelete(id);
@@ -55,7 +54,7 @@ const deleteOrder = async (id) => {
   }
 };
 
-const updateOrder = async (id, order) => {
+const updateOrder = async (id:ObjectId, order:IOrder) => {
   if (id) {
     try {
       const updatedOrder = await Order.findByIdAndUpdate(id, order);
@@ -88,7 +87,7 @@ const deleteAllOrders = async () => {
   return orders;
 };
 
-module.exports = {
+export default {
   getAllOrders,
   getOrdersByUser,
   getOrderById,

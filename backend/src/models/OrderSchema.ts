@@ -1,6 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose,{ObjectId} from "mongoose"
 
-const OrderSchema = new mongoose.Schema({
+
+export interface IOrder {
+  user: ObjectId;
+  songs: ObjectId[];
+  date: Date;
+}
+const OrderSchema = new mongoose.Schema<IOrder>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
@@ -23,4 +29,5 @@ const OrderSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("order", OrderSchema, "orders");
+const Order = mongoose.model<IOrder>("order", OrderSchema, "orders");
+export default Order;

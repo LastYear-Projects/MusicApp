@@ -5,10 +5,10 @@
  *   description: Comment management
  */
 
-const express = require("express");
-const router = express.Router();
-const commentController = require("../controllers/comments.controller");
-const validations = require("../validations/index");
+import {Router} from "express";
+const router = Router();
+import commentController from "../controllers/comments.controller";
+import validations from "../validations/index";
 
 /**
  * @swagger
@@ -166,4 +166,4 @@ router.delete("/:id", commentController.deleteCommentById);
  */
 router.delete("/", commentController.deleteAllComments);
 
-module.exports = router;
+export default router

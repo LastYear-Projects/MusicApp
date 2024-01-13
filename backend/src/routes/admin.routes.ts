@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const orderController = require("../controllers/orders.controller");
-const userController = require("../controllers/users.controller");
-const songController = require("../controllers/songs.controller");
-const validations = require("../validations/index");
+import { Router } from "express";
+const router = Router();
+import orderController from "../controllers/orders.controller";
+import userController from "../controllers/users.controller";
+import songController from "../controllers/songs.controller";
+import validations from "../validations/index";
 
 /**
  * @swagger
@@ -268,4 +268,4 @@ router
     orderController.deleteOrder
   ); //TODO:LO MEANYEN
 
-module.exports = router;
+export default router

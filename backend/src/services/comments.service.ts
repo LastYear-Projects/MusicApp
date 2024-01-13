@@ -1,15 +1,13 @@
-const Comment = require("../models/CommentScheme");
-const {
-  Types: { ObjectId },
-} = require("mongoose");
-const Song = require("../models/SongScheme");
+import Comment,{IComment} from "../models/CommentScheme";
+import {ObjectId} from "mongoose"
+import Song from "../models/SongScheme";
 
-const getCommentsByUserId = async (id) => {
+const getCommentsByUserId = async (id:ObjectId) => {
   const comments = await Comment.find({ user: id });
   return comments;
 };
 
-const getCommentsBySongId = async (id) => {
+const getCommentsBySongId = async (id:ObjectId) => {
   const comments = await Song.findById(id)
     .populate("comments")
     .populate({ path: "comments", populate: { path: "user" } })
@@ -17,24 +15,24 @@ const getCommentsBySongId = async (id) => {
   return comments;
 };
 
-const getCommentById = async (id) => {
+const getCommentById = async (id:ObjectId) => {
   const comment = await Comment.findById(id);
   return comment;
 };
 
-const createComment = async (comment) => {
+const createComment = async (comment:IComment) => {
   console.log("comment", comment);
   const newComment = new Comment(comment);
   await newComment.save();
   return newComment;
 };
 
-const updateCommentById = async (id, comment) => {
+const updateCommentById = async (id:ObjectId, comment:IComment) => {
   const updatedComment = await Comment.findByIdAndUpdate(id, comment);
   return updatedComment;
 };
 
-const deleteCommentById = async (id) => {
+const deleteCommentById = async (id:ObjectId) => {
   const comment = await Comment.findByIdAndDelete(id);
   return comment;
 };
@@ -44,7 +42,7 @@ const deleteAllComments = async () => {
   return comments;
 };
 
-module.exports = {
+export default {
   getCommentsByUserId,
   getCommentsBySongId,
   getCommentById,
