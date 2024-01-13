@@ -19,7 +19,7 @@ const handleClient = (io) => { //WHAT IS THE TYPE FOR IO ????????
     });
 
     // Listen for incoming song comments
-    socket.on("cart", (cartObject) => {
+    socket.on("cart", (cartObject) => {             // Cart Object??
       console.log("cartObject: ", cartObject);
 
       // Broadcast the sanitized comment to all connected clients

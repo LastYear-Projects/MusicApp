@@ -1,8 +1,8 @@
-import mongoose,{ObjectId} from "mongoose"
+import mongoose,{ObjectId,Types} from "mongoose"
 export interface IComment{
- user:ObjectId,
+ user:Types.ObjectId,
  comment:string,
-  date:Date
+  date?:Date
 }
 
 const CommentScheme = new mongoose.Schema<IComment>({

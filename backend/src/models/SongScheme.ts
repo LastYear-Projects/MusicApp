@@ -1,4 +1,4 @@
-import mongoose,{ObjectId} from "mongoose"
+import mongoose,{ObjectId,Types} from "mongoose"
 
 
 export interface ISong {
@@ -8,7 +8,7 @@ export interface ISong {
   genre: string[];
   duration: number;
   album_image: string;
-  comments: ObjectId[];
+  comments: Types.ObjectId[];
   creator: ObjectId;
   price: number;
   preview_url: string;
@@ -45,7 +45,7 @@ const SongScheme = new mongoose.Schema<ISong>({
     minlength: 3,
     maxlength: 50,
     default: [],
-    validate: [(val) => val.length > 0, "Must have minimum one option"],
+    validate: [(val:[String]) => val.length > 0, "Must have minimum one option"],
   },
   duration: {
     type: Number,
@@ -66,6 +66,7 @@ const SongScheme = new mongoose.Schema<ISong>({
         ref: "comment",
       },
     ],
+    default: [],
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,

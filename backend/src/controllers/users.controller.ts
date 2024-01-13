@@ -39,9 +39,6 @@ const getUserByEmail = async (req:Request, res:Response) => {
     res.status(500).json({ message: error.message });
   }
 };
- /* TODO : THE FUCK IS THIS??*/
-// const list = [];
-// list.fin;   
 
 const getUserDetails = async (req:Request, res:Response) => {
   try {
@@ -198,8 +195,7 @@ const checkToken = (req:Request, res:Response) => {
   return res.status(200).json({ isValidToken: true });
 };
 
- //next ?
-const isRefreshTokenExist = async (req:Request, res:Response,next:NextFunction) => { //I ADDED next,NextFunction ,NOT SURE IF NEEDED OR NOT, OR SHOULD BE CHANGED
+const isRefreshTokenExist = async (req:Request, res:Response,next:NextFunction) => { 
   try {
     const { refreshToken } = req.body;
     const decodedToken = jwt.decode(refreshToken);
@@ -220,12 +216,12 @@ const isRefreshTokenExist = async (req:Request, res:Response,next:NextFunction) 
   }
 };
 
-//next- is it NextFunction? , error type -> string/any ?
+
 const verifyRefreshToken = async (req:Request, res:Response, next:NextFunction) => {
   const { refreshToken } = req.body;
   const decodedToken = jwt.decode(refreshToken);
   const user = await userService.getUserById(decodedToken.id);
-  jwt.verify(refreshToken, process.env.JWT_SECRET, (err:string) => {
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err:Error) => {
     if (err) {
       //refreshToken is valid!! but expired
       userService.removeRefreshToken(user._id, refreshToken);

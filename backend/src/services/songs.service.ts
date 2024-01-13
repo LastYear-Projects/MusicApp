@@ -9,7 +9,7 @@ const getAllSongs = async () => {
   }
 };
 
-const getSongsByIds = async (ids:ObjectId[]) => { // need to check if this function really gets an array of ids
+const getSongsByIds = async (ids:string[]) => { 
   if (ids) {
     try {
       const songs = await Song.find({ _id: { $in: ids } });
@@ -24,7 +24,7 @@ const getSongsByIds = async (ids:ObjectId[]) => { // need to check if this funct
   throw new Error("Ids are required");
 };
 
-const getSongById = async (id:ObjectId) => {
+const getSongById = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -110,7 +110,7 @@ const createSong = async (song:ISong) => {
   }
 };
 
-const deleteSong = async (id:ObjectId) => {
+const deleteSong = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -126,7 +126,7 @@ const deleteSong = async (id:ObjectId) => {
   throw new Error("Id is required");
 };
 
-const updateSong = async (id:ObjectId, newSong:ISong) => {
+const updateSong = async (id:string, newSong:ISong) => {
   if (id) {
     await Song.findOneAndUpdate({ _id: id }, newSong);
     return;
@@ -134,7 +134,7 @@ const updateSong = async (id:ObjectId, newSong:ISong) => {
   throw new Error("Id is required");
 };
 
-const increaseNumOfPurchases = async (id:ObjectId) => {
+const increaseNumOfPurchases = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -150,7 +150,7 @@ const increaseNumOfPurchases = async (id:ObjectId) => {
   throw new Error("Id is required");
 };
 
-const getSongByCommentId = async (id:ObjectId) => {
+const getSongByCommentId = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findOne({ comments: id });

@@ -1,7 +1,8 @@
-let socket:string;
- //Socket is string???
+import { Socket } from "socket.io";
 
-const setSocket = (io:string) => {
+let socket:Socket;  //SOCKET ???  IO ???
+
+const setSocket = (io:Socket) => {
     socket = io;
 }
 

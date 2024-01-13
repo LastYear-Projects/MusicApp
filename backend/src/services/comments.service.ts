@@ -2,12 +2,12 @@ import Comment,{IComment} from "../models/CommentScheme";
 import {ObjectId} from "mongoose"
 import Song from "../models/SongScheme";
 
-const getCommentsByUserId = async (id:ObjectId) => {
+const getCommentsByUserId = async (id:string) => {
   const comments = await Comment.find({ user: id });
   return comments;
 };
 
-const getCommentsBySongId = async (id:ObjectId) => {
+const getCommentsBySongId = async (id:string) => {
   const comments = await Song.findById(id)
     .populate("comments")
     .populate({ path: "comments", populate: { path: "user" } })
@@ -15,7 +15,7 @@ const getCommentsBySongId = async (id:ObjectId) => {
   return comments;
 };
 
-const getCommentById = async (id:ObjectId) => {
+const getCommentById = async (id:string) => {
   const comment = await Comment.findById(id);
   return comment;
 };
@@ -27,12 +27,12 @@ const createComment = async (comment:IComment) => {
   return newComment;
 };
 
-const updateCommentById = async (id:ObjectId, comment:IComment) => {
+const updateCommentById = async (id:string, comment:IComment) => {
   const updatedComment = await Comment.findByIdAndUpdate(id, comment);
   return updatedComment;
 };
 
-const deleteCommentById = async (id:ObjectId) => {
+const deleteCommentById = async (id:string) => {
   const comment = await Comment.findByIdAndDelete(id);
   return comment;
 };

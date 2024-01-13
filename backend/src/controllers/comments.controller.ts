@@ -2,10 +2,16 @@ import commentService from "../services/comments.service";
 import songService from "../services/songs.service";
 import jwt from "jsonwebtoken";
 import {Request, Response} from "express";
+import mongoose,{ ObjectId,Types } from "mongoose";
+import { IComment } from "../models/CommentScheme";
+
+export interface Token{
+  id:string;
+}
 
 const getCommentById = async (req:Request, res:Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id ;
     const comment = await commentService.getCommentById(id);
     res.status(200).json(comment);
   } catch (error) {
@@ -27,14 +33,15 @@ const getCommentsBySongId = async (req:Request, res:Response) => {
 const createComment = async (req:Request, res:Response) => {
   try {
     const { comment, songId, token } = req.body;
-    const userId = jwt.decode(token).id;
-    const myComment = {
+    const decodedToken = jwt.decode(token) as Token;
+    const userId = new Types.ObjectId(decodedToken.id);
+    const myComment :IComment = {
       comment,
       user: userId,
     };
     const newComment = await commentService.createComment(myComment);
     const song = await songService.getSongById(songId);
-    song.comments.push(newComment);
+    song.comments.push(newComment._id);
     await songService.updateSong(songId, song);
     res.status(200).json(newComment);
   } catch (error) {
@@ -59,9 +66,9 @@ const deleteCommentById = async (req:Request, res:Response) => {
     // Find the song that contains the comment
     const song = await songService.getSongByCommentId(id);
     // Remove the comment from the song
-    song.comments = song.comments.filter((comment) => comment._id != id);
+    song.comments = song.comments.filter((comment) => comment._id.toString() != id);
     // Update the song
-    await songService.updateSong(song._id, song);
+    await songService.updateSong(song._id.toString(), song);
     const deletedComment = await commentService.deleteCommentById(id);
     res.status(200).json(deletedComment);
   } catch (error) {

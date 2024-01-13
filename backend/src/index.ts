@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import connectDB from "./config/mongo";
 import socketio from "socket.io";
-import setSocket from "./utils/socketService"; // Fix: Change named import to default import
+import {setSocket} from "./utils/socketService"; 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from"./swagger";
 import songRoutes from "./routes/songs.routes";
