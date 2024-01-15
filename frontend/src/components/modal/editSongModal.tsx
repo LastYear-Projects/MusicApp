@@ -5,19 +5,20 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { message } from "antd";
-import { handleRequestWithToken } from "../../utils";
+import {useNavigate} from "react-router-dom";
+import {message} from "antd";
+import { SongType } from "../../types";
 
-const EditSongModal = ({
-  open,
-  onClose,
-  songDetails,
-  onUpdate,
-  songId,
-  creator,
-}) => {
-  const [editedSong, setEditedSong] = useState({ ...songDetails });
+type EditSongProps ={
+    open:boolean,
+    onClose:()=>void,
+    songDetails: SongType,
+    onUpdate:()=>void,
+    songId:string,
+    creator:string
+}
+const EditSongModal = ({ open, onClose, songDetails, onUpdate,songId,creator }: EditSongProps) => {
+    const [editedSong, setEditedSong] = useState({ ...songDetails });
 
   const navigate = useNavigate();
 

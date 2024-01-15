@@ -10,6 +10,21 @@ import {
 import axios from "axios";
 import { handleRequestWithToken } from "../../utils";
 import { useNavigate } from "react-router-dom";
+import { CommentType } from "../../types";
+
+type CommentProps = {
+  comment: string;
+  date: string;
+  _id: string;
+  creator: string;
+  func: (id: string) => void;
+  editFunc: (id: string, comment: string) => void;
+  user: {
+    name: string;
+    profile_image: string;
+    _id: string;
+  };
+};
 
 const Comment = ({
   comment,
@@ -19,7 +34,7 @@ const Comment = ({
   func: removeComment,
   editFunc: editComment,
   user: { name, profile_image, _id: userId },
-}) => {
+}: CommentProps) => {
   const [isEditing, setIsEditing] = React.useState(false);
   const [editedComment, setEditedComment] = React.useState(comment);
   const [validate, setValidate] = React.useState(false);

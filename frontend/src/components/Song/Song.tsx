@@ -9,25 +9,27 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CheckIcon from "@mui/icons-material/Check";
-import Loader from "../loader/loader";
+import Loader from "../loader/loader.tsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils";
+import { SongType } from "../../types/index.tsx";
 const socket = io("http://localhost:7070");
+
 
 function Song({
   title,
   artist,
   album,
-  genere,
+  genre,
   year,
   duration,
   price,
   album_image,
   youtube_id,
-}) {
-  const [user, setUser] = useState({});
+}: SongType) {
+  const [user, setUser] = useState<UserType>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSongExist, setIsSongExist] = useState(false);
   const [isSongInCart, setIsSongInCart] = useState(false);
@@ -36,8 +38,8 @@ function Song({
   const songDurationInSeconds = duration / 1000;
   const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
   const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
-  const songDuration = `${minutes > 9 ? minutes : "0" + minutes}:${
-    seconds > 9 ? seconds : "0" + seconds
+  const songDuration = `${Number(minutes) > 9 ? minutes : "0" + minutes}:${
+    Number(seconds) > 9 ? seconds : "0" + seconds
   }`;
   const navigate = useNavigate();
   function addToCartHandler() {
@@ -45,7 +47,7 @@ function Song({
       message.error("You must be logged in before adding to cart");
       return;
     }
-    if (localStorage.getItem("cart").length === 0) {
+    if (localStorage.getItem("cart") && localStorage.getItem("cart").length === 0) {
       localStorage.setItem("cart", JSON.stringify([songId]));
     } else {
       const cart = JSON.parse(localStorage.getItem("cart"));
@@ -160,7 +162,7 @@ function Song({
               {artist}
             </Typography>
             <Typography variant="subtitle1" color="#b8b8b8" component="div">
-              {genere}
+              {genre}
             </Typography>
             <Typography variant="subtitle1" color="#b8b8b8" component="div">
               {year}

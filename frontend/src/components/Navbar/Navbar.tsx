@@ -21,16 +21,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
-import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
-import SignInModal from "../modal/SignInModal.jsx";
+import MoozikaLogo from "../moozikaLogo/MoozikaLogo.tsx";
+import SignInModal from "../modal/SignInModal.tsx";
 
-import useFetch from "../../hooks/useFetch.jsx";
+import useFetch from "../../hooks/useFetch.tsx";
 import css from "./styles.module.css";
-import Chat from "../chat/Chat.jsx";
+import Chat from "../chat/Chat.tsx";
 import { message } from "antd";
 
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils/index.js";
+import { SongType } from "../../types/index.tsx";
 
 const socket = io("http://localhost:7070");
 
@@ -45,7 +46,7 @@ export default function Navbar() {
   const { data } = useFetch("http://localhost:6969/songs");
   const top100Films =
     data != null
-      ? data.map((song) => ({ title: song.title, _id: song._id }))
+      ? data.map((song: SongType) => ({ title: song.title, _id: song._id }))
       : [];
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
