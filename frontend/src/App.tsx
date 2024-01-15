@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.css";
 import {
   createBrowserRouter,
@@ -8,17 +9,17 @@ import {
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/footer/Footer";
+import Navbar from "./components/Navbar/Navbar.tsx";
+import Footer from "./components/footer/footer.tsx";
 
-import HomePage from "./pages/HomePage/HomePage";
-import CartPage from "./pages/CartPage/CartPage";
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import SongPage from "./pages/SongPage/SongPage";
-import UserProfile from "./pages/UserPage/UserPage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import CartPage from "./pages/CartPage/CartPage.tsx";
+import SignUpPage from "./pages/SignUpPage/SignUpPage.tsx";
+import SongPage from "./pages/SongPage/SongPage.tsx";
+import UserProfile from "./pages/UserPage/UserPage.tsx";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import { gapi } from "gapi-script";
-import PrivateRoutes from "./components/privateRoutes/PrivateRoutes";
+import PrivateRoutes from "./components/privateRoutes/PrivateRoutes.tsx";
 
 const routes = [
   { path: "/", element: <HomePage /> },

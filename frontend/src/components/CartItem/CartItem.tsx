@@ -1,8 +1,17 @@
-import Stack from "@mui/material/Stack";
+import React from "react";
+import {Stack} from "@mui/material";
 import classes from "./CartItem.module.css";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-const CartItem = ({ album_image, title, price,removeSong}) => {
+
+type CartItemProps = {
+  album_image: string;
+  title: string;
+  price: string;
+  removeSong: () => void;
+};
+
+const CartItem = ({ album_image, title, price, removeSong }: CartItemProps) => {
   return (
     <Stack
       direction="row"
@@ -17,11 +26,11 @@ const CartItem = ({ album_image, title, price,removeSong}) => {
         <img
           src={album_image}
           style={{
-            height: "100%", // Take full height of the cart item
-            width: "100%", // Set width to 20% of the cart item
-            objectFit: "fit", // Preserve aspect ratio and cover the entire width
-            marginRight: "3rem", // Add some margin between the image and text
-            borderRadius: "5px 0px 0px 5px", // Rounded corners on the left side
+            height: "100%", 
+            width: "100%",
+            objectFit: "fit", 
+            marginRight: "3rem",
+            borderRadius: "5px 0px 0px 5px"
           }}
           alt={title}
         />
@@ -38,7 +47,10 @@ const CartItem = ({ album_image, title, price,removeSong}) => {
         <div className={classes.priceSection}>
           <p className={classes.priceText}>${price}</p>
           <IconButton aria-label="delete" onClick={removeSong}>
-            <DeleteIcon style={{color:"white"}} className={classes.trashIcon} />
+            <DeleteIcon
+              style={{ color: "white" }}
+              className={classes.trashIcon}
+            />
           </IconButton>
         </div>
       </Stack>
