@@ -2,7 +2,7 @@ import songService from "../services/songs.service";
 import userService from "../services/users.service";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
-
+import Token from "../utils/tokenType";
 const getAllSongs = async (req:Request, res:Response) => {
   try {
     const songs = await songService.getAllSongs();
@@ -83,8 +83,8 @@ const createSong = async (req:Request, res:Response) => {
     const genres = [...song.genre];
     const duration = song.duration;
     const price = song.price;
-    const creatorID = jwt.decode(token).id;
-    const user = await userService.getUserById(creatorID);
+    const creator = jwt.decode(token) as Token ;
+    const user = await userService.getUserById(creator.id);
 
     // Check with regex that the price doesn't contain letters (point is allowed)
     const reg = new RegExp("^[0-9]+(.[0-9]+)?");
@@ -112,7 +112,7 @@ const createSong = async (req:Request, res:Response) => {
 
     const newSong = await songService.createSong(song);
     user.songs.push(newSong._id);
-    await userService.updateUser(creatorID, user);
+    await userService.updateUser(creator.id, user);
     res.status(201).json(newSong);
   } catch (error) {
     res.status(409).json({ message: error.message });

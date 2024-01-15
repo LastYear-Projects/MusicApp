@@ -16,7 +16,7 @@ router
   .post(
     "/users/",
     validations.checkToken,
-    validations.adminAuth,
+    //validations.adminAuth,
     userController.getAllUsers
   ) //TODO:LO MEANYEN
 
@@ -63,7 +63,7 @@ router
   .post(
     "/songs/",
     validations.checkToken,
-    validations.adminAuth,
+   //validations.adminAuth,
     songController.getAllSongs
   ) //TODO:LO MEANYEN
 
@@ -248,7 +248,7 @@ router
   .post(
     "/orders/",
     validations.checkToken,
-    validations.adminAuth,
+    //validations.adminAuth,
     orderController.getAllOrders
   ) //TODO:LO MEANYEN
 
@@ -256,7 +256,7 @@ router
   .put(
     "/orders/:orderId",
     validations.checkToken,
-    validations.adminAuth,
+   // validations.adminAuth,
     orderController.updateOrder
   ) //TODO:LO MEANYEN
 
@@ -264,7 +264,7 @@ router
   .delete(
     "/orders/:orderId",
     validations.checkToken,
-    validations.adminAuth,
+    //validations.adminAuth,
     orderController.deleteOrder
   ); //TODO:LO MEANYEN
 

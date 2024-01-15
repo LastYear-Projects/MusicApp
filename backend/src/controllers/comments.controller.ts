@@ -2,12 +2,10 @@ import commentService from "../services/comments.service";
 import songService from "../services/songs.service";
 import jwt from "jsonwebtoken";
 import {Request, Response} from "express";
-import mongoose,{ ObjectId,Types } from "mongoose";
+import{ Types } from "mongoose";
 import { IComment } from "../models/CommentScheme";
+import Token from "../utils/tokenType";
 
-export interface Token{
-  id:string;
-}
 
 const getCommentById = async (req:Request, res:Response) => {
   try {

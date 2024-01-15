@@ -69,7 +69,7 @@ const getSongsByAlbum = async (album:string) => {
   throw new Error("Album is required");
 };
 
-const getSongsByGenre = async (genre:string[]) => {
+const getSongsByGenre = async (genre:string) => {
   if (genre) {
     try {
       const songs = await Song.find({ genre });

@@ -1,10 +1,10 @@
 import User, {IUser} from "../models/UserScheme";
-import {ObjectId} from "mongoose"
+import {Types} from "mongoose"
 const getAllUsers = async () => {
   return await User.find();
 };
 
-const getUserById = async (id:ObjectId) => {
+const getUserById = async (id:string) => {
   if (id) {
     try {
       const user = await User.findById(id).select("-password").populate({
@@ -90,7 +90,7 @@ const createGoogleUser = async (user:IUser) => {
   }
 };
 
-const deleteUser = async (id:ObjectId) => {
+const deleteUser = async (id:string) => {
   if (id) {
     try {
       const user = await User.findByIdAndDelete(id);
@@ -105,7 +105,7 @@ const deleteUser = async (id:ObjectId) => {
   throw new Error("Id is required");
 };
 
-const updateUser = async (id:ObjectId, newUser:IUser) => {
+const updateUser = async (id:string, newUser:IUser) => {
   if (id && newUser) {
     try {
       await User.findOneAndUpdate({ _id: id }, newUser);
@@ -117,23 +117,23 @@ const updateUser = async (id:ObjectId, newUser:IUser) => {
   throw new Error("Id and new user are required");
 };
 
-const addOrderToUser = async (id:ObjectId, orderID:ObjectId) => {
-  if (id) {
-    try {
-      const user = await User.findById(id);
-      if (user) {
-        user.orders.push(orderID); // NEED TO ADD ORDERS TO USER SCHEME ???
-        updateUser(id, user);
-        return orderID;
-      }
-      return null;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-};
+// const addOrderToUser = async (id:string, orderID:string) => {
+//   if (id) {
+//     try {
+//       const user = await User.findById(id);
+//       if (user) {
+//         user.orders.push(orderID); // NEED TO ADD ORDERS TO USER SCHEME ???
+//         updateUser(id, user);
+//         return orderID;
+//       }
+//       return null;
+//     } catch (error) {
+//       throw new Error(error.message);
+//     }
+//   }
+// };
 
-const addSongsToUser = async (id:ObjectId, songs:ObjectId[]) => { // IS IT SONG []  OR SONGS ID [] ??? SONG/ObjectId
+const addSongsToUser = async (id:string, songs:Types.ObjectId[]) => { 
   if (id) {
     try {
       const user = await User.findById(id);
@@ -151,7 +151,7 @@ const addSongsToUser = async (id:ObjectId, songs:ObjectId[]) => { // IS IT SONG 
   }
 };
 
-const removeRefreshTokens = async (id:ObjectId) => {
+const removeRefreshTokens = async (id:string) => {
   if(id){
     try{
       const user = await User.findById(id);
@@ -167,7 +167,7 @@ const removeRefreshTokens = async (id:ObjectId) => {
   }
 }
 
-const removeRefreshToken = async (id:ObjectId, refreshToken:string) => { // Refresh token is string or id?
+const removeRefreshToken = async (id:string, refreshToken:string) => { // Refresh token is string or id?
   if(id && refreshToken){
     try{
       const user = await User.findById(id);
@@ -183,7 +183,7 @@ const removeRefreshToken = async (id:ObjectId, refreshToken:string) => { // Refr
   }
 }
 
-const addRefreshToken = async (id:ObjectId, refreshToken:string) => {
+const addRefreshToken = async (id:string, refreshToken:string) => {
   if(id && refreshToken){
     try{
       const user = await User.findById(id);
@@ -204,7 +204,7 @@ const addRefreshToken = async (id:ObjectId, refreshToken:string) => {
 
 
 export default {
-  addOrderToUser,
+  //addOrderToUser,
   addSongsToUser,
   getAllUsers,
   getUserById,

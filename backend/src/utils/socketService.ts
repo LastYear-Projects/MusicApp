@@ -1,8 +1,8 @@
-import { Socket } from "socket.io";
+import { Server} from "socket.io";
 
-let socket:Socket;  //SOCKET ???  IO ???
+let socket:Server;  
 
-const setSocket = (io:Socket) => {
+const setSocket = (io:Server) => {
     socket = io;
 }
 

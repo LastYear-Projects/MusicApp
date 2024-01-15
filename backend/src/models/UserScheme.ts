@@ -1,12 +1,12 @@
-import mongoose,{ObjectId} from "mongoose";
+import mongoose,{Types} from "mongoose";
 
 export interface IUser {
   name: string;
   email: string;
   password: string;
-  songs: ObjectId[];
+  songs?: Types.ObjectId[];
   profile_image: string;
-  refreshTokens: string[];
+  refreshTokens?: string[];
 }
 
 const UserScheme = new mongoose.Schema<IUser>({

@@ -9,12 +9,12 @@ const getAllOrders = async () => {
   return orders;
 };
 
-const getOrdersByUser = async (user:ObjectId) => {
+const getOrdersByUser = async (user:string) => { // change to -> getOrderByUserId
   const orders = await Order.find({ user: user });
   return orders;
 };
 
-const getOrderById = async (id:ObjectId) => {
+const getOrderById = async (id:string) => {
   if (id) {
     try {
       const order = await Order.findById(id);
@@ -37,7 +37,7 @@ const createOrder = async (order:IOrder) => {
   return newOrder;
 };
 
-const deleteOrder = async (id:ObjectId) => {
+const deleteOrder = async (id:string) => {
   if (id) {
     try {
       const order = await Order.findByIdAndDelete(id);
@@ -54,7 +54,7 @@ const deleteOrder = async (id:ObjectId) => {
   }
 };
 
-const updateOrder = async (id:ObjectId, order:IOrder) => {
+const updateOrder = async (id:string, order:IOrder) => {
   if (id) {
     try {
       const updatedOrder = await Order.findByIdAndUpdate(id, order);
@@ -71,21 +71,21 @@ const updateOrder = async (id:ObjectId, order:IOrder) => {
   }
 };
 
-const deleteAllOrders = async () => {
-  const orders = await OrderSchema.deleteMany();
-  //delete all order songs from the users song list
-  for (let i = 0; i < orders.length; i++) {
-    const user = await usersService.getUserById(orders[i].user);
-    user.songs = user.songs.filter((song) => !orders[i].songs.includes(song));
-    await usersService.updateUser(user._id, user);
-    for (let j = 0; j < orders[i].songs.length; j++) {
-      const song = await songsService.getSongById(orders[i].songs[j]);
-      song.numOfPurchases--;
-      await songsService.updateSong(song._id, song);
-    }
-  }
-  return orders;
-};
+// const deleteAllOrders = async () => {
+//   const orders = await OrderSchema.deleteMany() ;
+//   //delete all order songs from the users song list
+//   for (let i = 0; i < orders.length; i++) {
+//     const user = await usersService.getUserById(orders[i].user);
+//     user.songs = user.songs.filter((song) => !orders[i].songs.includes(song));
+//     await usersService.updateUser(user._id, user);
+//     for (let j = 0; j < orders[i].songs.length; j++) {
+//       const song = await songsService.getSongById(orders[i].songs[j]);
+//       song.numOfPurchases--;
+//       await songsService.updateSong(song._id, song);
+//     }
+//   }
+//   return orders;
+// };
 
 export default {
   getAllOrders,
@@ -93,6 +93,6 @@ export default {
   getOrderById,
   createOrder,
   deleteOrder,
-  deleteAllOrders,
+  //deleteAllOrders,
   updateOrder,
 };

@@ -110,6 +110,6 @@ router.post("/", validations.checkToken, orderController.createOrder);
  *       500:
  *         description: Internal Server Error
  */
-router.delete("/", orderController.deleteAllOrders);
+// router.delete("/", orderController.deleteAllOrders);
 
 export default router;

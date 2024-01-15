@@ -1,6 +1,7 @@
-import xss from "xss";
+import { Server } from "socket.io";
+import { escapeHtml } from "xss";
 
-const handleClient = (io) => { //WHAT IS THE TYPE FOR IO ????????
+const handleClient = (io:Server) => { //WHAT IS THE TYPE FOR IO ????????
   io.on("connection", (socket) => {
     console.log("New WebSocket Connection...");
 
@@ -9,7 +10,7 @@ const handleClient = (io) => { //WHAT IS THE TYPE FOR IO ????????
       console.log("messageObject: ", messageObject);
 
       // Sanitize the message before broadcasting
-      const sanitizedMessage = xss.escapeHtml(messageObject.message);
+      const sanitizedMessage = escapeHtml(messageObject.message);
 
       // Broadcast the sanitized message to all connected clients
       io.emit("message", {
@@ -37,4 +38,4 @@ const handleClient = (io) => { //WHAT IS THE TYPE FOR IO ????????
   });
 };
 
-export default { handleClient };
+export default  handleClient ;

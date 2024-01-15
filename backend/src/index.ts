@@ -4,25 +4,20 @@ if (process.env.NODE_ENV !== "production") {
 }
 import express from "express";
 import cors from "cors";
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import connectDB from "./config/mongo";
-import socketio from "socket.io";
-import {setSocket} from "./utils/socketService"; 
+import  { Server } from "socket.io";
+import Socket  from "./utils/socketService";
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from"./swagger";
+import swaggerSpec from "./swagger";
 import songRoutes from "./routes/songs.routes";
 import userRoutes from "./routes/users.routes";
 import orderRoutes from "./routes/orders.routes";
 import authRoutes from "./routes/auth.routes";
 import adminRoutes from "./routes/admin.routes";
 import commentRoutes from "./routes/comments.routes";
-
-
-
-
-
-
+import handleClient from "./utils/sockets";
+import { createServer } from "http";
 
 const PORT = process.env.PORT || 5000;
 const SOCKET_PORT = process.env.SOCKET_PORT || 3010;
@@ -34,17 +29,16 @@ app.use(express.json());
 app.use(cors());
 
 //socket.io
-import server from "http" // 25 and 26 were one line using require, changed to import
-server.createServer(app);
-const io = socketio(server, { // WHAT TO DO WITH THIS SOCKETIO
+
+const server = createServer(app);
+const io = new Server(server, {
   cors: {
-    origin: "*", // adjust this to your frontend URL in production for security
+    origin: "*", 
     methods: ["GET", "POST"],
   },
 });
-setSocket(io); // WHAT TO DO WITH THIS SETSOCKET
-import handleClient from "./utils/sockets";
-handleClient(io); // WHAT TO DO WITH HANDLECLIENT
+Socket.setSocket(io); 
+handleClient(io); 
 
 // using socket comunicatin for the chat.
 server.listen(SOCKET_PORT, () => {
