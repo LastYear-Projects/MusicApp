@@ -143,7 +143,7 @@ const userLogin = async (req, res) => {
     });
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
-    })
+    });
     userService.addRefreshToken(user._id, refreshToken);
     res.status(200).json({ token: token, refreshToken: refreshToken });
   } catch (error) {
@@ -205,38 +205,43 @@ const isRefreshTokenExist = async (req, res) => {
     if (!user) {
       return res.status(403).json({ message: "Invalid token" });
     }
-    const isTokenExist = user.refreshTokens.find((token) => token === refreshToken);
+    const isTokenExist = user.refreshTokens.find(
+      (token) => token === refreshToken
+    );
     if (!isTokenExist) {
       await userService.removeRefreshTokens(user._id);
       return res.status(403).json({ message: "Invalid token" });
     }
     next();
-  }catch(error){
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 const verifyRefreshToken = async (req, res, next) => {
-  const {refreshToken} = req.body;
+  const { refreshToken } = req.body;
   const decodedToken = jwt.decode(refreshToken);
   const user = await userService.getUserById(decodedToken.id);
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err) => {
-      if (err) {
-        //refreshToken is valid!! but expired
-        userService.removeRefreshToken(user._id, refreshToken);
-        const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    if (err) {
+      //refreshToken is valid!! but expired
+      userService.removeRefreshToken(user._id, refreshToken);
+      const newRefreshToken = jwt.sign(
+        { id: user._id },
+        process.env.JWT_SECRET,
+        {
           expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
-        })
-        userService.addRefreshToken(user._id, newRefreshToken);
-        req.body.refreshToken = newRefreshToken;
-      }
-      next();
+        }
+      );
+      userService.addRefreshToken(user._id, newRefreshToken);
+      req.body.refreshToken = newRefreshToken;
+    }
+    next();
   });
-
-}
+};
 
 const generateAccessToken = async (req, res) => {
-  try{
+  try {
     const { refreshToken } = req.body;
     const decodedToken = jwt.decode(refreshToken);
     const user = await userService.getUserById(decodedToken.id);
@@ -244,12 +249,22 @@ const generateAccessToken = async (req, res) => {
       expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
     res.status(200).json({ token: token, refreshToken: refreshToken });
-  }catch(error){
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const logout = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    const decodedToken = jwt.decode(token);
+    const userId = decodedToken.id;
+    await userService.removeRefreshToken(userId, refreshToken);
+    res.status(200).json({ message: "Logout successfully" });
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
-
-
 
 module.exports = {
   getAllUsers,
@@ -269,5 +284,6 @@ module.exports = {
   checkToken,
   isRefreshTokenExist,
   verifyRefreshToken,
-  generateAccessToken
+  generateAccessToken,
+  logout
 };
