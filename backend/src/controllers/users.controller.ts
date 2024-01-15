@@ -186,7 +186,11 @@ const googleLogin = async (req:Request, res:Response) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
-    return res.status(200).json({ token: token });
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+    });
+    
+    return res.status(200).json({ token,refreshToken });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
