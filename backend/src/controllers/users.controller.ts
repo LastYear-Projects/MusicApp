@@ -1,8 +1,10 @@
-const userService = require("../services/users.service");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import userService from "../services/users.service";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { Request, Response,NextFunction } from "express";
+import Token from "../utils/tokenType";
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req:Request, res:Response) => {
   try {
     const users = await userService.getAllUsers();
     res.status(200).json(users);
@@ -11,7 +13,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const getUserById = async (req, res) => {
+const getUserById = async (req:Request, res:Response) => {
   try {
     const user = await userService.getUserById(req.params.userId);
     res.status(200).json(user);
@@ -20,7 +22,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-const getUserByName = async (req, res) => {
+const getUserByName = async (req:Request, res:Response) => {
   //TODO: LO MEANYEN
   try {
     const user = await userService.getUserByName(req.params.name);
@@ -30,7 +32,7 @@ const getUserByName = async (req, res) => {
   }
 };
 
-const getUserByEmail = async (req, res) => {
+const getUserByEmail = async (req:Request, res:Response) => {
   try {
     const user = await userService.getUserByEmail(req.body.email);
     res.status(200).json(user);
@@ -39,15 +41,12 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-const list = [];
-list.fin;
-
-const getUserDetails = async (req, res) => {
+const getUserDetails = async (req:Request, res:Response) => {
   try {
     const { token } = req.body;
     const decodedToken = jwt.decode(token);
-    const userId = decodedToken.id;
-    const user = await userService.getUserById(userId);
+    const tokenObject = decodedToken as Token;
+    const user = await userService.getUserById(tokenObject.id);
     //delete password key from user object
     res.status(200).json(user);
   } catch (error) {
@@ -55,14 +54,14 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+const createUser = async (req:Request, res:Response) => {
   try {
     const user = { ...req.body };
     user.name = user.name
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
       .join(" ");
-    salt = bcrypt.genSaltSync(10);
+    const salt = bcrypt.genSaltSync(10); // I ADDED CONST ?
     user.email = user.email.toLowerCase();
     user.password = bcrypt.hashSync(user.password, salt);
     const createdUser = await userService.createUser(user);
@@ -72,7 +71,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req:Request, res:Response) => {
   try {
     const user = await userService.deleteUser(req.params.userId);
     res.status(200).json(user);
@@ -81,20 +80,20 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req:Request, res:Response) => {
   try {
     const userIdParams = req.params.userId;
     const { token, updatedUser } = req.body;
     const decodedToken = jwt.decode(token);
-    const userId = decodedToken.id;
-    const user = await userService.getUserById(userId);
+    const tokenObject = decodedToken as Token;
+    const user = await userService.getUserById(tokenObject.id);
     if (updatedUser.name)
       updatedUser.name = updatedUser.name
         .split(" ")
         .map((s) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
         .join(" ");
     if (updatedUser.email) updatedUser.email = updatedUser.email.toLowerCase();
-    const userAfterUpdate = await userService.updateUser(userId, updatedUser);
+    const userAfterUpdate = await userService.updateUser(tokenObject.id, updatedUser);
     userAfterUpdate.password = undefined;
     res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
@@ -102,16 +101,16 @@ const updateUser = async (req, res) => {
   }
 };
 
-const getUserSongs = async (req, res) => {
-  try {
-    const user = await userService.getUserSongs(req.params.id);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// const getUserSongs = async (req:Request, res:Response) => {
+//   try {
+//     const user = await userService.getUserSongs(req.params.id);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
-const addSongToUser = async (req, res) => {
+const addSongToUser = async (req:Request, res:Response) => {
   try {
     const user = await userService.addSongsToUser(req.params.id, req.body);
     res.status(200).json(user);
@@ -120,16 +119,16 @@ const addSongToUser = async (req, res) => {
   }
 };
 
-const removeSongFromUser = async (req, res) => {
-  try {
-    const user = await userService.removeSongFromUser(req.params.id, req.body);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// const removeSongFromUser = async (req:Request, res:Response) => {
+//   try {
+//     const user = await userService.removeSongFromUser(req.params.id, req.body);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
-const userLogin = async (req, res) => {
+const userLogin = async (req:Request, res:Response) => {
   try {
     const user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
@@ -144,20 +143,20 @@ const userLogin = async (req, res) => {
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
     });
-    userService.addRefreshToken(user._id, refreshToken);
+    userService.addRefreshToken(user._id.toString(), refreshToken);
     res.status(200).json({ token: token, refreshToken: refreshToken });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const checkSong = async (req, res) => {
+const checkSong = async (req:Request, res:Response) => {
   try {
     const { token } = req.body;
     const { songId } = req.params;
-    const decodedToken = jwt.decode(token);
+    const decodedToken = jwt.decode(token) as Token;
     const user = await userService.getUserById(decodedToken.id);
-    const song = user.songs.find((song) => song._id == songId);
+    const song = user.songs.find((song) => song._id.toString() == songId);
     if (song) {
       res.status(200).json({ isExist: true });
     } else {
@@ -168,7 +167,7 @@ const checkSong = async (req, res) => {
   }
 };
 
-const googleLogin = async (req, res) => {
+const googleLogin = async (req:Request, res:Response) => {
   try {
     let user = await userService.getUserByEmail(req.body.email.toLowerCase());
     if (!user) {
@@ -187,20 +186,24 @@ const googleLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
-    return res.status(200).json({ token: token });
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+    });
+    
+    return res.status(200).json({ token,refreshToken });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const checkToken = (req, res) => {
+const checkToken = (req:Request, res:Response) => {
   return res.status(200).json({ isValidToken: true });
 };
 
-const isRefreshTokenExist = async (req, res) => {
+const isRefreshTokenExist = async (req:Request, res:Response,next:NextFunction) => { 
   try {
     const { refreshToken } = req.body;
-    const decodedToken = jwt.decode(refreshToken);
+    const decodedToken = jwt.decode(refreshToken) as Token;
     const user = await userService.getUserById(decodedToken.id);
     if (!user) {
       return res.status(403).json({ message: "Invalid token" });
@@ -209,7 +212,7 @@ const isRefreshTokenExist = async (req, res) => {
       (token) => token === refreshToken
     );
     if (!isTokenExist) {
-      await userService.removeRefreshTokens(user._id);
+      await userService.removeRefreshTokens(user._id.toString());
       return res.status(403).json({ message: "Invalid token" });
     }
     next();
@@ -218,14 +221,15 @@ const isRefreshTokenExist = async (req, res) => {
   }
 };
 
-const verifyRefreshToken = async (req, res, next) => {
+
+const verifyRefreshToken = async (req:Request, res:Response, next:NextFunction) => {
   const { refreshToken } = req.body;
-  const decodedToken = jwt.decode(refreshToken);
+  const decodedToken = jwt.decode(refreshToken) as Token;
   const user = await userService.getUserById(decodedToken.id);
-  jwt.verify(refreshToken, process.env.JWT_SECRET, (err) => {
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err:Error) => {
     if (err) {
       //refreshToken is valid!! but expired
-      userService.removeRefreshToken(user._id, refreshToken);
+      userService.removeRefreshToken(user._id.toString(), refreshToken);
       const newRefreshToken = jwt.sign(
         { id: user._id },
         process.env.JWT_SECRET,
@@ -233,17 +237,17 @@ const verifyRefreshToken = async (req, res, next) => {
           expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
         }
       );
-      userService.addRefreshToken(user._id, newRefreshToken);
+      userService.addRefreshToken(user._id.toString(), newRefreshToken);
       req.body.refreshToken = newRefreshToken;
     }
     next();
   });
 };
 
-const generateAccessToken = async (req, res) => {
+const generateAccessToken = async (req:Request, res:Response) => {
   try {
     const { refreshToken } = req.body;
-    const decodedToken = jwt.decode(refreshToken);
+    const decodedToken = jwt.decode(refreshToken) as Token;
     const user = await userService.getUserById(decodedToken.id);
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.TOKEN_EXPIRATION_TIME,
@@ -253,11 +257,11 @@ const generateAccessToken = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-const logout = async (req, res) => {
+ // token??
+const logout = async (req:Request, res:Response) => {
   try {
     const { refreshToken } = req.body;
-    const decodedToken = jwt.decode(token);
+    const decodedToken = jwt.decode(refreshToken) as Token;
     const userId = decodedToken.id;
     await userService.removeRefreshToken(userId, refreshToken);
     res.status(200).json({ message: "Logout successfully" });
@@ -266,7 +270,7 @@ const logout = async (req, res) => {
   }
 }
 
-module.exports = {
+export default {
   getAllUsers,
   getUserById,
   getUserByName,
@@ -275,9 +279,9 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
-  getUserSongs,
+  //getUserSongs,
   addSongToUser,
-  removeSongFromUser,
+ // removeSongFromUser,
   userLogin,
   checkSong,
   googleLogin,

@@ -1,4 +1,5 @@
-const Song = require("../models/SongScheme");
+import Song,{ISong} from "../models/SongScheme";
+import {ObjectId} from "mongoose"
 
 const getAllSongs = async () => {
   try {
@@ -8,7 +9,7 @@ const getAllSongs = async () => {
   }
 };
 
-const getSongsByIds = async (ids) => {
+const getSongsByIds = async (ids:string[]) => { 
   if (ids) {
     try {
       const songs = await Song.find({ _id: { $in: ids } });
@@ -23,7 +24,7 @@ const getSongsByIds = async (ids) => {
   throw new Error("Ids are required");
 };
 
-const getSongById = async (id) => {
+const getSongById = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -38,7 +39,7 @@ const getSongById = async (id) => {
   throw new Error("Id is required");
 };
 
-const getSongsByArtist = async (artist) => {
+const getSongsByArtist = async (artist:string) => {
   if (artist) {
     try {
       const songs = await Song.find({ artist });
@@ -53,7 +54,7 @@ const getSongsByArtist = async (artist) => {
   throw new Error("Artist is required");
 };
 
-const getSongsByAlbum = async (album) => {
+const getSongsByAlbum = async (album:string) => {
   if (album) {
     try {
       const songs = await Song.find({ album });
@@ -68,7 +69,7 @@ const getSongsByAlbum = async (album) => {
   throw new Error("Album is required");
 };
 
-const getSongsByGenre = async (genre) => {
+const getSongsByGenre = async (genre:string) => {
   if (genre) {
     try {
       const songs = await Song.find({ genre });
@@ -83,7 +84,7 @@ const getSongsByGenre = async (genre) => {
   throw new Error("Genre is required");
 };
 
-const getSongsByYear = async (year) => {
+const getSongsByYear = async (year:string) => { // year dosent exist on SongScheme
   if (year) {
     try {
       const songs = await Song.find({ year });
@@ -98,7 +99,7 @@ const getSongsByYear = async (year) => {
   throw new Error("Year is required");
 };
 
-const createSong = async (song) => {
+const createSong = async (song:ISong) => {
   const checkSong = await Song.findOne(song);
   if (checkSong) {
     throw new Error("Song already exists");
@@ -109,7 +110,7 @@ const createSong = async (song) => {
   }
 };
 
-const deleteSong = async (id) => {
+const deleteSong = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -125,7 +126,7 @@ const deleteSong = async (id) => {
   throw new Error("Id is required");
 };
 
-const updateSong = async (id, newSong) => {
+const updateSong = async (id:string, newSong:ISong) => {
   if (id) {
     await Song.findOneAndUpdate({ _id: id }, newSong);
     return;
@@ -133,7 +134,7 @@ const updateSong = async (id, newSong) => {
   throw new Error("Id is required");
 };
 
-const increaseNumOfPurchases = async (id) => {
+const increaseNumOfPurchases = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findById(id);
@@ -149,7 +150,7 @@ const increaseNumOfPurchases = async (id) => {
   throw new Error("Id is required");
 };
 
-const getSongByCommentId = async (id) => {
+const getSongByCommentId = async (id:string) => {
   if (id) {
     try {
       const song = await Song.findOne({ comments: id });
@@ -164,7 +165,7 @@ const getSongByCommentId = async (id) => {
   throw new Error("Id is required");
 };
 
-module.exports = {
+export default {
   getAllSongs,
   getSongsByIds,
   createSong,

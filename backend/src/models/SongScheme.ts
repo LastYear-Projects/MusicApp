@@ -1,7 +1,23 @@
-const mongoose = require("mongoose");
+import mongoose,{ObjectId,Types} from "mongoose"
 
 
-const SongScheme = new mongoose.Schema({
+export interface ISong {
+  title: string;
+  artist: string;
+  album: string;
+  genre: string[];
+  duration: number;
+  album_image: string;
+  comments: Types.ObjectId[];
+  creator: ObjectId;
+  price: number;
+  preview_url: string;
+  youtube_id: string;
+  numOfPurchases: number;
+}
+
+
+const SongScheme = new mongoose.Schema<ISong>({
   title: {
     type: String,
     required: true,
@@ -29,7 +45,7 @@ const SongScheme = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
     default: [],
-    validate: [(val) => val.length > 0, "Must have minimum one option"],
+    validate: [(val:[String]) => val.length > 0, "Must have minimum one option"],
   },
   duration: {
     type: Number,
@@ -50,6 +66,7 @@ const SongScheme = new mongoose.Schema({
         ref: "comment",
       },
     ],
+    default: [],
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
@@ -81,4 +98,5 @@ const SongScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("song", SongScheme, "songs");
+const Song= mongoose.model<ISong>("song", SongScheme, "songs");
+export default Song

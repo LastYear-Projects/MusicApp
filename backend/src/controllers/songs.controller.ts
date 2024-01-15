@@ -1,10 +1,9 @@
-
-
-const songService = require("../services/songs.service");
-const userService = require("../services/users.service");
-const jwt = require("jsonwebtoken");
-
-const getAllSongs = async (req, res) => {
+import songService from "../services/songs.service";
+import userService from "../services/users.service";
+import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
+import Token from "../utils/tokenType";
+const getAllSongs = async (req:Request, res:Response) => {
   try {
     const songs = await songService.getAllSongs();
     res.status(200).json(songs);
@@ -14,7 +13,7 @@ const getAllSongs = async (req, res) => {
 };
 
 
-const getSongsByIds = async (req, res) => {
+const getSongsByIds = async (req:Request, res:Response) => {
   try {
     const { ids } = req.body;
     const songs = await songService.getSongsByIds(ids);
@@ -24,7 +23,7 @@ const getSongsByIds = async (req, res) => {
   }
 };
 
-const getSongsByArtist = async (req, res) => {
+const getSongsByArtist = async (req:Request, res:Response) => {
   try {
     const { artist } = req.params;
     const songs = await songService.getSongsByArtist(artist);
@@ -35,7 +34,7 @@ const getSongsByArtist = async (req, res) => {
 };
 
 
-const getSongsByAlbum = async (req, res) => {
+const getSongsByAlbum = async (req:Request, res:Response) => {
   try {
     const { album } = req.params;
     const songs = await songService.getSongsByAlbum(album);
@@ -46,7 +45,7 @@ const getSongsByAlbum = async (req, res) => {
 };
 
 
-const getSongsByGenre = async (req, res) => {
+const getSongsByGenre = async (req:Request, res:Response) => {
   try {
     const { genre } = req.params;
     const songs = await songService.getSongsByGenre(genre);
@@ -57,7 +56,7 @@ const getSongsByGenre = async (req, res) => {
 };
 
 
-const getSongsByYear = async (req, res) => {
+const getSongsByYear = async (req:Request, res:Response) => {
   try {
     const { year } = req.params;
     const songs = await songService.getSongsByYear(year);
@@ -68,7 +67,7 @@ const getSongsByYear = async (req, res) => {
 };
 
 
-const getSongById = async (req, res) => {
+const getSongById = async (req:Request, res:Response) => {
   try {
     const id = req.params.songId;
     const song = await songService.getSongById(id);
@@ -78,14 +77,14 @@ const getSongById = async (req, res) => {
   }
 };
 
-const createSong = async (req, res) => {
+const createSong = async (req:Request, res:Response) => {
   try {
     const { song, token } = req.body;
     const genres = [...song.genre];
     const duration = song.duration;
     const price = song.price;
-    const creatorID = jwt.decode(token).id;
-    const user = await userService.getUserById(creatorID);
+    const creator = jwt.decode(token) as Token ;
+    const user = await userService.getUserById(creator.id);
 
     // Check with regex that the price doesn't contain letters (point is allowed)
     const reg = new RegExp("^[0-9]+(.[0-9]+)?");
@@ -113,14 +112,14 @@ const createSong = async (req, res) => {
 
     const newSong = await songService.createSong(song);
     user.songs.push(newSong._id);
-    await userService.updateUser(creatorID, user);
+    await userService.updateUser(creator.id, user);
     res.status(201).json(newSong);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
 };
 
-const deleteSong = async (req, res) => {
+const deleteSong = async (req:Request, res:Response) => {
   try {
     const id = req.params.songId;
     await songService.deleteSong(id);
@@ -130,7 +129,7 @@ const deleteSong = async (req, res) => {
   }
 };
 
-const updateSong = async (req, res) => {
+const updateSong = async (req:Request, res:Response) => {
   try {
     const id = req.params.songId;
     const { updatedSong } = req.body;
@@ -156,7 +155,7 @@ const updateSong = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getAllSongs,
   getSongsByIds,
   createSong,

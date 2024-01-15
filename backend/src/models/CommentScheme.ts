@@ -1,6 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose,{ObjectId,Types} from "mongoose"
+export interface IComment{
+ user:Types.ObjectId,
+ comment:string,
+  date?:Date
+}
 
-const CommentScheme = new mongoose.Schema({
+const CommentScheme = new mongoose.Schema<IComment>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
@@ -23,4 +28,5 @@ const CommentScheme = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("comment", CommentScheme, "comments");
+const Comment = mongoose.model<IComment>("comment", CommentScheme, "comments");
+export default Comment

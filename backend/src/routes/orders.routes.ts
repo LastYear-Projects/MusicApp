@@ -5,10 +5,10 @@
  *   description: Order management
  */
 
-const express = require("express");
-const router = express.Router();
-const orderController = require("../controllers/orders.controller");
-const validations = require("../validations/index");
+import {Router} from "express";
+const router = Router();
+import orderController from "../controllers/orders.controller";
+import validations from "../validations/index";
 
 /**
  * @swagger
@@ -110,6 +110,6 @@ router.post("/", validations.checkToken, orderController.createOrder);
  *       500:
  *         description: Internal Server Error
  */
-router.delete("/", orderController.deleteAllOrders);
+// router.delete("/", orderController.deleteAllOrders);
 
-module.exports = router;
+export default router;
