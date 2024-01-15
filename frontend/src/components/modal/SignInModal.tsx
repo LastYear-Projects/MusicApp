@@ -46,7 +46,7 @@ export default function SignInModal({
         localStorage.setItem("moozikaToken", userToken.data.token);
         localStorage.setItem("refreshToken", userToken.data.refreshToken);
         message.success("Sign in success");
-        localStorage.setItem("cart", []);
+        localStorage.setItem("cart", JSON.stringify([]));
         setTimeout(() => {
           navigate(0);
         }, 1000);
@@ -84,6 +84,8 @@ export default function SignInModal({
       })
       .then((res) => {
         localStorage.setItem("moozikaToken", res.data.token);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        localStorage.setItem("cart", JSON.stringify([]));
       })
       .catch((err) => {});
 
