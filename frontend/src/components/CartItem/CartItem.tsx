@@ -14,11 +14,11 @@ type CartItemProps = {
 const CartItem = ({ album_image, title, price, removeSong }: CartItemProps) => {
   return (
     <Stack
+      component="div"
       direction="row"
-      flexItem
       height="6rem"
       marginTop="1rem"
-      bgcolor="	#202020"
+      bgcolor="#202020"
       borderRadius="5px"
       marginRight="2rem"
     >
@@ -28,7 +28,7 @@ const CartItem = ({ album_image, title, price, removeSong }: CartItemProps) => {
           style={{
             height: "100%", 
             width: "100%",
-            objectFit: "fit", 
+            objectFit: "fill", 
             marginRight: "3rem",
             borderRadius: "5px 0px 0px 5px"
           }}
