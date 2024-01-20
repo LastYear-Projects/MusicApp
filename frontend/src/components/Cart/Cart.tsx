@@ -1,8 +1,8 @@
 import { Grid, Card, Divider, Typography, Button, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CartItem from "../CartItem/CartItem.tsx";
-import classes from "./Cart.module.css";
-import Loader from "../loader/loader.tsx";
+import CartItem from "../CartItem/CartItem";
+import classes from "./cart.module.css";
+import Loader from "../loader/loader";
 import axios from "axios";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState<SongType[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [cartExist, setCartExist] = useState(false);
+  const [conversionRate, setConversionRate] = useState(1);
 
   async function getCart() {
     const localStorageCart = localStorage.getItem("cart");
@@ -42,6 +43,11 @@ const Cart = () => {
     setIsLoading(false);
   }
 
+  const getUsdToIls = async () => {
+    const res=await axios.get("https://v6.exchangerate-api.com/v6/d49e704b01ca5fa2a23ed2cc/latest/USD")
+    setConversionRate(res.data.conversion_rates.ILS)
+  };
+  
   function handeleDeleteSong(id: string | undefined) {
     if(!id) return;
     setIsLoading(true);
@@ -96,6 +102,7 @@ const Cart = () => {
 
   useEffect(() => {
     getCart();
+    getUsdToIls()
   }, []);
 
   let subtotal= 0;
@@ -121,7 +128,7 @@ const Cart = () => {
             </div>
             <div className={classes.cartText}>
               <Typography variant="h5">Subtotal:</Typography>
-              <Typography variant="h6">{subtotal}</Typography>
+              <Typography variant="h6">${subtotal}</Typography>
             </div>
             <div className={classes.cartText}>
               <Typography variant="h5">Discount:</Typography>
@@ -129,7 +136,7 @@ const Cart = () => {
             </div>
             <div className={classes.cartText}>
               <Typography variant="h5">Total:</Typography>
-              <Typography variant="h6">{subtotal}</Typography>
+              <Typography variant="h6">${subtotal} ~ {(conversionRate*subtotal).toFixed(2)}₪</Typography>
             </div>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button

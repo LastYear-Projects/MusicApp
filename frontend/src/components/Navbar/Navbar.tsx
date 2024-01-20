@@ -21,17 +21,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
 import { StyledAutocomplete } from "../../constants/index";
 import axios from "axios";
-import MoozikaLogo from "../moozikaLogo/MoozikaLogo.tsx";
-import SignInModal from "../modal/SignInModal.tsx";
+import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
+import SignInModal from "../modal/SignInModal";
 
-import useFetch from "../../hooks/useFetch.tsx";
+import useFetch from "../../hooks/useFetch";
 import css from "./styles.module.css";
-import Chat from "../chat/Chat.tsx";
+import Chat from "../chat/Chat";
 import { message } from "antd";
 
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils/index.js";
-import { SongType } from "../../types/index.tsx";
+import { SongType } from "../../types/index";
 
 const socket = io("http://localhost:7070");
 
@@ -247,12 +247,12 @@ export default function Navbar() {
               disablePortal
               id="combo-box-demo"
               options={top100Films}
-              getOptionLabel={(option) => option.title}
+              getOptionLabel={(option: { title: string }) => option.title}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Search..." />
               )}
               onChange={(e, value) => {
-                value ? navigate(`/song/${value._id}`) : "";
+                value ? navigate(`/song/${(value as {_id: string})._id}`) : "";
               }}
             ></StyledAutocomplete>
             {isLoggedIn ? (
