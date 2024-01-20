@@ -22,6 +22,7 @@ const createChat = async (chat:IChat) => {
     return newChat
 }
 
+
 export default {
     getChatByUsersIds,
     getChatsByUserId,

@@ -16,6 +16,7 @@ import orderRoutes from "./routes/orders.routes";
 import authRoutes from "./routes/auth.routes";
 import adminRoutes from "./routes/admin.routes";
 import commentRoutes from "./routes/comments.routes";
+import chatRoutes from "./routes/chats.routes";
 import handleClient from "./utils/sockets";
 import { createServer } from "http";
 
@@ -52,6 +53,7 @@ app.use("/orders", orderRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/comments", commentRoutes);
+app.use("/chats", chatRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, () => {

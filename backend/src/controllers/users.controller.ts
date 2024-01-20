@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response,NextFunction } from "express";
 import Token from "../utils/tokenType";
+import User from "../models/UserScheme";
+import {Types } from "mongoose";
 
 const getAllUsers = async (req:Request, res:Response) => {
   try {
@@ -270,6 +272,16 @@ const logout = async (req:Request, res:Response) => {
   }
 }
 
+const addChatToUser = async (userId: string, chatId: Types.ObjectId) => {
+  const user=await userService.getUserById(userId);
+  if(!user)
+  {
+    throw new Error("User dosent exist");
+  }
+  user.chats.push(chatId);
+  return await userService.updateUser(userId,user);
+}
+
 export default {
   getAllUsers,
   getUserById,
@@ -289,5 +301,6 @@ export default {
   isRefreshTokenExist,
   verifyRefreshToken,
   generateAccessToken,
-  logout
+  logout,
+  addChatToUser,
 };
