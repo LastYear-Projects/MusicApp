@@ -7,6 +7,7 @@ export interface IUser {
   songs?: Types.ObjectId[];
   profile_image: string;
   refreshTokens?: string[];
+  chats?:Types.ObjectId[]
 }
 
 const UserScheme = new mongoose.Schema<IUser>({
@@ -47,6 +48,11 @@ const UserScheme = new mongoose.Schema<IUser>({
     type: [String],
     default: [],
   },
+  chats:{
+    type:[mongoose.Schema.Types.ObjectId],
+    ref:"chat",
+    default:[]
+  }
 });
 
 const User = mongoose.model<IUser>("user", UserScheme, "users");

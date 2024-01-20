@@ -1,10 +1,11 @@
-import User, {IUser} from "../models/UserScheme";
-import {Types} from "mongoose"
+import User, { IUser } from "../models/UserScheme";
+import { Types } from "mongoose";
+
 const getAllUsers = async () => {
   return await User.find();
 };
 
-const getUserById = async (id:string) => {
+const getUserById = async (id: string) => {
   if (id) {
     try {
       const user = await User.findById(id).select("-password").populate({
@@ -22,7 +23,7 @@ const getUserById = async (id:string) => {
   throw new Error("Id is required");
 };
 
-const getUserByName = async (name:string) => {
+const getUserByName = async (name: string) => {
   if (name) {
     try {
       const user = await User.findOne({ name });
@@ -37,7 +38,7 @@ const getUserByName = async (name:string) => {
   throw new Error("Name is required");
 };
 
-const getUserByEmail = async (email:string) => {
+const getUserByEmail = async (email: string) => {
   if (email) {
     try {
       const user = await User.findOne({ email });
@@ -52,7 +53,7 @@ const getUserByEmail = async (email:string) => {
   throw new Error("Email is required");
 };
 
-const createUser = async (user:IUser) => {
+const createUser = async (user: IUser) => {
   if (user) {
     try {
       const { name, email, password } = user;
@@ -73,7 +74,7 @@ const createUser = async (user:IUser) => {
   throw new Error("User is required");
 };
 
-const createGoogleUser = async (user:IUser) => {
+const createGoogleUser = async (user: IUser) => {
   if (user) {
     try {
       const { name, email, profile_image } = user;
@@ -90,7 +91,7 @@ const createGoogleUser = async (user:IUser) => {
   }
 };
 
-const deleteUser = async (id:string) => {
+const deleteUser = async (id: string) => {
   if (id) {
     try {
       const user = await User.findByIdAndDelete(id);
@@ -105,7 +106,7 @@ const deleteUser = async (id:string) => {
   throw new Error("Id is required");
 };
 
-const updateUser = async (id:string, newUser:IUser) => {
+const updateUser = async (id: string, newUser: IUser) => {
   if (id && newUser) {
     try {
       await User.findOneAndUpdate({ _id: id }, newUser);
@@ -133,7 +134,7 @@ const updateUser = async (id:string, newUser:IUser) => {
 //   }
 // };
 
-const addSongsToUser = async (id:string, songs:Types.ObjectId[]) => { 
+const addSongsToUser = async (id: string, songs: Types.ObjectId[]) => {
   if (id) {
     try {
       const user = await User.findById(id);
@@ -151,57 +152,64 @@ const addSongsToUser = async (id:string, songs:Types.ObjectId[]) => {
   }
 };
 
-const removeRefreshTokens = async (id:string) => {
-  if(id){
-    try{
+const removeRefreshTokens = async (id: string) => {
+  if (id) {
+    try {
       const user = await User.findById(id);
-      if(user){
+      if (user) {
         user.refreshTokens = [];
         await updateUser(id, user);
         return user;
       }
       throw new Error("User not found");
-    }catch(error){
+    } catch (error) {
       throw new Error(error.message);
     }
   }
-}
+};
 
-const removeRefreshToken = async (id:string, refreshToken:string) => { // Refresh token is string or id?
-  if(id && refreshToken){
-    try{
+const removeRefreshToken = async (id: string, refreshToken: string) => {
+  // Refresh token is string or id?
+  if (id && refreshToken) {
+    try {
       const user = await User.findById(id);
-      if(user){
-        user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
+      if (user) {
+        user.refreshTokens = user.refreshTokens.filter(
+          (token) => token !== refreshToken
+        );
         await updateUser(id, user);
         return user;
       }
       throw new Error("User not found");
-    }catch(error){
+    } catch (error) {
       throw new Error(error.message);
     }
   }
-}
+};
 
-const addRefreshToken = async (id:string, refreshToken:string) => {
-  if(id && refreshToken){
-    try{
+const addRefreshToken = async (id: string, refreshToken: string) => {
+  if (id && refreshToken) {
+    try {
       const user = await User.findById(id);
-      if(user){
+      if (user) {
         user.refreshTokens.push(refreshToken);
         await updateUser(id, user);
         return user;
       }
       throw new Error("User not found");
-    }catch(error){
+    } catch (error) {
       throw new Error(error.message);
     }
   }
-}
-
-
-
-
+};
+const addChatToUser = async (userId: string, chatId: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("user dosent exist");
+  }
+  user.chats.push(new Types.ObjectId(chatId));
+  return User.findOneAndUpdate({ _id: userId }, user);
+};
 
 export default {
   //addOrderToUser,
@@ -216,5 +224,6 @@ export default {
   createGoogleUser,
   removeRefreshTokens,
   removeRefreshToken,
-  addRefreshToken
+  addRefreshToken,
+  addChatToUser,
 };
