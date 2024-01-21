@@ -133,4 +133,8 @@ router.post("/refresh-token", userController.isRefreshTokenExist, userController
 
 router.post("/logout", userController.logout);
 
+router.post("/chatRegister", userController.chatRegister);
+
+router.post("/chatLogin", userController.chatLogin);
+
 export default router

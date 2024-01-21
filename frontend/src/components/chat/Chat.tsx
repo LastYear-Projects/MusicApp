@@ -1,145 +1,43 @@
-
-import React, { useState, useEffect } from "react";
-import {
-  TextField,
-  Button,
-  Paper,
-  Typography,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
-import io from "socket.io-client";
+import { useEffect, useState } from "react";
+import { PrettyChatWindow } from "react-chat-engine-pretty";
 import axios from "axios";
-import { handleRequestWithToken } from "../../utils";
-import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types";
+import { Box } from "@mui/material";
 
-const socket = io("http://localhost:7070");
 
-type ChatProps = {
-  isOpen: boolean;
-  handleOpen: () => void;
-};
 
-type Message = {
-  message: string
-  userDetails: UserType,
-}
-
-const Chat = ({ isOpen, handleOpen }: ChatProps) => {
-  const [messages, setMessages] = useState<Message []>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState<UserType>();
+const Chat = () => {
+const [userDetails, setUserDetails] = useState<UserType>();
+  const token = localStorage.getItem("moozikaToken");
+  if (!token) return null;
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        if (!handleRequestWithToken()) return navigate("/");
-        if (!localStorage.getItem("moozikaToken")) return;
-        const response = await axios.post(
-          "http://localhost:6969/users/user-details",
-          { token: localStorage.getItem("moozikaToken") }
-        );
-        setUserDetails(response.data);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
-    fetchUserDetails();
-
-    socket.on("message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
-    return () => {
-      socket.off("message");
-    };
+    const fetchUser = async () => {
+      const response = await axios.post(
+        "http://localhost:6969/users/user-details",
+        { token: localStorage.getItem("moozikaToken") }
+      ).then((res) => {
+        setUserDetails(res.data);
+      })
+    }
+    fetchUser();
   }, []);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
-      const messageObject = {
-        message: newMessage,
-        userDetails: userDetails,
-      };
-      socket.emit("message", messageObject);
-      setNewMessage("");
-    }
-  };
-
   return (
-    <Drawer anchor="right" open={isOpen} onClose={handleOpen}>
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          maxWidth: "23rem",
-          padding: (theme) => theme.spacing(2),
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Chat
-        </Typography>
-        <List
-          sx={{
-            flexGrow: 1,
-            overflowY: "auto",
-          }}
-        >
-          {messages.map((message, index) => (
-            <ListItem key={index}>
-              {message.userDetails && message.userDetails.profile_image && (
-                <img
-                  src={message.userDetails.profile_image}
-                  alt="User Avatar"
-                  style={{
-                    marginRight: "8px",
-                    borderRadius: "50%",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                />
-              )}
-              {message.userDetails && message.userDetails.name && (
-                <ListItemText
-                  primary={message.userDetails.name}
-                  secondary={message.message}
-                />
-              )}
-            </ListItem>
-          ))}
-        </List>
-        <div
-          style={{
-            display: "flex",
-            marginTop: (theme ) => theme.spacing(2),
-          }}
-        >
-          <TextField
-            sx={{
-              flexGrow: 1,
-              marginRight: (theme) => theme.spacing(2),
-            }}
-            variant="outlined"
-            label="Type your message"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSendMessage}
-          >
-            Send
-          </Button>
-        </div>
-      </Paper>
-    </Drawer>
+    userDetails && 
+    (
+      <Box>
+      <div style={{height: "100vh", overflowY: "hidden", marginBottom: "3.5rem"}}>
+      <PrettyChatWindow
+        projectId="2fb16285-f632-4fa3-9954-d25203f389f2"
+        username={userDetails.email} // adam
+        secret={userDetails.email} // pass1234
+        style={{ height: "100%" }}
+      />
+    </div>
+    </Box>
+    )
+    
   );
 };
 

@@ -45,6 +45,10 @@ export default function SignInModal({
       .then((userToken) => {
         localStorage.setItem("moozikaToken", userToken.data.token);
         localStorage.setItem("refreshToken", userToken.data.refreshToken);
+
+        axios
+        .post("http://localhost:6969/auth/chatLogin", { username: userNameAndPassword.email, secret:userNameAndPassword.email })
+
         message.success("Sign in success");
         localStorage.setItem("cart", JSON.stringify([]));
         setTimeout(() => {
