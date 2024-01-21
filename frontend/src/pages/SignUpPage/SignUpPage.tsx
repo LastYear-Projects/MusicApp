@@ -54,8 +54,8 @@ const Signup = () => {
             username: formData.email,
             secret: formData.email,
             email: formData.email,
-            first_name: formData.fullName.split(" ")[0],
-            last_name: formData.fullName.split(" ")[1],
+            first_name: formData.fullName,
+            last_name: formData.email,
           })
 
         await axios
