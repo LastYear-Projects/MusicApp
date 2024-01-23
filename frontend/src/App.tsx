@@ -20,10 +20,12 @@ import UserProfile from "./pages/UserPage/UserPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import { gapi } from "gapi-script";
 import PrivateRoutes from "./components/privateRoutes/PrivateRoutes.tsx";
+import Chat from "./components/chat/Chat";
 
 const routes = [
   { path: "/", element: <HomePage /> },
   { path: "/signup", element: <SignUpPage /> },
+  { path: "/chat", element: <Chat /> },
   { path: "/song/:id", element: <SongPage /> },
   { path: "*", element: <NotFoundPage /> },
 ];

@@ -115,6 +115,7 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     localStorage.removeItem("moozikaToken");
+    localStorage.removeItem("refreshToken");
     navigate("/");
     await axios.post("http://localhost:6969/auth/logout", {
       refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
@@ -147,7 +148,7 @@ export default function Navbar() {
               handleMobileMenuClose();
             }}
           >
-            <IconButton sx={{ color: "black" }}>
+            <IconButton sx={{ color: "black" }} onClick={()=>navigate("/chat")}>
               <ChatIcon />
             </IconButton>
             <p>Chat</p>
@@ -257,7 +258,7 @@ export default function Navbar() {
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <IconButton onClick={() => setIsChatOpen(true)}>
+                <IconButton onClick={()=>navigate("/chat")}>
                   <ChatIcon sx={{ color: "white" }} />
                 </IconButton>
                 <IconButton
@@ -330,7 +331,7 @@ export default function Navbar() {
         openModal={isSignInModalOpen}
         setOpenModal={setIsSignInModalOpen}
       />
-      <Chat isOpen={isChatOpen} handleOpen={() => setIsChatOpen(false)} />
+      {/* <Chat isOpen={isChatOpen} handleOpen={() => setIsChatOpen(false)} /> */}
     </div>
   );
 }

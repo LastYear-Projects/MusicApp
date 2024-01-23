@@ -49,13 +49,27 @@ const Signup = () => {
           })
           .then((res) => res.data);
 
+         await axios
+          .post("http://localhost:6969/auth/chatRegister", {
+            username: formData.email,
+            secret: formData.email,
+            email: formData.email,
+            first_name: formData.fullName,
+            last_name: formData.email,
+          })
+
         await axios
           .post("http://localhost:6969/auth/login", {
             email: data.email,
             password: formData.password,
           })
-          .then((res) => res.data.token)
-          .then((token) => localStorage.setItem("userToken", token));
+          .then((res) => res.data)
+          .then(({token, refreshToken}) => {
+            localStorage.setItem("moozikaToken", token)
+            localStorage.setItem("refreshToken", refreshToken)
+            localStorage.setItem("cart", JSON.stringify([]))
+          });
+
       } catch (err) {
         message.error("Signup failed!");
         return;
@@ -63,8 +77,8 @@ const Signup = () => {
 
       message.success("Signup successful!");
 
-      // await new Promise(resolve => setTimeout(resolve, 3000));
-      // window.location.href = 'http://localhost:3000';
+      await new Promise(resolve => setTimeout(resolve, 500));
+      window.location.href = 'http://localhost:3000';
     }
   };
 

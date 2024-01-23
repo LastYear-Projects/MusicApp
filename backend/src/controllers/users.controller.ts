@@ -1,8 +1,10 @@
+import axios from 'axios';
 import userService from "../services/users.service";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response,NextFunction } from "express";
 import Token from "../utils/tokenType";
+import { IUser } from "../models/UserScheme";
 
 const getAllUsers = async (req:Request, res:Response) => {
   try {
@@ -128,6 +130,7 @@ const addSongToUser = async (req:Request, res:Response) => {
 //   }
 // };
 
+
 const userLogin = async (req:Request, res:Response) => {
   try {
     const user = await userService.getUserByEmail(req.body.email.toLowerCase());
@@ -189,7 +192,7 @@ const googleLogin = async (req:Request, res:Response) => {
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
     });
-    
+
     return res.status(200).json({ token,refreshToken });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -270,6 +273,45 @@ const logout = async (req:Request, res:Response) => {
   }
 }
 
+const chatRegister =async (req:Request, res:Response)=>{
+  const { username, secret, email, first_name, last_name } = req.body;
+
+  // console.log("Write user into DB.");
+  // return res.json({ user: {} });
+
+  // Store a user-copy on Chat Engine!
+  try {
+    const r = await axios.post(
+      "https://api.chatengine.io/users/",
+      { username, secret, email, first_name, last_name },
+      { headers: { "Private-Key": "3ae46e6d-745c-4633-99e0-d3969f135380" } }
+    );
+    return res.status(r.status).json(r.data);
+  } catch (e) {
+    return res.status(e.response.status).json(e.response.data);
+  }
+}
+
+const chatLogin=async (req:Request, res:Response)=>{
+  const { username, secret } = req.body;
+
+  // console.log("Fetch user from DB.");
+  // return res.json({ user: {} });
+
+  // Fetch this user from Chat Engine in this project!
+  try {
+    const r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": "2fb16285-f632-4fa3-9954-d25203f389f2",
+        "User-Name": username,
+        "User-Secret": secret,
+      },
+    });
+    return res.status(r.status).json(r.data);
+  } catch (e) {
+    return res.status(e.response.status).json(e.response.data);
+  }
+}
 export default {
   getAllUsers,
   getUserById,
@@ -289,5 +331,7 @@ export default {
   isRefreshTokenExist,
   verifyRefreshToken,
   generateAccessToken,
-  logout
+  logout,
+  chatLogin,
+chatRegister,
 };

@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 type SignInModalProps = {
   openModal: boolean;
-  setOpenModal: (openModal: boolean)=> void;
+  setOpenModal: (openModal: boolean) => void;
 };
 export default function SignInModal({
   // eslint-disable-next-line react/prop-types
@@ -42,9 +42,16 @@ export default function SignInModal({
         email: userNameAndPassword.email,
         password: userNameAndPassword.password,
       })
-      .then((userToken) => {
+      .then(async (userToken) => {
         localStorage.setItem("moozikaToken", userToken.data.token);
         localStorage.setItem("refreshToken", userToken.data.refreshToken);
+        await axios
+          .post("http://localhost:6969/auth/chatLogin", {
+            username: userNameAndPassword.email,
+            secret: userNameAndPassword.email,
+          })
+          .catch((err) => {});
+
         message.success("Sign in success");
         localStorage.setItem("cart", JSON.stringify([]));
         setTimeout(() => {
@@ -82,10 +89,26 @@ export default function SignInModal({
         email: userData.email,
         profile_image: userData.picture,
       })
-      .then((res) => {
+      .then(async (res) => {
         localStorage.setItem("moozikaToken", res.data.token);
         localStorage.setItem("refreshToken", res.data.refreshToken);
         localStorage.setItem("cart", JSON.stringify([]));
+        await axios
+          .post("http://localhost:6969/auth/chatLogin", {
+            username: userData.email,
+            secret: userData.email,
+
+          }).catch(async (err) => {
+            await axios
+              .post("http://localhost:6969/auth/chatRegister", {
+                username: userData.email,
+                secret: userData.email,
+                email: userData.email,
+                first_name: userData.name,
+                last_name: userData.email,
+              })
+              .catch((err) => {});
+          });
       })
       .catch((err) => {});
 
