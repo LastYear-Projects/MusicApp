@@ -1,7 +1,7 @@
-const commentController = require('../controllers/comments.controller.js');
-const { app, closeServers } = require("../index");
+const commentController = require('../controllers/comments.controller.ts');
+const { app, closeServers, server} = require("../index");
 const request = require("supertest");
-const data = require('../config/mongo.js')
+const data = require('../config/mongo.ts')
 const {connection} = require("mongoose");
 const jwt = require('jsonwebtoken')
 
@@ -29,13 +29,11 @@ let comment4 = {
 let commentId
 beforeAll(async () => {
 
-
-
 });
 
 afterAll(async () => {
-    await closeServers();
-    await connection.close();
+    // await closeServers();
+    // await connection.close();
 
 });
 
@@ -49,6 +47,7 @@ describe("comments tests", () => {
         commentId = response.body._id
 
     })
+
     it("crate new comment -Fail", async () => {
         const response = await request(app).post("/comments").send(comment4);
         expect(response.statusCode).toBe(500);
@@ -60,7 +59,7 @@ describe("comments tests", () => {
         expect(response.statusCode).toBe(200);
 
     })
-
+    //
     it("crate new comment that will fail", async () => {
         const response = await request(app).post("/comments").send(comment2);
         expect(response.statusCode).toBe(403);
@@ -72,14 +71,14 @@ describe("comments tests", () => {
         expect(response.statusCode).toBe(401);
 
     })
-
+    //
     it("get comment by song id", async () => {
         const response = await request(app).get("/comments/song/" + comment.songId);
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeDefined();
 
     })
-
+    //
     it("get comment by song id that will fail", async () => {
         const response = await request(app).get("/comments/song/" + "123");
         expect(response.statusCode).toBe(500);
