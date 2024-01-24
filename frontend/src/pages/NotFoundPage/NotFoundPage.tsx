@@ -19,11 +19,14 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function InputFileUpload() {
   const [fileName, setFileName] = React.useState<File | null>();
+  const [imageURL, setImageUrl] = React.useState<string>("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if(event.target.files){
         console.log(event.target.files[0]);
       setFileName(event.target.files[0]);
+      const newUrl = URL.createObjectURL(event.target.files[0]);
+      setImageUrl(newUrl);
     }
   };
 
@@ -47,6 +50,7 @@ export default function InputFileUpload() {
     </Button>
     <Button onClick={saveImage}>Submit</Button>
     <Typography sx={{color: "white"}}>{fileName?.name}</Typography>
+    {imageURL && <img src={imageURL} alt="img" width="200px" height="200px"/>}
     </>
   );
 }
