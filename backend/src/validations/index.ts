@@ -81,7 +81,8 @@ const songCreatorAuth = (req:Request, res:Response, next:NextFunction) =>{
     const {token,song} = req.body;
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as Token;
     if(decodedToken.id !== song.creator){
-        return res.status(403).json({message: "You must be the song creator to access this resource"});
+        return res.status(403).json({
+            message: "You must be the song creator to access this resource"});
     }
     next();
 }
