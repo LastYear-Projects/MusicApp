@@ -15,6 +15,7 @@ import userRoutes from "./routes/users.routes";
 import orderRoutes from "./routes/orders.routes";
 import authRoutes from "./routes/auth.routes";
 import adminRoutes from "./routes/admin.routes";
+import fileRoutes from "./routes/file.routes";
 import commentRoutes from "./routes/comments.routes";
 import handleClient from "./utils/sockets";
 import { createServer } from "http";
@@ -27,6 +28,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.use("/public", express.static("public")); // to serve static files
 
 //socket.io
 
@@ -51,6 +53,7 @@ app.use("/users", userRoutes);
 app.use("/orders", orderRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
+app.use("/uploadFiles", fileRoutes);
 app.use("/comments", commentRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
