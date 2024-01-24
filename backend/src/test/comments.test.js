@@ -1,8 +1,8 @@
 const commentController = require('../controllers/comments.controller.ts');
-const { app, closeServers, server} = require("../index");
+const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const data = require('../config/mongo.ts')
-const {connection} = require("mongoose");
+const {connection, disconnect} = require("mongoose");
 const jwt = require('jsonwebtoken')
 
 let comment = {
@@ -26,14 +26,20 @@ let comment4 = {
     songId: ''
 }
 
-let commentId
+let commentId;
+let server;
 beforeAll(async () => {
-
+    startServers()
 });
 
 afterAll(async () => {
+
+    stopServers()
+
+
     // await closeServers();
     // await connection.close();
+    // await disconnect();
 
 });
 
@@ -94,15 +100,16 @@ describe("comments tests", () => {
 
     })
     it("get comment by user id - to get error 500", async () => {
-        const userId = jwt.decode(comment.token).id
         const response = await request(app).get("/comments/user/");
         expect(response.statusCode).toBe(500);
     })
 
     it(" update comment ", async () => {
-        let updateComment = {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwNDEwMjY0MSwiZXhwIjoxNzM1NjM4NjQxfQ.x8uQNF7D4piMn5KgUy62MVdGt9Mzozda5Ldi-QJt_2I',
+        let updateComment = {
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwNDEwMjY0MSwiZXhwIjoxNzM1NjM4NjQxfQ.x8uQNF7D4piMn5KgUy62MVdGt9Mzozda5Ldi-QJt_2I',
             comment: 'THIS IS TEST COMMENT UPDATE',
-            songId: '64e30d14fc68b9a5b37ba5bd'}
+            songId: '64e30d14fc68b9a5b37ba5bd'
+        }
 
         const response = await request(app).put("/comments/" + commentId).send(updateComment);
         expect(response.statusCode).toBe(200);
@@ -111,9 +118,11 @@ describe("comments tests", () => {
     })
 
     it(" update comment to fail ", async () => {
-        let updateComment = {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwNDEwMjY0MSwiZXhwIjoxNzM1NjM4NjQxfQ.x8uQNF7D4piMn5KgUy62MVdGt9Mzozda5Ldi-QJt_2I',
+        let updateComment = {
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZTM4YjU1YTA1NmMxZTJlMzljNWU5NSIsImlhdCI6MTcwNDEwMjY0MSwiZXhwIjoxNzM1NjM4NjQxfQ.x8uQNF7D4piMn5KgUy62MVdGt9Mzozda5Ldi-QJt_2I',
             comment: 'THIS IS TEST COMMENT UPDATE',
-            songId: '64e30d14fc68b9a5b37ba5bdREMOVETHIS'}
+            songId: '64e30d14fc68b9a5b37ba5bdREMOVETHIS'
+        }
 
         const response = await request(app).put("/comments/" + updateComment.songId).send(updateComment);
         expect(response.statusCode).toBe(500);
@@ -131,5 +140,6 @@ describe("comments tests", () => {
         expect(response.statusCode).toBe(500);
 
     })
+
 
 })
