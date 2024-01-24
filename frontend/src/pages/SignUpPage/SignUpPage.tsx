@@ -2,8 +2,24 @@ import React, { useState } from "react";
 import { Form, Input, DatePicker, Upload, Button, message } from "antd";
 import { UserOutlined, InboxOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
+import { Box, Button as MuiButton, Typography } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+
 import axios from "axios";
 const { Dragger } = Upload;
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const Signup = () => {
   const {
@@ -20,7 +36,8 @@ const Signup = () => {
     password: "",
     cPassword: "",
   });
-
+  const [fileName, setFileName] = React.useState<File | null>();
+  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async () => {
     const requiredFields = [
       "email",
@@ -29,9 +46,10 @@ const Signup = () => {
       "password",
       "cPassword",
     ];
+    setIsLoading(true);
     const hasEmptyField = requiredFields.some((field) => !formData[field]);
 
-    if (hasEmptyField) {
+    if (hasEmptyField || !fileName) {
       message.error("Please fill in all required fields");
       return;
     }
@@ -40,23 +58,39 @@ const Signup = () => {
       return;
     } else {
       try {
+        let imagePath = "";
+        if (fileName) {
+          const imageData = new FormData();
+          imageData.append("file", fileName);
+          await axios
+            .post("http://localhost:6969/uploadFiles/upload", imageData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => {
+              console.log("RES: ", res.data.file.path);
+              imagePath = `http://localhost:6969/${res.data.file.path}`;
+            });
+        }
+        console.log("imagePath: ", imagePath);
+
         const data = await axios
           .post("http://localhost:6969/auth/register", {
             email: formData.email,
             name: formData.fullName,
             password: formData.password,
-            profile_image: formData.profilePicture,
+            profile_image: imagePath,
           })
           .then((res) => res.data);
 
-         await axios
-          .post("http://localhost:6969/auth/chatRegister", {
-            username: formData.email,
-            secret: formData.email,
-            email: formData.email,
-            first_name: formData.fullName,
-            last_name: formData.email,
-          })
+        await axios.post("http://localhost:6969/auth/chatRegister", {
+          username: formData.email,
+          secret: formData.email,
+          email: formData.email,
+          first_name: formData.fullName,
+          last_name: formData.email,
+        });
 
         await axios
           .post("http://localhost:6969/auth/login", {
@@ -64,12 +98,11 @@ const Signup = () => {
             password: formData.password,
           })
           .then((res) => res.data)
-          .then(({token, refreshToken}) => {
-            localStorage.setItem("moozikaToken", token)
-            localStorage.setItem("refreshToken", refreshToken)
-            localStorage.setItem("cart", JSON.stringify([]))
+          .then(({ token, refreshToken }) => {
+            localStorage.setItem("moozikaToken", token);
+            localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("cart", JSON.stringify([]));
           });
-
       } catch (err) {
         message.error("Signup failed!");
         return;
@@ -77,8 +110,9 @@ const Signup = () => {
 
       message.success("Signup successful!");
 
-      await new Promise(resolve => setTimeout(resolve, 500));
-      window.location.href = 'http://localhost:3000';
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setIsLoading(false);
+      window.location.href = "http://localhost:3000";
     }
   };
 
@@ -87,6 +121,12 @@ const Signup = () => {
       return e;
     }
     return e && e.fileList;
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFileName(event.target.files[0]);
+    }
   };
 
   const handleInputChange = (name, value) => {
@@ -144,23 +184,21 @@ const Signup = () => {
             onChange={(date) => handleInputChange("dateOfBirth", date)}
           />
         </Form.Item>
-        <Form.Item
-          name="profilePicture"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          rules={[
-            { required: false, message: "Please upload your profile picture!" },
-          ]}
-        >
-          <Dragger name="file" multiple={false} beforeUpload={() => false}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text" style={{ color: "white" }}>
-              Click or drag file to this area to upload
-            </p>
-          </Dragger>
-        </Form.Item>
+        <Box textAlign="center" marginBottom="1rem">
+          <MuiButton
+            component="label"
+            sx={{ color: "white", borderColor: "white" }}
+            variant="outlined"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput type="file" onChange={handleChange} />
+          </MuiButton>
+          <Typography sx={{ color: "white", marginTop: "0.35rem" }}>
+            {fileName?.name}
+          </Typography>
+        </Box>
+
         <Form.Item
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
@@ -203,7 +241,7 @@ const Signup = () => {
             style={{ width: "100%" }}
             onClick={onSubmit}
           >
-            Sign Up
+            {isLoading ? "Loading..." : "Sign Up"}
           </Button>
         </Form.Item>
       </Form>

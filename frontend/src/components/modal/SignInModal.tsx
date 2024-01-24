@@ -97,8 +97,8 @@ export default function SignInModal({
           .post("http://localhost:6969/auth/chatLogin", {
             username: userData.email,
             secret: userData.email,
-
-          }).catch(async (err) => {
+          })
+          .catch(async (err) => {
             await axios
               .post("http://localhost:6969/auth/chatRegister", {
                 username: userData.email,
