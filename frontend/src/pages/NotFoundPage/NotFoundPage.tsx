@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
+import { Typography } from '@mui/material';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -35,7 +36,7 @@ export default function InputFileUpload() {
               'Content-Type': 'multipart/form-data'
             }
           });
-          console.log("RES: ",res);
+          console.log("RES: ",res.data.file.filename);
     }
 }
   return (
@@ -45,6 +46,7 @@ export default function InputFileUpload() {
       <VisuallyHiddenInput type="file" onChange={handleChange}/>
     </Button>
     <Button onClick={saveImage}>Submit</Button>
+    <Typography sx={{color: "white"}}>{fileName?.name}</Typography>
     </>
   );
 }
