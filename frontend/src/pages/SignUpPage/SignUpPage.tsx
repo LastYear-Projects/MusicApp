@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, DatePicker, Upload, Button, message } from "antd";
 import { UserOutlined, InboxOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
-import { Button as MuiButton, Typography } from "@mui/material";
+import { Box, Button as MuiButton, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 
@@ -37,8 +37,7 @@ const Signup = () => {
     cPassword: "",
   });
   const [fileName, setFileName] = React.useState<File | null>();
-  const [imageURL, setImageUrl] = React.useState<string>("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async () => {
     const requiredFields = [
       "email",
@@ -47,9 +46,10 @@ const Signup = () => {
       "password",
       "cPassword",
     ];
+    setIsLoading(true);
     const hasEmptyField = requiredFields.some((field) => !formData[field]);
 
-    if (hasEmptyField) {
+    if (hasEmptyField || !fileName) {
       message.error("Please fill in all required fields");
       return;
     }
@@ -71,7 +71,6 @@ const Signup = () => {
             .then((res) => {
               console.log("RES: ", res.data.file.path);
               imagePath = `http://localhost:6969/${res.data.file.path}`;
-              setImageUrl(imagePath);
             });
         }
         console.log("imagePath: ", imagePath);
@@ -112,6 +111,7 @@ const Signup = () => {
       message.success("Signup successful!");
 
       await new Promise((resolve) => setTimeout(resolve, 500));
+      setIsLoading(false);
       window.location.href = "http://localhost:3000";
     }
   };
@@ -125,27 +125,7 @@ const Signup = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      console.log(event.target.files[0]);
       setFileName(event.target.files[0]);
-      // const newUrl = URL.createObjectURL(event.target.files[0]);
-      // setImageUrl(newUrl);
-    }
-  };
-
-  const saveImage = async () => {
-    if (fileName) {
-      const formData = new FormData();
-      formData.append("file", fileName);
-      const res = await axios
-        .post("http://localhost:6969/uploadFiles/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          console.log("RES: ", res.data.file.path);
-          setImageUrl(`http://localhost:6969/${res.data.file.path}`);
-        });
     }
   };
 
@@ -204,15 +184,20 @@ const Signup = () => {
             onChange={(date) => handleInputChange("dateOfBirth", date)}
           />
         </Form.Item>
-        <MuiButton
-          component="label"
-          variant="contained"
-          startIcon={<CloudUploadIcon />}
-        >
-          Upload file
-          <VisuallyHiddenInput type="file" onChange={handleChange} />
-        </MuiButton>
-        <Typography sx={{ color: "white" }}>{fileName?.name}</Typography>
+        <Box textAlign="center" marginBottom="1rem">
+          <MuiButton
+            component="label"
+            sx={{ color: "white", borderColor: "white" }}
+            variant="outlined"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput type="file" onChange={handleChange} />
+          </MuiButton>
+          <Typography sx={{ color: "white", marginTop: "0.35rem" }}>
+            {fileName?.name}
+          </Typography>
+        </Box>
 
         <Form.Item
           name="password"
@@ -256,7 +241,7 @@ const Signup = () => {
             style={{ width: "100%" }}
             onClick={onSubmit}
           >
-            Sign Up
+            {isLoading ? "Loading..." : "Sign Up"}
           </Button>
         </Form.Item>
       </Form>
