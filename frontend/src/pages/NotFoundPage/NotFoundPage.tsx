@@ -25,8 +25,8 @@ export default function InputFileUpload() {
     if(event.target.files){
         console.log(event.target.files[0]);
       setFileName(event.target.files[0]);
-      const newUrl = URL.createObjectURL(event.target.files[0]);
-      setImageUrl(newUrl);
+      // const newUrl = URL.createObjectURL(event.target.files[0]);
+      // setImageUrl(newUrl);
     }
   };
 
@@ -38,8 +38,11 @@ export default function InputFileUpload() {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          });
-          console.log("RES: ",res.data.file.filename);
+          }).then(res=>{
+            console.log("RES: ",res.data.file.path);
+            setImageUrl(`http://localhost:6969/${res.data.file.path}`);
+          })
+
     }
 }
   return (
