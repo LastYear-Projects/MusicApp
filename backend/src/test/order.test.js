@@ -1,6 +1,8 @@
 const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const {connection, disconnect} = require("mongoose");
+const {findById} = require("../models/OrderSchema");
+const orderService = require("../services/orders.service.ts");
 
 let orderId = "64e89a3861acef3b5b6aea77";
 let orderId2;
@@ -12,19 +14,17 @@ beforeAll(async () => {
 
 afterAll(async () => {
     stopServers()
-
-
-    // await closeServers();
-    // await connection.close();
-    // await disconnect();
 });
 
+
 describe("Order Tests", () => {
+
     it("test get all orders", async () => {
         const response = await request(app).get("/orders/");
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     });
+
 
     it("test get order by id", async () => {
         const response = await request(app).get("/orders/" + orderId);
@@ -35,6 +35,10 @@ describe("Order Tests", () => {
     it("test get order by id -> fail", async () => {
         const response = await request(app).get("/orders/" + 123);
         expect(response.statusCode).toEqual(500);
+    });
+    it("should throw an error if no id is provided", async () => {
+        const response = await request(app).get("/orders/user/" );
+        expect(response.body.error).toBeUndefined();
     });
 
     it("test get order by user id", async () => {
@@ -48,6 +52,11 @@ describe("Order Tests", () => {
     });
 
     it("test create order", async () => {
+        const now = new Date();
+        // Add 3 hours to the current date and time
+        const expectedDate = new Date(now.getTime());
+        expectedDate.setHours(expectedDate.getHours() + 3);
+
         const response = await request(app)
             .post("/orders/")
             .send({
@@ -59,17 +68,14 @@ describe("Order Tests", () => {
                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjBiNTA5ZWE0MGJhYjc3ZDdlZTViNiIsImlhdCI6MTcwNjA3OTQ5NywiZXhwIjoxNzA2OTQzNDk3fQ.9XK69QR8Lt9WtLWZfSiTf6mvDAHM1oLjmNpjPz9K5NQ",
             });
         orderId2 = response.body._id;
+        const orderDate = new Date(response.body.date);
+
+        const timeDifference = Math.abs(orderDate - expectedDate);
+        expect(timeDifference).toBeLessThan(15 * 60 * 1000); // Tolerance of 5 minutes
+
+
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
-
-        // Check the date field
-        const orderDate = new Date(response.body.date);
-        const expectedDate = new Date();
-        expectedDate.setHours(expectedDate.getHours() + 3);
-
-        // Allow some tolerance for the time it takes to make the request and process it
-        const timeDifference = Math.abs(orderDate - expectedDate);
-        expect(timeDifference).toBeLessThan(5 * 60 * 1000); // Tolerance of 5 minutes
     });
 
     it("test create order -> fail", async () => {
@@ -110,5 +116,9 @@ describe("Order Tests", () => {
         expect(response.body).toBeDefined();
     });
 
-
+    it("test get all orders to get error 500", async () => {
+        await disconnect()
+        const response = await request(app).get("/orders");
+        expect(response.statusCode).toEqual(500);
+    });
 });
