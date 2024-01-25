@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import { escapeHtml } from "xss";
 
-const handleClient = (io:Server) => { //WHAT IS THE TYPE FOR IO ????????
+export const  handleClient = (io:Server) => { //WHAT IS THE TYPE FOR IO ????????
   io.on("connection", (socket) => {
     console.log("New WebSocket Connection...");
 
