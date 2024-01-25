@@ -51,10 +51,13 @@ const Signup = () => {
 
     if (hasEmptyField || !fileName) {
       message.error("Please fill in all required fields");
+      setIsLoading(false);
       return;
     }
     if (formData.password !== formData.cPassword) {
       message.error("Passwords do not match");
+      setIsLoading(false);
+
       return;
     } else {
       try {
@@ -69,11 +72,9 @@ const Signup = () => {
               },
             })
             .then((res) => {
-              console.log("RES: ", res.data.file.path);
               imagePath = `http://localhost:6969/${res.data.file.path}`;
             });
         }
-        console.log("imagePath: ", imagePath);
 
         const data = await axios
           .post("http://localhost:6969/auth/register", {
@@ -82,7 +83,12 @@ const Signup = () => {
             password: formData.password,
             profile_image: imagePath,
           })
-          .then((res) => res.data);
+          .then((res) => res.data)
+          .catch((err) => {
+            message.error(err.response.data.error);
+            setIsLoading(false);
+            return;
+          });
 
         await axios.post("http://localhost:6969/auth/chatRegister", {
           username: formData.email,
@@ -105,6 +111,7 @@ const Signup = () => {
           });
       } catch (err) {
         message.error("Signup failed!");
+        setIsLoading(false);
         return;
       }
 
