@@ -28,6 +28,7 @@ router.get("/", userController.getAllUsers);
 router.get("/:userId", userController.getUserById);
 
 router.post("/email", userController.getUserByEmail);
+router.get("/name/:name", userController.getUserByName);
 
 router.post(
   "/check-song/:songId",
