@@ -109,5 +109,6 @@ router.post("/", validations.checkToken, orderController.createOrder);
  *         description: Internal Server Error
  */
 // router.delete("/", orderController.deleteAllOrders);
+router.delete("/",orderController.deleteOrder)
 
 export default router;
