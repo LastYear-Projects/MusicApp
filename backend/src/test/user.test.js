@@ -3,6 +3,7 @@ const request = require("supertest");
 const {connection, disconnect} = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+
 const userId = "64e1e2eff734e0042c496a46";
 const userEmail = "tal.mekler11@gmail.com";
 const token =
@@ -16,9 +17,7 @@ beforeAll(async () => {
 afterAll(async () => {
     stopServers()
 
-    // await closeServers();
-    // await connection.close();
-    // await disconnect();
+
 });
 
 describe("User Tests", () => {
@@ -27,6 +26,8 @@ describe("User Tests", () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     });
+
+
 
     it("Test get user by id", async () => {
         const response = await request(app).get("/users/" + userId);
@@ -46,6 +47,36 @@ describe("User Tests", () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     });
+    it("Test get user by email to null", async () => {
+        const response = await request(app).post("/users/email").send({
+            email: "d@D",
+        });
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toBeDefined();
+    });
+
+    it("get user by name ", async () => {
+        const name = "Idan";
+        const response = await request(app).get("/users/name/"+name)
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toBeDefined();
+    })
+    it("get user by name -> to null", async () => {
+        const name = "Idan1";
+        const response = await request(app).get("/users/name/"+name)
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toBeDefined();
+    })
+
+
+    it("get user by name-> to fail with 500  ", async () => {
+        const response = await request(app).get("/users/name").send({
+            name: "David",
+        });
+        expect(response.statusCode).toEqual(500);
+        expect(response.body).toBeDefined();
+    })
 
     it("Test get user by email -> fail", async () => {
         const response = await request(app).post("/users/email").send({});
