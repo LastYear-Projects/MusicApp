@@ -16,7 +16,7 @@ type UserType = {
   name: string;
   profile_image?: string;
   songs?: SongType[];
-}
+};
 const UserPage = () => {
   const [user, setUser] = useState<UserType>({
     email: "Pleas sign in to see your profile",
@@ -99,7 +99,6 @@ const UserPage = () => {
     // setIsNameFormOpen(false);
   };
 
-
   const handleChangeName = async () => {
     if (!handleRequestWithToken()) return navigate("/");
     await axios
@@ -134,7 +133,9 @@ const UserPage = () => {
       setSongs(myUser.data.songs);
       setIsLoading(false);
       setOwnSongs(
-        myUser.data.songs.filter((song: SongType) => song.creator === myUser.data._id)
+        myUser.data.songs.filter(
+          (song: SongType) => song.creator === myUser.data._id
+        )
       );
     } catch (error) {
       console.error("Error fetching user data", error);
@@ -214,10 +215,17 @@ const UserPage = () => {
         <Button
           style={{ display: "flex", alignItems: "center" }}
           icon={<Edit />}
-          size=" small"
+          size="middle"
           onClick={handleOpenForm}
         >
           Change User Name
+        </Button>
+        <Button
+          style={{ marginTop: "1rem" }}
+          onClick={handleAddSong}
+          color="primary"
+        >
+          Add Song
         </Button>
 
         {isNameFormOpen && (
@@ -277,10 +285,7 @@ const UserPage = () => {
                   }}
                 >
                   <Button
-                    marginLeft="2rem"
-                    marginRight="2rem"
                     onClick={handleChangeName}
-                    variant="contained"
                     style={{
                       marginRight: "1rem",
                       marginLeft: "1rem",
@@ -311,7 +316,6 @@ const UserPage = () => {
             display: "inline-block",
             whiteSpace: "nowrap",
             marginTop: 7,
-            paddingRight: windowWidth <= 600 ? 10 : 90,
             paddingLeft: 3,
             fontWeight: "bold",
             color: "white",
@@ -320,20 +324,18 @@ const UserPage = () => {
         >
           Songs Owned By User
         </Typography>
-        <Grid container spacing={2} marginTop="2rem">
+        <Grid spacing={2} marginTop="2rem">
           {user.songs.length > 0 ? (
-            <List list={user.songs} style={{ marginTop: "1rem" }} />
+            <List list={user.songs} />
           ) : (
             <Typography
               variant="h6"
               color="white"
-              gutterBottom
               sx={{
                 paddingLeft: 15,
                 fontWeight: "bold",
                 color: "white",
                 textTransform: "uppercase",
-                paddingRight: windowWidth <= 600 ? 10 : 90,
                 whiteSpace: "nowrap",
               }}
             >
@@ -349,7 +351,6 @@ const UserPage = () => {
             borderBottom: "2px solid white",
             display: "inline-block",
             marginTop: 7,
-            paddingRight: windowWidth <= 600 ? 10 : 90,
             paddingLeft: 3,
             fontWeight: "bold",
             color: "white",
@@ -360,7 +361,7 @@ const UserPage = () => {
           Songs created By User
         </Typography>
 
-        <Grid container spacing={2} marginTop="2rem">
+        <Grid spacing={2} marginTop="2rem">
           {ownSongs.length > 0 ? (
             <List list={ownSongs} />
           ) : (
@@ -373,7 +374,6 @@ const UserPage = () => {
                 fontWeight: "bold",
                 color: "white",
                 textTransform: "uppercase",
-                paddingRight: windowWidth <= 600 ? 10 : 90,
                 whiteSpace: "nowrap",
               }}
             >
@@ -381,10 +381,6 @@ const UserPage = () => {
             </Typography>
           )}
         </Grid>
-
-        <Button onClick={handleAddSong} variant="contained" color="primary">
-          Add Song
-        </Button>
         <AddSong
           openModal={openAddSongModal}
           setOpenModal={setOpenAddSongModal}
