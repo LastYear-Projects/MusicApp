@@ -6,16 +6,14 @@
   "scripts": {
     "type": "module",
     "start": "tsc && nodemon ./dist/index.js ",
-
-    "testAuth": "jest --detectOpenHandles --forceExit --coverage --coverageDirectory=coverage/auth src/test/auth.test.js",
     "testComment": "jest  --forceExit --coverage --coverageDirectory=coverage/comments src/test/comments.test.js",
-    "testSong": "jest  --forceExit --coverage --coverageDirectory=coverage/song src/test/song.test.js",
     "testOrder": "jest --forceExit --coverage --coverageDirectory=coverage/order src/test/order.test.js",
-    "testUser": "jest --forceExit --coverage --coverageDirectory=coverage/order src/test/user.test.js",
-    "aggregateCoverage": "jest --coverage --maxWorkers=1 --coverageDirectory=coverage --collectCoverageFrom=src/**/*.js --forceExit",
-    "test": "npm run testComment && npm run testAuth && npm run testOrder && npm run testSong&& npm run testUser ",
-    "test3": "npm run testComment ",
-    "test1": "npm run testComment &&  npm run aggregateCoverage"
+    "testSong": "jest  --forceExit --coverage --coverageDirectory=coverage/song src/test/song.test.js",
+    "testAuth": "jest --forceExit --coverage --coverageDirectory=coverage/auth src/test/auth.test.js",
+    "testUser": "jest --forceExit --coverage --coverageDirectory=coverage/user src/test/user.test.js",
+    "testSocket": "jest --forceExit --coverage --coverageDirectory=coverage/socket src/test/socket.test.js",
+    "aggregateCoverage": "jest --coverage --maxWorkers=1 --coverageDirectory=coverage --collectCoverageFrom=src/**/*.ts --forceExit",
+    "test": "npm run testComment && npm run testAuth && npm run testOrder && npm run testSong && npm run testUser && npm run testSocket "
   },
   "repository": {
     "type": "git",
@@ -40,6 +38,7 @@
     "mongoose": "^7.2.2",
     "nodemon": "^2.0.22",
     "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.4",
     "supertest": "^6.3.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
