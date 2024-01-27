@@ -108,4 +108,62 @@ router.put(
   userController.updateUser
 );
 
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Test Create a new user
+ *     description: Test Create a new user with the provided name, email, and password
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: User successfully created
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/Test/', userController.createUser);
+/**
+ * @swagger
+ * /users/{userId}:
+ *   delete:
+ *     summary: Test Delete a user
+ *     description: Delete a user by their ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User successfully deleted
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.delete('/Test/:userId', userController.deleteUser);
 export default router
