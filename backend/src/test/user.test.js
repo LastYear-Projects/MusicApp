@@ -1,30 +1,24 @@
-
 const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
-const {connection, disconnect, Types} = require("mongoose");
-const jwt = require("jsonwebtoken");
-
-const {getUserByEmail} = require("../models/UserScheme");
 const mongoose = require("mongoose");
-const {response} = require("express");
-const usersController = require("../controllers/users.controller").default;
 const User = require("../models/UserScheme").default;
 const userService = require('../services/users.service.ts').default;
 const songService = require('../services/songs.service.ts').default;
 
-
-const userId = "64e1e2eff734e0042c496a46";
 const userEmail = "tal.mekler11@gmail.com";
 const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjBiNTA5ZWE0MGJhYjc3ZDdlZTViNiIsImlhdCI6MTcwNjA3OTQ5NywiZXhwIjoxNzA2OTQzNDk3fQ.9XK69QR8Lt9WtLWZfSiTf6mvDAHM1oLjmNpjPz9K5NQ";
 const songId = "64eb643fcdf4ece499ec1e4e";
+let resultFromGoogle
+let userResponseId
 
-let server
 beforeAll(async () => {
     startServers()
 });
 
 afterAll(async () => {
+    const deleteUser = await User.findByIdAndDelete(userResponseId);
+    expect(deleteUser).toBeDefined();
     stopServers()
 
 
@@ -45,7 +39,7 @@ describe("User Tests", () => {
         password: "12345678",
     };
     let userId;
-    let userResponseId
+
 
     it("test createUser", async () => {
         const response = await request(app).post("/users/Test").send(user);
@@ -227,8 +221,8 @@ describe("User Tests", () => {
         expect(response.statusCode).toEqual(400);
     });
 
-    let resultFromGoogle
-    it("test the create google user and delete the user", async () => {
+
+    it("test the create google user ", async () => {
 
         const result = await userService.createGoogleUser(user);
         resultFromGoogle=result
@@ -260,30 +254,36 @@ describe("User Tests", () => {
 
     })
 
-    // it("test the remove refreshToken", async () => {
-    //
-    //     const result = await userService.createGoogleUser(user);
-    //     console.log("refreshToken",result);
-    //     const userResponseId = result._id;
-    //     const logIn = await usersController.generateAccessToken(user);
-    //
-    //     // const refreshToken = result.body.refreshToken;
-    //     console.log("userResponseId",userResponseId);
-    //     console.log("userResponseId after log in",logIn);
-    //     // const removeRefreshToken = await userService.removeRefreshToken(userResponseId,refreshToken);
-    //     // expect(removeRefreshToken).toBeDefined();
-    //
-    //
-    //     const deleteUser = await User.findByIdAndDelete(userResponseId);
-    //     expect(deleteUser).toBeDefined();
-    //
-    // })
-
-
-    it ("test delete user",async () => {
-        const deleteUser = await User.findByIdAndDelete(userResponseId);
-        expect(deleteUser).toBeDefined();
+    it("test addRefreshToken",async () => {
+        const addRefreshToken = await userService.addRefreshToken(resultFromGoogle._id,"123456789");
+        expect(addRefreshToken).toBeDefined();
     })
+
+    it("test addRefreshToken and wont find the user",async () => {
+        const wrongId=new mongoose.Types.ObjectId("65b51a3bc760666666e8a815");
+        try {
+            const addRefreshToken = await userService.addRefreshToken(wrongId,"123456789");
+        } catch (error) {
+            expect(error.message).toEqual("User not found");
+        }
+    })
+
+    it("test removeRefreshToken",async () => {
+        const removeRefreshToken = await userService.removeRefreshToken(resultFromGoogle._id,"123456789");
+        expect(removeRefreshToken).toBeDefined();
+    })
+
+    it("test removeRefreshToken and wont find the user",async () => {
+        const wrongId=new mongoose.Types.ObjectId("65b51a3bc760666666e8a815");
+        try {
+            const removeRefreshToken = await userService.removeRefreshToken(wrongId,"123456789");
+        } catch (error) {
+            expect(error.message).toEqual("User not found");
+        }
+    })
+
+
+
 
 
 });
