@@ -2,6 +2,7 @@ const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const usersService = require("../services/users.service").default;
 const usersController = require("../controllers/users.controller").default;
 const User = require("../models/UserScheme").default;
 const userService = require('../services/users.service.ts').default;
@@ -87,6 +88,7 @@ describe("User Tests", () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     });
+
 
     it("Test get user by id", async () => {
         const response = await request(app).get("/users/" + userId);
@@ -319,8 +321,6 @@ describe("controller more tests", () => {
 })
 describe('Test the userLogin endpoint', () => {
     it('should login a user and return a status code of 400- Wrong password', async () => {
-        //create a user at the DB
-
 
         const req = {
             body: {
@@ -340,6 +340,112 @@ describe('Test the userLogin endpoint', () => {
 
     })
 
+    it('should return a status code of 200 and a valid token response', () => {
+        // Mock the req object
+        const req = {};
+
+        // Mock the res object
+        const res = {
+            status: jest.fn().mockReturnThis(), // Chainable
+            json: jest.fn()
+        };
+
+        // Call the checkToken function with the mocked req and res objects
+        usersController.checkToken(req, res);
+
+        // Check that res.status and res.json were called with the right arguments
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ isValidToken: true });
+    });
+
+        it('should return a status code of 403 and an invalid token message', async () => {
+            // Mock the req object
+            const req = {
+                body: {
+                    refreshToken: 'invalidToken'
+                }
+            };
+
+            // Mock the res object
+            const res = {
+                status: jest.fn().mockReturnThis(), // Chainable
+                json: jest.fn()
+            };
+
+            // Mock the next function
+            const next = jest.fn();
+
+            // Mock the jwt.decode function to return an object with an id
+            jest.spyOn(jwt, 'decode').mockReturnValue({ id: 'invalidId' });
+
+            // Mock the userService.getUserById function to return null
+            jest.spyOn(userService, 'getUserById').mockResolvedValue(null);
+
+            // Call the isRefreshTokenExist function with the mocked req, res, and next objects
+            await usersController.isRefreshTokenExist(req, res, next);
+
+            // Check that res.status and res.json were called with the right arguments
+            expect(res.status).toHaveBeenCalledWith(403);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Invalid token' });
+
+            // Clean up the mocks
+            jest.restoreAllMocks();
+        });
+
+ let refreshToken;
+ let user3Id
+    it('test generateAccessToken', async () => {
+        const user3=await usersService.getUserByEmail("aaaaa@gmail.com");
+        user3Id=user3._id
+        refreshToken=user3.refreshTokens[0]
+        const req = {
+            body: {
+                refreshToken:  user3.refreshTokens[0]
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(), // Chainable
+            json: jest.fn()
+        };
+
+        jest.spyOn(jwt, 'decode').mockReturnValue({ id: 'validId' });
+
+        jest.spyOn(userService, 'getUserById').mockResolvedValue({
+            _id: user3._id,
+        });
+
+        jest.spyOn(jwt, 'sign').mockReturnValue(user3.refreshTokens[0]);
+
+        await usersController.generateAccessToken(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ token: user3.refreshTokens[0], refreshToken: user3.refreshTokens[0] });
+        jest.restoreAllMocks();
+    });
+
+    it('should verify the refresh token successfully and call next', async () => {
+        const req = {
+            body: {
+                refreshToken: refreshToken
+            }
+        };
+
+        const res = {};
+        const next = jest.fn();
+
+        jest.spyOn(jwt, 'decode').mockReturnValue({ id: user3Id });
+        jest.spyOn(userService, 'getUserById').mockResolvedValue({
+            _id: user3Id
+        });
+
+        jest.spyOn(jwt, 'verify').mockImplementation((token, secret, callback) => {
+            callback(null, { id: user3Id });
+        });
+
+        await usersController.verifyRefreshToken(req, res, next);
+        expect(next).toHaveBeenCalled();
+        jest.restoreAllMocks();
+    });
 
 });
 
