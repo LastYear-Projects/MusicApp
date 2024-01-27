@@ -2,7 +2,8 @@ const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const {connection, disconnect} = require("mongoose");
 const {findById} = require("../models/OrderSchema");
-const orderService = require("../services/orders.service.ts");
+const Order = require("../models/OrderSchema").default;
+const orderService = require("../services/orders.service.ts").default;
 
 let orderId = "64e89a3861acef3b5b6aea77";
 let orderId2;
@@ -24,7 +25,6 @@ describe("Order Tests", () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     });
-
 
     it("test get order by id", async () => {
         const response = await request(app).get("/orders/" + orderId);
@@ -73,9 +73,10 @@ describe("Order Tests", () => {
         const timeDifference = Math.abs(orderDate - expectedDate);
         expect(timeDifference).toBeLessThan(15 * 60 * 1000); // Tolerance of 5 minutes
 
-
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
+
+
     });
 
     it("test create order -> fail", async () => {
@@ -115,6 +116,39 @@ describe("Order Tests", () => {
         expect(response.statusCode).toEqual(500);
         expect(response.body).toBeDefined();
     });
+
+    it("test delete order", async () => {
+        const deleteResponse = await orderService.deleteOrder(orderId2);
+        expect(deleteResponse).toBeDefined();
+    });
+    it('should throw an error if no id is provided', async () => {
+        await expect(orderService.deleteOrder()).rejects.toThrow('Id is required');
+    });
+
+    it('should throw an error if no order is found with the provided id', async () => {
+
+        jest.spyOn(Order, 'findByIdAndDelete').mockResolvedValue(null);
+
+        await expect(orderService.deleteOrder('nonexistentId')).rejects.toThrow('Order not found');
+
+        // Clean up the mock
+        jest.restoreAllMocks();
+    });
+
+    it('should throw an error if Order.findByIdAndDelete throws an error', async () => {
+
+        jest.spyOn(Order, 'findByIdAndDelete').mockImplementation(() => {
+            throw new Error('Database error');
+        });
+
+        await expect(orderService.deleteOrder('validId')).rejects.toThrow('Database error');
+
+        // Clean up the mock
+        jest.restoreAllMocks();
+    });
+
+
+
 
     it("test get all orders to get error 500", async () => {
         await disconnect()
