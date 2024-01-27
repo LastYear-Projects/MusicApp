@@ -1,6 +1,8 @@
 const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const usersController = require("../controllers/users.controller").default;
 const User = require("../models/UserScheme").default;
 const userService = require('../services/users.service.ts').default;
 const songService = require('../services/songs.service.ts').default;
@@ -11,6 +13,12 @@ const token =
 const songId = "64eb643fcdf4ece499ec1e4e";
 let resultFromGoogle
 let userResponseId
+const user = {
+    name: "Dan Tests",
+    email: "dantests@gmail.com",
+    password: "12345678",
+    profile_image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fs"
+};
 
 beforeAll(async () => {
     startServers()
@@ -25,13 +33,9 @@ afterAll(async () => {
 });
 
 
+
 describe("User Tests", () => {
-    const user = {
-        name: "Dan Tests",
-        email: "dantests@gmail.com",
-        password: "12345678",
-        profile_image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fs"
-    };
+
 
     const userNoName = {
         name:"",
@@ -120,7 +124,6 @@ describe("User Tests", () => {
     it("get user by name ", async () => {
         const name = "Idan";
         const response = await request(app).get("/users/name/" + name)
-
         expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
     })
@@ -284,6 +287,58 @@ describe("User Tests", () => {
 
 
 
+
+
+});
+
+describe("controller more tests", () => {
+    it('should add a song to a user and return a status code of 200', async () => {
+        const userId = user._id;
+        const songId = '64e30d14fc68b9a5b37ba5bd';
+
+        const req = {
+            params: {
+                id: userId
+            },
+            body: songId
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(), // Chainable
+            json: jest.fn()
+        };
+
+        await usersController.addSongToUser(req, res);
+
+        // Check that res.status and res.json were called with the right arguments
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalled();
+    });
+
+
+
+})
+describe('Test the userLogin endpoint', () => {
+    it('should login a user and return a status code of 400- Wrong password', async () => {
+        //create a user at the DB
+
+
+        const req = {
+            body: {
+                email: user.email,
+                password: user.password+user.email.toLowerCase(),
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(), // Chainable
+            json: jest.fn()
+        };
+
+        await usersController.userLogin(req, res);
+
+        // Check that res.status and res.json were called with the right arguments
+        expect(res.status).toHaveBeenCalledWith(400);
+
+    })
 
 
 });
