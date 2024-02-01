@@ -74,14 +74,14 @@ const deleteCommentById = async (req:Request, res:Response) => {
   }
 };
 
-const deleteAllComments = async (req:Request, res:Response) => {
-  try {
-    const deletedComments = await commentService.deleteAllComments();
-    res.status(200).json(deletedComments);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// const deleteAllComments = async (req:Request, res:Response) => {
+//   try {
+//     const deletedComments = await commentService.deleteAllComments();
+//     res.status(200).json(deletedComments);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 const getCommentsByUserId = async (req:Request, res:Response) => {
   try {
@@ -99,6 +99,6 @@ export default {
   createComment,
   updateCommentById,
   deleteCommentById,
-  deleteAllComments,
+  // deleteAllComments,
   getCommentsByUserId,
 };

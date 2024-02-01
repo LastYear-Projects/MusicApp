@@ -37,10 +37,10 @@ const deleteCommentById = async (id:string) => {
   return comment;
 };
 
-const deleteAllComments = async () => {
-  const comments = await Comment.deleteMany();
-  return comments;
-};
+// const deleteAllComments = async () => {
+//   const comments = await Comment.deleteMany();
+//   return comments;
+// };
 
 export default {
   getCommentsByUserId,
@@ -49,5 +49,5 @@ export default {
   createComment,
   updateCommentById,
   deleteCommentById,
-  deleteAllComments,
+  // deleteAllComments,
 };

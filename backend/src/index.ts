@@ -42,11 +42,6 @@ const io = new Server(server, {
 Socket.setSocket(io); 
 handleClient(io); 
 
-// using socket comunicatin for the chat.
-server.listen(SOCKET_PORT, () => {
-  console.log(`Socket Server is running on port ${SOCKET_PORT}`);
-});
-
 //routes
 app.use("/songs", songRoutes);
 app.use("/users", userRoutes);
@@ -57,7 +52,31 @@ app.use("/uploadFiles", fileRoutes);
 app.use("/comments", commentRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
+let httpServer;
+let socketServer;
+
+function startServers() {
+  httpServer = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+  socketServer = server.listen(SOCKET_PORT, () => {
+    console.log(`Socket Server is running on port ${SOCKET_PORT}`);
+  });
   connectDB();
-});
+}
+
+function stopServers() {
+  if (httpServer) {
+    httpServer.close();
+  }
+  if (socketServer) {
+    socketServer.close();
+  }
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  startServers();
+}
+
+export { app, startServers, stopServers };

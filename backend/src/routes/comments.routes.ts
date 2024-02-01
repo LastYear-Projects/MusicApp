@@ -164,6 +164,6 @@ router.delete("/:id", commentController.deleteCommentById);
  *       500:
  *         description: Internal Server Error
  */
-router.delete("/", commentController.deleteAllComments);
+// router.delete("/", commentController.deleteAllComments);
 
 export default router

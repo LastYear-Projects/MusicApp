@@ -56,15 +56,15 @@ const getSongsByGenre = async (req:Request, res:Response) => {
 };
 
 
-const getSongsByYear = async (req:Request, res:Response) => {
-  try {
-    const { year } = req.params;
-    const songs = await songService.getSongsByYear(year);
-    res.status(200).json(songs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// const getSongsByYear = async (req:Request, res:Response) => {
+//   try {
+//     const { year } = req.params;
+//     const songs = await songService.getSongsByYear(year);
+//     res.status(200).json(songs);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 
 const getSongById = async (req:Request, res:Response) => {
@@ -165,5 +165,5 @@ export default {
   getSongsByArtist,
   getSongsByAlbum,
   getSongsByGenre,
-  getSongsByYear,
+  // getSongsByYear,
 };

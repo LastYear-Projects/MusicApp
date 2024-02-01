@@ -95,6 +95,6 @@ router.get("/artist/:artist", songController.getSongsByArtist);
 
 router.get("/album/:album", songController.getSongsByAlbum);
 router.get("/genre/:genre", songController.getSongsByGenre);
-router.get("/year/:year", songController.getSongsByYear);
+// router.get("/year/:year", songController.getSongsByYear);
 
 export default router
