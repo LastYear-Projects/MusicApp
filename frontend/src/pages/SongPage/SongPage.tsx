@@ -2,13 +2,14 @@ import React, { ChangeEvent } from "react";
 import Song from "../../components/Song/Song.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Loader from "../../components/loader/loader.tsx";
+import Loader from "../../components/loader/loader";
 import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
-import Comment from "../../components/comment/Comment";
+import Comment from "../../components/comment/comment";
 import { Button, Form, message } from "antd";
 import { handleRequestWithToken } from "../../utils";
-import { CommentType, SongType } from "../../types/index.tsx";
+import { CommentType, SongType } from "../../types/index";
+import { useToken } from "../../hooks/useToken";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const SongPage = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isCommentsLoading, setIsCommentsLoading] = React.useState(true);
   const [newComment, setNewComment] = React.useState("");
-  const userToken = localStorage.getItem("moozikaToken");
+  const userToken = useToken();
   const navigate = useNavigate();
 
   const fetchSong = async () => {

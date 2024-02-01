@@ -7,6 +7,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 
 import axios from "axios";
+import { usePost } from "../../hooks/usePost";
+import { AUTH } from "../../constants";
 const { Dragger } = Upload;
 
 const VisuallyHiddenInput = styled("input")({
@@ -90,7 +92,7 @@ const Signup = () => {
             return;
           });
 
-        await axios.post("http://localhost:6969/auth/chatRegister", {
+        await usePost(`${AUTH}/chatRegister`, {
           username: formData.email,
           secret: formData.email,
           email: formData.email,
@@ -98,11 +100,10 @@ const Signup = () => {
           last_name: formData.email,
         });
 
-        await axios
-          .post("http://localhost:6969/auth/login", {
-            email: data.email,
-            password: formData.password,
-          })
+        usePost(`${AUTH}/login`, {
+          email: data.email,
+          password: formData.password,
+        })
           .then((res) => res.data)
           .then(({ token, refreshToken }) => {
             localStorage.setItem("moozikaToken", token);

@@ -10,6 +10,9 @@ import { Edit, EditRounded, Update } from "@mui/icons-material";
 import { handleRequestWithToken } from "../../utils/index.js";
 import { useNavigate } from "react-router-dom";
 import { SongType } from "../../types/index.tsx";
+import { useToken } from "../../hooks/useToken.js";
+import { USERS } from "../../constants/index.jsx";
+import { usePost } from "../../hooks/usePost.js";
 
 type UserType = {
   email: string;
@@ -103,7 +106,7 @@ const UserPage = () => {
     if (!handleRequestWithToken()) return navigate("/");
     await axios
       .put("http://localhost:6969/users", {
-        token: localStorage.getItem("moozikaToken"),
+        token: useToken(),
         updatedUser: {
           name: newName.newName,
         },
@@ -125,9 +128,9 @@ const UserPage = () => {
     try {
       if (!handleRequestWithToken()) return navigate("/");
       if (!localStorage.getItem("moozikaToken")) return;
-      const myUser = await axios.post(
-        "http://localhost:6969/users/user-details",
-        { token: localStorage.getItem("moozikaToken") }
+      const myUser = await usePost(
+        `${USERS}/user-details`,
+        { token: useToken() }
       );
       setUser(myUser.data);
       setSongs(myUser.data.songs);

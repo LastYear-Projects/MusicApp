@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils";
 import { OrderType, SongType } from "../../types";
+import { useToken } from "../../hooks/useToken";
+import { usePost } from "../../hooks/usePost";
+import { ORDERS } from "../../constants";
 
 const socket = io("http://localhost:7070");
 
@@ -56,7 +59,7 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(newCart));
     setCartItems((prev) => prev?.filter((item: SongType) => item._id !== id));
     socket.emit("cart", {
-      token: localStorage.getItem("moozikaToken"),
+      token: useToken(),
       cart: newCart,
       numberInCart: newCart.length,
     });
@@ -71,8 +74,8 @@ const Cart = () => {
     setIsLoading(true);
     try {
       if (!handleRequestWithToken()) return navigate("/");
-      const response = await axios.post("http://localhost:6969/orders", {
-        token: localStorage.getItem("moozikaToken"),
+      const response = await usePost(ORDERS, {
+        token: useToken(),
         order: { songs: cartItems?.map((item) => item._id) },
       });
 
@@ -83,7 +86,7 @@ const Cart = () => {
         setCartExist(false);
 
         socket.emit("cart", {
-          token: localStorage.getItem("moozikaToken"),
+          token: useToken(),
           cart: [],
           numberInCart: 0,
         });

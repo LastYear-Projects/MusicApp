@@ -11,6 +11,9 @@ import axios from "axios";
 import { handleRequestWithToken } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import { CommentType } from "../../types";
+import { usePost } from "../../hooks/usePost";
+import { USERS } from "../../constants";
+import { useToken } from "../../hooks/useToken";
 
 type CommentProps = {
   comment: string;
@@ -41,15 +44,12 @@ const Comment = ({
   const navigate = useNavigate();
 
   const validateUser = async () => {
-    const userToken = localStorage.getItem("moozikaToken");
+    const userToken = useToken();
     if (!handleRequestWithToken()) return navigate("/");
     if (!userToken) return;
-    const { data } = await axios.post(
-      "http://localhost:6969/users/user-details",
-      {
-        token: userToken,
-      }
-    );
+    const { data } = await usePost(`${USERS}/user-details`, {
+      token: userToken,
+    });
 
     if (data._id === userId || data._id === creator) {
       setValidate(true);

@@ -3,23 +3,21 @@ import { PrettyChatWindow } from "react-chat-engine-pretty";
 import axios from "axios";
 import { UserType } from "../../types";
 import { Box } from "@mui/material";
+import { useToken } from "../../hooks/useToken";
 
 const Chat = () => {
   const [userDetails, setUserDetails] = useState<UserType>();
-  const token = localStorage.getItem("moozikaToken");
+  const token = useToken();
   if (!token) return null;
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await axios
-        .post("http://localhost:6969/users/user-details", {
-          token: localStorage.getItem("moozikaToken"),
-        })
-        .then((res) => {
-          setUserDetails(res.data);
-        });
-    };
-    fetchUser();
+    axios
+      .post("http://localhost:6969/users/user-details", {
+        token: token,
+      })
+      .then((res) => {
+        setUserDetails(res.data);
+      });
   }, []);
 
   return (

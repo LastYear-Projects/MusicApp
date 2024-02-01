@@ -9,11 +9,14 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
-import AddSong from "../addSongModal/addSong.tsx";
-import EditSongModal from "../modal/editSongModal.tsx";
-import { SongType } from "../../types/index.tsx";
+
+import EditSongModal from "../modal/editSongModal";
+import { SongType } from "../../types/index";
 import { message } from "antd";
 import { handleRequestWithToken } from "../../utils/index.js";
+import { usePost } from "../../hooks/usePost.js";
+import { USERS } from "../../constants/index.jsx";
+import { useToken } from "../../hooks/useToken.js";
 
 export default function SongCard({
   _id,
@@ -30,8 +33,8 @@ export default function SongCard({
   creator,
 }: SongType) {
   const songDurationInSeconds = duration / 1000;
-  const minutes = parseInt(songDurationInSeconds / 60).toFixed(0);
-  const seconds = parseInt(songDurationInSeconds % 60).toFixed(0);
+  const minutes = (songDurationInSeconds / 60).toFixed(0);
+  const seconds = (songDurationInSeconds % 60).toFixed(0);
   const songDuration = `${Number(minutes) > 9 ? minutes : "0" + minutes}:${
     Number(seconds) > 9 ? seconds : "0" + seconds
   }`;
@@ -41,7 +44,7 @@ export default function SongCard({
   const { pathname } = useLocation();
   const [isOwnedByUser, setIsOwnedByUser] = React.useState(false);
   const [openEditModal, setOpenEditModal] = React.useState(false);
-  const [editedSong, setEditedSong] = React.useState<SongType>({}); // State to store edited song details
+  const [editedSong, setEditedSong] = React.useState<SongType>(); // State to store edited song details
 
   const handleDeleteSong = async () => {
     try {
@@ -58,15 +61,15 @@ export default function SongCard({
         numOfPurchases: numOfPurchases,
         comments: comments,
         creator: creator,
-      }
-      const userToken = localStorage.getItem("moozikaToken");
+      };
+      const userToken = useToken();
       if (!handleRequestWithToken()) return navigate("/");
-        await axios.delete(`http://localhost:6969/admin/songs/${_id}`, {
-          data: {
-            token: userToken,
-            song: song
-          },
-        });
+      await axios.delete(`http://localhost:6969/admin/songs/${_id}`, {
+        data: {
+          token: userToken,
+          song: song,
+        },
+      });
       message.success("Song deleted successfully");
       setTimeout(() => {
         window.location.reload();
@@ -78,10 +81,9 @@ export default function SongCard({
 
   const isSongOwnedByUserCheck = async () => {
     if (!handleRequestWithToken()) return navigate("/");
-    const { data } = await axios.post(
-      "http://localhost:6969/users/user-details",
-      { token: localStorage.getItem("moozikaToken") }
-    );
+    const { data } = await usePost(`${USERS}/user-details`, {
+      token: useToken(),
+    });
     if (creator === data._id) {
       setIsOwnedByUser(true);
       return;
@@ -234,8 +236,7 @@ export default function SongCard({
           <Button
             onClick={handleDeleteSong}
             size="small"
-            sx={{ color: "Red" }}
-            textAlign="center"
+            sx={{ color: "Red", textAlign: "center" }}
             startIcon={<Delete />}
           >
             Delete This Song

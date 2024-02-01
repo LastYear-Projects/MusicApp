@@ -45,3 +45,12 @@ export const modalStyle = {
   boxShadow: "24px", // Added "px" for boxShadow
   padding: "16px", // Added padding instead of "p"
 };
+
+export const SERVER_URL = "http://localhost:6969";
+export const AUTH = SERVER_URL + "/auth";
+export const ADMIN = SERVER_URL + "/admin";
+export const SONGS = SERVER_URL + "/songs";
+export const USERS = SERVER_URL + "/users";
+export const ORDERS = SERVER_URL + "/orders";
+export const UPLOAD_FILES = SERVER_URL + "/uploadFiles";
+export const COMMENTS = SERVER_URL + "/comments";

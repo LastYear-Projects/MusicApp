@@ -15,8 +15,10 @@ import { message } from "antd";
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils";
 import { SongType } from "../../types/index.tsx";
+import { useToken } from "../../hooks/useToken.js";
+import { usePost } from "../../hooks/usePost.js";
+import { USERS } from "../../constants/index.jsx";
 const socket = io("http://localhost:7070");
-
 
 function Song({
   title,
@@ -47,14 +49,17 @@ function Song({
       message.error("You must be logged in before adding to cart");
       return;
     }
-    if (localStorage.getItem("cart") && localStorage.getItem("cart").length === 0) {
+    if (
+      localStorage.getItem("cart") &&
+      localStorage.getItem("cart").length === 0
+    ) {
       localStorage.setItem("cart", JSON.stringify([songId]));
     } else {
       const cart = JSON.parse(localStorage.getItem("cart"));
       cart.push(songId);
       if (!handleRequestWithToken()) return navigate("/");
       socket.emit("cart", {
-        token: localStorage.getItem("moozikaToken"),
+        token: useToken(),
         cart: cart,
         numberInCart: cart.length,
       });
@@ -67,17 +72,16 @@ function Song({
 
   const getUser = async () => {
     setIsLoading(true);
-    const userToken = localStorage.getItem("moozikaToken");
+    const userToken = useToken();
     if (!userToken) {
       setIsLoggedIn(false);
       setIsLoading(false);
       return;
     }
     if (!handleRequestWithToken()) return navigate("/");
-    const { data } = await axios.post(
-      "http://localhost:6969/users/user-details",
-      { token: userToken }
-    );
+    const { data } = await usePost(`${USERS}/user-details`, {
+      token: userToken,
+    });
     setUser(data);
     setIsLoggedIn(true);
     setIsLoading(false);
