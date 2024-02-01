@@ -284,7 +284,7 @@ const chatRegister =async (req:Request, res:Response)=>{
     const r = await axios.post(
       "https://api.chatengine.io/users/",
       { username, secret, email, first_name, last_name },
-      { headers: { "Private-Key": "3ae46e6d-745c-4633-99e0-d3969f135380" } }
+      { headers: { "Private-Key": "aeb4d2b7-9570-4432-bc80-36787f32800f" } }
     );
     return res.status(r.status).json(r.data);
   } catch (e) {
@@ -302,7 +302,7 @@ const chatLogin=async (req:Request, res:Response)=>{
   try {
     const r = await axios.get("https://api.chatengine.io/users/me/", {
       headers: {
-        "Project-ID": "2fb16285-f632-4fa3-9954-d25203f389f2",
+        "Project-ID": "0065a0fd-6a45-4e13-bb94-ddd7556671aa",
         "User-Name": username,
         "User-Secret": secret,
       },
