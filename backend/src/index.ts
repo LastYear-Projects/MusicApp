@@ -19,6 +19,8 @@ import fileRoutes from "./routes/file.routes";
 import commentRoutes from "./routes/comments.routes";
 import handleClient from "./utils/sockets";
 import { createServer } from "http";
+import https from "https";
+import fs from "fs";
 
 const PORT = process.env.PORT || 5000;
 const SOCKET_PORT = process.env.SOCKET_PORT || 3010;
@@ -63,6 +65,11 @@ function startServers() {
   socketServer = server.listen(SOCKET_PORT, () => {
     console.log(`Socket Server is running on port ${SOCKET_PORT}`);
   });
+  const options = {
+    key: fs.readFileSync('./client-key.pem'),
+    cert: fs.readFileSync('./client-cert.pem')
+  }
+  https.createServer(options, app).listen(process.env.HTTPS_PORT);
   connectDB();
 }
 
