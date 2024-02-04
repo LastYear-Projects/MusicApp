@@ -15,7 +15,7 @@ import { SongType } from "../../types/index";
 import { message } from "antd";
 import { handleRequestWithToken } from "../../utils/index.js";
 import { usePost } from "../../hooks/usePost.js";
-import { USERS } from "../../constants/index.jsx";
+import { ADMIN, USERS } from "../../constants/index.jsx";
 import { useToken } from "../../hooks/useToken.js";
 
 export default function SongCard({
@@ -64,7 +64,7 @@ export default function SongCard({
       };
       const userToken = useToken();
       if (!handleRequestWithToken()) return navigate("/");
-      await axios.delete(`http://localhost:6969/admin/songs/${_id}`, {
+      await axios.delete(`${ADMIN}/songs/${_id}`, {
         data: {
           token: userToken,
           song: song,

@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 
 import axios from "axios";
 import { usePost } from "../../hooks/usePost";
-import { AUTH } from "../../constants";
+import { AUTH, SERVER_URL } from "../../constants";
 const { Dragger } = Upload;
 
 const VisuallyHiddenInput = styled("input")({
@@ -68,18 +68,18 @@ const Signup = () => {
           const imageData = new FormData();
           imageData.append("file", fileName);
           await axios
-            .post("http://localhost:6969/uploadFiles/upload", imageData, {
+            .post(`${SERVER_URL}/uploadFiles/upload`, imageData, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             })
             .then((res) => {
-              imagePath = `http://localhost:6969/${res.data.file.path}`;
+              imagePath = `${SERVER_URL}/${res.data.file.path}`;
             });
         }
 
         const data = await axios
-          .post("http://localhost:6969/auth/register", {
+          .post(`${AUTH}/register`, {
             email: formData.email,
             name: formData.fullName,
             password: formData.password,

@@ -46,7 +46,8 @@ export const modalStyle = {
   padding: "16px", // Added padding instead of "p"
 };
 
-export const SERVER_URL = "http://localhost:6969";
+export const SERVER_URL = "https://10.10.248.161:443";
+
 export const AUTH = SERVER_URL + "/auth";
 export const ADMIN = SERVER_URL + "/admin";
 export const SONGS = SERVER_URL + "/songs";

@@ -105,7 +105,7 @@ const UserPage = () => {
   const handleChangeName = async () => {
     if (!handleRequestWithToken()) return navigate("/");
     await axios
-      .put("http://localhost:6969/users", {
+      .put(USERS, {
         token: useToken(),
         updatedUser: {
           name: newName.newName,

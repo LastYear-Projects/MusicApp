@@ -10,6 +10,7 @@ import {message} from "antd";
 import { SongType } from "../../types";
 import { handleRequestWithToken } from "../../utils";
 import { useToken } from "../../hooks/useToken";
+import { ADMIN } from "../../constants";
 
 type EditSongProps ={
     open:boolean,
@@ -36,7 +37,7 @@ const EditSongModal = ({ open, onClose, songDetails, onUpdate,songId,creator }: 
   const handleEditSong = async () => {
     if (!handleRequestWithToken()) return navigate("/");
     await axios
-      .put(`http://localhost:6969/admin/songs/${songId}`, {
+      .put(`${ADMIN}/songs/${songId}`, {
         token: useToken(),
         updatedSong: {
           title: editedSong.title,

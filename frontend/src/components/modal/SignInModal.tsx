@@ -14,7 +14,7 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 import css from "./style.module.css";
-import { modalStyle } from "../../constants";
+import { AUTH, modalStyle } from "../../constants";
 import { GoogleLogin } from "react-google-login";
 import axios from "axios";
 import { message } from "antd";
@@ -38,7 +38,7 @@ export default function SignInModal({
 
   const handleSignIn = async () => {
     await axios
-      .post("http://localhost:6969/auth/login", {
+      .post(`${AUTH}/login`, {
         email: userNameAndPassword.email,
         password: userNameAndPassword.password,
       })
@@ -46,7 +46,7 @@ export default function SignInModal({
         localStorage.setItem("moozikaToken", userToken.data.token);
         localStorage.setItem("refreshToken", userToken.data.refreshToken);
         await axios
-          .post("http://localhost:6969/auth/chatLogin", {
+          .post(`${AUTH}/chatLogin`, {
             username: userNameAndPassword.email,
             secret: userNameAndPassword.email,
           })
@@ -84,7 +84,7 @@ export default function SignInModal({
     const { email, name, picture } = userData;
 
     await axios
-      .post("http://localhost:6969/auth/google-login", {
+      .post(`${AUTH}/google-login`, {
         name: userData.name,
         email: userData.email,
         profile_image: userData.picture,
@@ -94,13 +94,13 @@ export default function SignInModal({
         localStorage.setItem("refreshToken", res.data.refreshToken);
         localStorage.setItem("cart", JSON.stringify([]));
         await axios
-          .post("http://localhost:6969/auth/chatLogin", {
+          .post(`${AUTH}/chatLogin`, {
             username: userData.email,
             secret: userData.email,
           })
           .catch(async (err) => {
             await axios
-              .post("http://localhost:6969/auth/chatRegister", {
+              .post(`${AUTH}/chatRegister`, {
                 username: userData.email,
                 secret: userData.email,
                 email: userData.email,

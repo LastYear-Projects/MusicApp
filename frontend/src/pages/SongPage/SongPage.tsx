@@ -10,6 +10,7 @@ import { Button, Form, message } from "antd";
 import { handleRequestWithToken } from "../../utils";
 import { CommentType, SongType } from "../../types/index";
 import { useToken } from "../../hooks/useToken";
+import { COMMENTS, SONGS } from "../../constants/index.jsx";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const SongPage = () => {
   const fetchSong = async () => {
     try {
       if (!handleRequestWithToken()) return navigate("/");
-      const { data } = await axios.get(`http://localhost:6969/songs/${id}`);
+      const { data } = await axios.get(`${SONGS}/${id}`);
       setSong(data);
       setIsLoading(false);
     } catch (error) {
@@ -36,7 +37,7 @@ const SongPage = () => {
   const fetchComments = async () => {
     try {
       const { data: fetchedComments } = await axios.get(
-        `http://localhost:6969/comments/song/${id}`
+        `${COMMENTS}/song/${id}`
       );
       setComments(fetchedComments.comments);
       setIsCommentsLoading(false);
@@ -49,7 +50,7 @@ const SongPage = () => {
   const removeComment = async (id: string) => {
     setIsCommentsLoading(true);
     try {
-      await axios.delete(`http://localhost:6969/comments/${id}`);
+      await axios.delete(`${COMMENTS}/${id}`);
       setComments((prev) => prev.filter((comment) => comment._id !== id));
     } catch (error) {
       console.error("Error removing comment:", error);
@@ -61,7 +62,7 @@ const SongPage = () => {
   const editComment = async (id: string, editedComment: CommentType) => {
     try {
       setIsCommentsLoading(true);
-      const { data } = await axios.put(`http://localhost:6969/comments/${id}`, {
+      const { data } = await axios.put(`${COMMENTS}/${id}`, {
         comment: editedComment,
       });
 
@@ -156,7 +157,7 @@ const SongPage = () => {
                           setIsCommentsLoading(true);
                           if (!handleRequestWithToken()) return navigate("/");
                           axios
-                            .post("http://localhost:6969/comments/", {
+                            .post(COMMENTS, {
                               token: userToken,
                               comment: newComment,
                               songId: id,

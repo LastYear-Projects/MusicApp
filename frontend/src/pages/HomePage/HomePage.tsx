@@ -3,12 +3,13 @@ import React from "react";
 import useFetch from "../../hooks/useFetch.tsx";
 import List from "../../components/list/List.tsx";
 import Loader from "../../components/loader/loader.tsx";
+import { SONGS } from "../../constants/index.jsx";
 const HomePage = () => {
   const {
     data: songs,
     error,
     isLoading,
-  } = useFetch("http://localhost:6969/songs");
+  } = useFetch(SONGS);
   //TODO : send the data to context/redux, and handle error.
   return (
     <Box marginBottom="3.3rem">

@@ -7,7 +7,7 @@ const handleRequestWithToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!token || !refreshToken) return false;
   axios
-    .post("http://localhost:6969/auth/check-token", {
+    .post(`${AUTH}/check-token`, {
       token: token,
     })
     .then(() => {
@@ -15,7 +15,7 @@ const handleRequestWithToken = async () => {
     })
     .catch(() => {
       axios
-        .post("http://localhost:6969/auth/refresh-token", {
+        .post(`${AUTH}/refresh-token`, {
           refreshToken: refreshToken,
         })
         .then((res) => {

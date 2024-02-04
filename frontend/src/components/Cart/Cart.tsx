@@ -12,9 +12,9 @@ import { handleRequestWithToken } from "../../utils";
 import { OrderType, SongType } from "../../types";
 import { useToken } from "../../hooks/useToken";
 import { usePost } from "../../hooks/usePost";
-import { ORDERS } from "../../constants";
+import { ORDERS, SERVER_URL, SONGS } from "../../constants";
 
-const socket = io("http://localhost:7070");
+const socket = io(SERVER_URL);
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Cart = () => {
     }
     const promises = cart.map(async (itemId: string) => {
       const { data: songData } = await axios.get(
-        `http://localhost:6969/songs/${itemId}`
+        `${SONGS}/${itemId}`
       );
       return songData;
     });

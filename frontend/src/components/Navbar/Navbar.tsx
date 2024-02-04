@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
-import { AUTH, StyledAutocomplete, USERS } from "../../constants/index";
+import { AUTH, SERVER_URL, SONGS, StyledAutocomplete, USERS } from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal";
@@ -35,7 +35,7 @@ import { SongType } from "../../types/index";
 import { useToken } from "../../hooks/useToken";
 import { usePost } from "../../hooks/usePost";
 
-const socket = io("http://localhost:7070");
+const socket = io(SERVER_URL);
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,7 +45,7 @@ export default function Navbar() {
   const [cart, setCart] = useState(0);
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const navigate = useNavigate();
-  const { data } = useFetch("http://localhost:6969/songs");
+  const { data } = useFetch(SONGS);
   const top100Films =
     data != null
       ? data.map((song: SongType) => ({ title: song.title, _id: song._id }))

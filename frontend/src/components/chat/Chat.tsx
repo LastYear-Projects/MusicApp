@@ -4,6 +4,7 @@ import axios from "axios";
 import { UserType } from "../../types";
 import { Box } from "@mui/material";
 import { useToken } from "../../hooks/useToken";
+import { USERS } from "../../constants";
 
 const Chat = () => {
   const [userDetails, setUserDetails] = useState<UserType>();
@@ -12,7 +13,7 @@ const Chat = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:6969/users/user-details", {
+      .post(`${USERS}/user-details`, {
         token: token,
       })
       .then((res) => {
