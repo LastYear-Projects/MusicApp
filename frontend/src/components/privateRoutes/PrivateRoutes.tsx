@@ -2,6 +2,9 @@ import { message } from "antd";
 import axios from "axios";
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import { useToken } from "../../hooks/useToken";
+import { usePost } from "../../hooks/usePost";
+import { USERS } from "../../constants";
 
 const PrivateRoutes = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
@@ -13,10 +16,9 @@ const PrivateRoutes = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:6969/users/user-details",
-        { token: localStorage.getItem("moozikaToken") }
-      );
+      const response = await usePost(`${USERS}/user-details`, {
+        token: useToken(),
+      });
       if (response.status !== 200) {
         message.error("You must be logged in before accessing this page");
         setIsLoggedIn(false);

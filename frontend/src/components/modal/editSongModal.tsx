@@ -9,12 +9,13 @@ import {useNavigate} from "react-router-dom";
 import {message} from "antd";
 import { SongType } from "../../types";
 import { handleRequestWithToken } from "../../utils";
+import { useToken } from "../../hooks/useToken";
 
 type EditSongProps ={
     open:boolean,
     onClose:()=>void,
     songDetails: SongType,
-    onUpdate:()=>void,
+    onUpdate?:()=>void,
     songId:string,
     creator:string
 }
@@ -36,7 +37,7 @@ const EditSongModal = ({ open, onClose, songDetails, onUpdate,songId,creator }: 
     if (!handleRequestWithToken()) return navigate("/");
     await axios
       .put(`http://localhost:6969/admin/songs/${songId}`, {
-        token: localStorage.getItem("moozikaToken"),
+        token: useToken(),
         updatedSong: {
           title: editedSong.title,
           album: editedSong.album,

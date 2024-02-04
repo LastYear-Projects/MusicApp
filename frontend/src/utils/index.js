@@ -1,4 +1,6 @@
 import axios from "axios";
+import { usePost } from "../hooks/usePost";
+import { AUTH } from "../constants";
 
 const handleRequestWithToken = async () => {
   const token = localStorage.getItem("moozikaToken");
@@ -25,7 +27,7 @@ const handleRequestWithToken = async () => {
           return true;
         })
         .catch(() => {
-          axios.post("http://localhost:6969/auth/logout", {
+          usePost(`${AUTH}/logout`, {
             refreshToken: refreshToken,
           });
           localStorage.removeItem("moozikaToken");

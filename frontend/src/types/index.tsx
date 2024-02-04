@@ -17,12 +17,12 @@ export type SongType = {
     title:string
     artist:string
     album:string
-    genre?:string
+    genre?:string[]
     year?:string
     duration:number
     album_image?:string
     comments?:string[]
-    creator:string
+    creator?:string
     price?:string
     preview_url?:string
     youtube_id?:string

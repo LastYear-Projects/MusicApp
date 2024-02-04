@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChatIcon from "@mui/icons-material/Chat";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
-import { StyledAutocomplete } from "../../constants/index";
+import { AUTH, StyledAutocomplete, USERS } from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal";
@@ -32,6 +32,8 @@ import { message } from "antd";
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils/index.js";
 import { SongType } from "../../types/index";
+import { useToken } from "../../hooks/useToken";
+import { usePost } from "../../hooks/usePost";
 
 const socket = io("http://localhost:7070");
 
@@ -68,10 +70,9 @@ export default function Navbar() {
 
     try {
       if (!handleRequestWithToken()) return navigate("/");
-      const response = await axios.post(
-        "http://localhost:6969/users/user-details",
-        { token: localStorage.getItem("moozikaToken") }
-      );
+      const response = await usePost(`${USERS}/user-details`, {
+        token: useToken(),
+      });
       if (response.status !== 200) {
         message.error("You must be logged in before accessing this page");
         setIsLoggedIn(false);
@@ -90,7 +91,7 @@ export default function Navbar() {
     getCartSize();
 
     socket.on("cart", ({ cart, token, numberInCart }) => {
-      if (token === localStorage.getItem("moozikaToken")) {
+      if (token === useToken()) {
         setCart(numberInCart);
       }
     });
@@ -115,11 +116,11 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     localStorage.removeItem("moozikaToken");
-    localStorage.removeItem("refreshToken");
     navigate("/");
-    await axios.post("http://localhost:6969/auth/logout", {
+    await usePost(`${AUTH}/logout`, {
       refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
     });
+    localStorage.removeItem("refreshToken");
   };
 
   const menuId = "primary-search-account-menu";
@@ -148,7 +149,10 @@ export default function Navbar() {
               handleMobileMenuClose();
             }}
           >
-            <IconButton sx={{ color: "black" }} onClick={()=>navigate("/chat")}>
+            <IconButton
+              sx={{ color: "black" }}
+              onClick={() => navigate("/chat")}
+            >
               <ChatIcon />
             </IconButton>
             <p>Chat</p>
@@ -253,12 +257,14 @@ export default function Navbar() {
                 <TextField {...params} placeholder="Search..." />
               )}
               onChange={(e, value) => {
-                value ? navigate(`/song/${(value as {_id: string})._id}`) : "";
+                value
+                  ? navigate(`/song/${(value as { _id: string })._id}`)
+                  : "";
               }}
             ></StyledAutocomplete>
             {isLoggedIn ? (
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <IconButton onClick={()=>navigate("/chat")}>
+                <IconButton onClick={() => navigate("/chat")}>
                   <ChatIcon sx={{ color: "white" }} />
                 </IconButton>
                 <IconButton

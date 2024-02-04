@@ -16,6 +16,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { handleRequestWithToken } from "../../utils";
 import { SongType } from "../../types";
+import { useToken } from "../../hooks/useToken";
+import { usePost } from "../../hooks/usePost";
+import { ADMIN } from "../../constants";
 
 const enumFields = [
   { field: "title", placeholder: "Song Title", Icon: <UserOutlined /> },
@@ -47,10 +50,10 @@ type ModalType = {
   onSuccess: (song: SongType) => void;
 };
 
-const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
+const AddSong = ({ openModal, setOpenModal, onSuccess }: ModalType) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<Omit<SongType, 'creator'>>({
+  const [formData, setFormData] = useState<Omit<SongType, "creator">>({
     title: "",
     album: "",
     artist: "",
@@ -112,13 +115,11 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
       return;
     }
     if (!handleRequestWithToken()) return navigate("/");
-    const response = await axios.post(
-      "http://localhost:6969/admin/songs/create",
-      {
-        song: formData,
-        token: localStorage.getItem("moozikaToken"),
-      }
-    );
+
+    const response = await usePost(`${ADMIN}/songs/create`, {
+      song: formData,
+      token: useToken(),
+    });
 
     onSuccess(response.data);
     message.success("Song was successfully added");
@@ -162,7 +163,7 @@ const AddSong = ({ openModal, setOpenModal,onSuccess }: ModalType) => {
             </Form.Item>
           ))}
           <Form.Item>
-          <Button
+            <Button
               color="primary"
               variant="contained"
               style={{
