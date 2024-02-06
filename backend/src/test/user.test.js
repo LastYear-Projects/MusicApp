@@ -8,9 +8,10 @@ const User = require("../models/UserScheme").default;
 const userService = require('../services/users.service.ts').default;
 const songService = require('../services/songs.service.ts').default;
 
-const userEmail = "tal.mekler11@gmail.com";
+const userEmail = "davidovich.dan@gmail.com";
 const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjBiNTA5ZWE0MGJhYjc3ZDdlZTViNiIsImlhdCI6MTcwNjA3OTQ5NywiZXhwIjoxNzA2OTQzNDk3fQ.9XK69QR8Lt9WtLWZfSiTf6mvDAHM1oLjmNpjPz9K5NQ";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmI1MDJmYWU4YzY2ZDhhYTkxNTRjOCIsImlhdCI6MTcwNjc3NDU3NywiZXhwIjoxNzA3NjM4NTc3fQ.6RFGVpbVr1Z7MowSWjDj5Ij_BqNaeQQZ_W5nF9saRZ8"
+
 const songId = "64eb643fcdf4ece499ec1e4e";
 let resultFromGoogle
 let userResponseId
@@ -20,6 +21,12 @@ const user = {
     password: "12345678",
     profile_image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fs"
 };
+const userNoName = {
+    name:"",
+    email: "dantests@gmail.com",
+    password: "12345678",
+};
+let userId;
 
 beforeAll(async () => {
     startServers()
@@ -29,23 +36,11 @@ afterAll(async () => {
     const deleteUser = await User.findByIdAndDelete(userResponseId);
     expect(deleteUser).toBeDefined();
     stopServers()
-
-
 });
 
 
 
 describe("User Tests", () => {
-
-
-    const userNoName = {
-        name:"",
-        email: "dantests@gmail.com",
-        password: "12345678",
-    };
-    let userId;
-
-
     it("test createUser", async () => {
         const response = await request(app).post("/users/Test").send(user);
         userId = response.body._id;
@@ -195,6 +190,9 @@ describe("User Tests", () => {
                 },
                 token: token,
             });
+        console.log(response.body)
+        console.log(response.body.message)
+
         expect(response.statusCode).toEqual(200);
     });
 

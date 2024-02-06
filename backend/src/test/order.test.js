@@ -7,7 +7,7 @@ const orderService = require("../services/orders.service.ts").default;
 
 let orderId = "64e89a3861acef3b5b6aea77";
 let orderId2;
-let userId = "64e34fee5c01bef6a85b754f";
+let userId = "65bb502fae8c66d8aa9154c8";
 let server;
 beforeAll(async () => {
     startServers()
@@ -37,7 +37,7 @@ describe("Order Tests", () => {
         expect(response.statusCode).toEqual(500);
     });
     it("should throw an error if no id is provided", async () => {
-        const response = await request(app).get("/orders/user/" );
+        const response = await request(app).get("/orders/user/");
         expect(response.body.error).toBeUndefined();
     });
 
@@ -65,15 +65,16 @@ describe("Order Tests", () => {
                     songs: ["6586b18ed330cce3dd395419", "6586b27da4f89cc16ecc9ee6"],
                 },
                 token:
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjBiNTA5ZWE0MGJhYjc3ZDdlZTViNiIsImlhdCI6MTcwNjA3OTQ5NywiZXhwIjoxNzA2OTQzNDk3fQ.9XK69QR8Lt9WtLWZfSiTf6mvDAHM1oLjmNpjPz9K5NQ",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmI1MDJmYWU4YzY2ZDhhYTkxNTRjOCIsImlhdCI6MTcwNjc3NDU3NywiZXhwIjoxNzA3NjM4NTc3fQ.6RFGVpbVr1Z7MowSWjDj5Ij_BqNaeQQZ_W5nF9saRZ8"
             });
         orderId2 = response.body._id;
         const orderDate = new Date(response.body.date);
 
+        expect(response.statusCode).toEqual(200);
+
         const timeDifference = Math.abs(orderDate - expectedDate);
         expect(timeDifference).toBeLessThan(15 * 60 * 1000); // Tolerance of 5 minutes
 
-        expect(response.statusCode).toEqual(200);
         expect(response.body).toBeDefined();
 
 
@@ -146,8 +147,6 @@ describe("Order Tests", () => {
         // Clean up the mock
         jest.restoreAllMocks();
     });
-
-
 
 
     it("test get all orders to get error 500", async () => {
