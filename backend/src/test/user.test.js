@@ -17,13 +17,13 @@ let resultFromGoogle
 let userResponseId
 const user = {
     name: "Dan Tests",
-    email: "dantests@gmail.com",
+    email: "dantestsa@gmail.com",
     password: "12345678",
     profile_image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fs"
 };
 const userNoName = {
     name:"",
-    email: "dantests@gmail.com",
+    email: "dantestsb@gmail.com",
     password: "12345678",
 };
 let userId;
@@ -442,6 +442,15 @@ describe('Test the userLogin endpoint', () => {
 
         await usersController.verifyRefreshToken(req, res, next);
         expect(next).toHaveBeenCalled();
+        jest.restoreAllMocks();
+    });
+
+    it("should return error when userService.getAllUsers() throws an error", async () => {
+        jest.spyOn(userService, 'getAllUsers').mockImplementationOnce(() => {
+            throw new Error('Test error');
+        });
+        const response = await request(app).get("/users");
+        expect(response.statusCode).toEqual(500);
         jest.restoreAllMocks();
     });
 
