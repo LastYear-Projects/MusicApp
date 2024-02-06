@@ -2,6 +2,12 @@ const {app, startServers, stopServers} = require("../index");
 const request = require("supertest");
 const {connection, disconnect, connect} = require("mongoose");
 
+let songId = "64e30d14fc68b9a5b37ba5bd";
+let userId = "65bb502fae8c66d8aa9154c8";
+let token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YmI1MDJmYWU4YzY2ZDhhYTkxNTRjOCIsImlhdCI6MTcwNjc3NDU3NywiZXhwIjoxNzA3NjM4NTc3fQ.6RFGVpbVr1Z7MowSWjDj5Ij_BqNaeQQZ_W5nF9saRZ8";
+
+
 const song = {
     title: "test song",
     album: "Back In Black",
@@ -9,7 +15,7 @@ const song = {
     year: 1980,
     genre: ["pop", "rock"],
     artist: "Amy Winehouse",
-    creator: "64e1e2eff734e0042c496a46",
+    creator: userId,
     price: 10,
 };
 const newSong = {
@@ -18,7 +24,7 @@ const newSong = {
     duration: 300000,
     genre: ["pop", "rock"],
     artist: "test",
-    creator: "65b0b509ea40bab77d7ee5b6",
+    creator: userId,
     price: 10,
 };
 const updatedSong = {
@@ -28,14 +34,10 @@ const updatedSong = {
     year: 1981,
     genre: ["pop", "rock"],
     artist: "test",
-    creator: "64e1e2eff734e0042c496a46",
+    creator: userId,
     price: 10,
 };
-let songId = "64e30d14fc68b9a5b37ba5bd";
-let token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjBiNTA5ZWE0MGJhYjc3ZDdlZTViNiIsImlhdCI6MTcwNjA3OTQ5NywiZXhwIjoxNzA2OTQzNDk3fQ.9XK69QR8Lt9WtLWZfSiTf6mvDAHM1oLjmNpjPz9K5NQ";
-let creator;
-let server;
+
 beforeAll(async () => {
     startServers()
 });
@@ -198,5 +200,18 @@ describe("Songs Tests", () => {
         const response = await request(app).get("/songs/genre/" + "12");
         expect(response.statusCode).toEqual(500);
     })
+
+    it("test get song by id to fail because id is not valid", async () => {
+        const response = await request(app).get("/songs/" + "123");
+        expect(response.statusCode).toEqual(500);
+    });
+
+    it("test delete song with invalid songid", async () => {
+        const response = await request(app)
+            .delete("/admin/songs/" + "123345")
+            .send({token: token, song: song});
+        expect(response.statusCode).toEqual(500);
+    });
+
 
 });

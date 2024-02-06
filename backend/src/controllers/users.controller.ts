@@ -25,13 +25,9 @@ const getUserById = async (req:Request, res:Response) => {
 };
 
 const getUserByName = async (req:Request, res:Response) => {
-  //TODO: LO MEANYEN
-  try {
+
     const user = await userService.getUserByName(req.params.name);
     res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
 const getUserByEmail = async (req:Request, res:Response) => {

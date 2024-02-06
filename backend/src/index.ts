@@ -65,11 +65,12 @@ function startServers() {
   socketServer = server.listen(SOCKET_PORT, () => {
     console.log(`Socket Server is running on port ${SOCKET_PORT}`);
   });
-  const options = {
-    key: fs.readFileSync('../../client-key.pem'),
-    cert: fs.readFileSync('../../client-cert.pem')
-  }
-  https.createServer(options, app).listen(process.env.HTTPS_PORT);
+  // const options = {
+  //   key: fs.readFileSync('../../client-key.pem'),
+  //   cert: fs.readFileSync('../../client-cert.pem')
+  // }
+  https.createServer(app).listen(process.env.HTTPS_PORT);
+  // https.createServer(options, app).listen(process.env.HTTPS_PORT);
   connectDB();
 }
 
