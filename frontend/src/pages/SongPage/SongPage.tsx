@@ -80,7 +80,7 @@ const SongPage = () => {
     setIsLoading(true);
     fetchSong();
     fetchComments();
-  }, []);
+  }, [id]);
 
   return (
     <Loader isLoading={isLoading}>
