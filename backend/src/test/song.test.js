@@ -201,4 +201,17 @@ describe("Songs Tests", () => {
         expect(response.statusCode).toEqual(500);
     })
 
+    it("test get song by id to fail because id is not valid", async () => {
+        const response = await request(app).get("/songs/" + "123");
+        expect(response.statusCode).toEqual(500);
+    });
+
+    it("test delete song with invalid songid", async () => {
+        const response = await request(app)
+            .delete("/admin/songs/" + "123345")
+            .send({token: token, song: song});
+        expect(response.statusCode).toEqual(500);
+    });
+
+
 });
