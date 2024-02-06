@@ -38,5 +38,5 @@ describe('socket.io server', () => {
         });
     });
 
-    // More tests for other events...
+
 });
