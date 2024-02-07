@@ -1,5 +1,14 @@
 // SignInModal.js
 import React from "react";
+
+import ClearIcon from "@mui/icons-material/Clear";
+import css from "./style.module.css";
+import { AUTH, modalStyle } from "../../constants";
+import { GoogleLogin } from "react-google-login";
+import axios from "axios";
+import { message } from "antd";
+import { gapi } from "gapi-script";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Modal,
@@ -11,15 +20,6 @@ import {
   TextField,
   Link,
 } from "@mui/material";
-
-import ClearIcon from "@mui/icons-material/Clear";
-import css from "./style.module.css";
-import { AUTH, modalStyle } from "../../constants";
-import { GoogleLogin } from "react-google-login";
-import axios from "axios";
-import { message } from "antd";
-import { gapi } from "gapi-script";
-import { useNavigate } from "react-router-dom";
 
 type SignInModalProps = {
   openModal: boolean;
@@ -187,7 +187,7 @@ export default function SignInModal({
                 type="password"
                 InputProps={{
                   style: { color: "white" },
-                  notchedOutline: { borderColor: "white" },
+                  // notchedOutline: { borderColor: "white" },
                 }}
                 InputLabelProps={{
                   style: { color: "white" },

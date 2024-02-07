@@ -3,12 +3,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Box, Button, CardActionArea, CardActions } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Delete, Edit } from "@mui/icons-material";
+import { Box, Button, CardActionArea, CardActions } from "@mui/material";
 
 import EditSongModal from "../modal/editSongModal";
 import { SongType } from "../../types/index";

@@ -1,20 +1,20 @@
-import { Grid, Card, Divider, Typography, Button, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CartItem from "../CartItem/CartItem";
-import classes from "./cart.module.css";
+import classes from "./Cart.module.css";
 import Loader from "../loader/loader";
 import axios from "axios";
 import { message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Grid, Card, Divider, Typography, Button, Box } from "@mui/material";
 
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils";
 import { OrderType, SongType } from "../../types";
 import { useToken } from "../../hooks/useToken";
 import { usePost } from "../../hooks/usePost";
-import { ORDERS, SERVER_URL, SONGS } from "../../constants";
+import { ORDERS, SERVER_PORT_URL, SONGS } from "../../constants";
 
-const socket = io(SERVER_URL);
+const socket = io(SERVER_PORT_URL);
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Cart = () => {
   async function getCart() {
     const localStorageCart = localStorage.getItem("cart");
     const cart =
-    localStorageCart && localStorageCart.length > 0
+      localStorageCart && localStorageCart.length > 0
         ? JSON.parse(localStorageCart)
         : [];
     if (cart.length === 0) {
@@ -35,9 +35,7 @@ const Cart = () => {
       return;
     }
     const promises = cart.map(async (itemId: string) => {
-      const { data: songData } = await axios.get(
-        `${SONGS}/${itemId}`
-      );
+      const { data: songData } = await axios.get(`${SONGS}/${itemId}`);
       return songData;
     });
     const cartSongs: SongType[] = await Promise.all(promises);
@@ -47,12 +45,14 @@ const Cart = () => {
   }
 
   const getUsdToIls = async () => {
-    const res=await axios.get("https://v6.exchangerate-api.com/v6/d49e704b01ca5fa2a23ed2cc/latest/USD")
-    setConversionRate(res.data.conversion_rates.ILS)
+    const res = await axios.get(
+      "https://v6.exchangerate-api.com/v6/d49e704b01ca5fa2a23ed2cc/latest/USD"
+    );
+    setConversionRate(res.data.conversion_rates.ILS);
   };
-  
+
   function handeleDeleteSong(id: string | undefined) {
-    if(!id) return;
+    if (!id) return;
     setIsLoading(true);
     const cartIds = JSON.parse(localStorage.getItem("cart") || "[]");
     const newCart = cartIds.filter((itemId) => itemId !== id);
@@ -105,10 +105,10 @@ const Cart = () => {
 
   useEffect(() => {
     getCart();
-    getUsdToIls()
+    getUsdToIls();
   }, []);
 
-  let subtotal= 0;
+  let subtotal = 0;
   cartItems?.forEach((item) => {
     subtotal += Number(item.price);
   });
@@ -139,7 +139,9 @@ const Cart = () => {
             </div>
             <div className={classes.cartText}>
               <Typography variant="h5">Total:</Typography>
-              <Typography variant="h6">${subtotal} ~ {(conversionRate*subtotal).toFixed(2)}₪</Typography>
+              <Typography variant="h6">
+                ${subtotal} ~ {(conversionRate * subtotal).toFixed(2)}₪
+              </Typography>
             </div>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button

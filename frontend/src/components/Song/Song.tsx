@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,16 +8,17 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CheckIcon from "@mui/icons-material/Check";
-import Loader from "../loader/loader.tsx";
+import Loader from "../loader/loader";
+import Box from "@mui/material/Box";
 import { message } from "antd";
 
 import io from "socket.io-client";
 import { handleRequestWithToken } from "../../utils";
-import { SongType } from "../../types/index.tsx";
+import { SongType, UserType } from "../../types/index";
 import { useToken } from "../../hooks/useToken.js";
 import { usePost } from "../../hooks/usePost.js";
-import { SERVER_URL, USERS } from "../../constants/index.jsx";
-const socket = io(SERVER_URL);
+import { SERVER_PORT_URL, USERS } from "../../constants/index.jsx";
+const socket = io(SERVER_PORT_URL);
 
 function Song({
   title,
@@ -31,7 +31,7 @@ function Song({
   album_image,
   youtube_id,
 }: SongType) {
-  const [user, setUser] = useState<UserType>({});
+  const [user, setUser] = useState<UserType>();
   const [isLoading, setIsLoading] = useState(true);
   const [isSongExist, setIsSongExist] = useState(false);
   const [isSongInCart, setIsSongInCart] = useState(false);

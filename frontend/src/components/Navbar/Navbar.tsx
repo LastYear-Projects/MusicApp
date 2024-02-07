@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChatIcon from "@mui/icons-material/Chat";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   AppBar,
   Box,
@@ -12,14 +18,13 @@ import {
   Menu,
   TextField,
 } from "@mui/material";
-
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChatIcon from "@mui/icons-material/Chat";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useState, useEffect } from "react";
-import { AUTH, SERVER_URL, SONGS, StyledAutocomplete, USERS } from "../../constants/index";
+import {
+  AUTH,
+  SERVER_PORT_URL,
+  SONGS,
+  StyledAutocomplete,
+  USERS,
+} from "../../constants/index";
 import axios from "axios";
 import MoozikaLogo from "../moozikaLogo/MoozikaLogo";
 import SignInModal from "../modal/SignInModal";
@@ -35,7 +40,7 @@ import { SongType } from "../../types/index";
 import { useToken } from "../../hooks/useToken";
 import { usePost } from "../../hooks/usePost";
 
-const socket = io(SERVER_URL);
+const socket = io(SERVER_PORT_URL);
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -118,7 +123,7 @@ export default function Navbar() {
     localStorage.removeItem("moozikaToken");
     navigate("/");
     await usePost(`${AUTH}/logout`, {
-      refreshToken: JSON.parse(localStorage.getItem("refreshToken")),
+      refreshToken: localStorage.getItem("refreshToken"),
     });
     localStorage.removeItem("refreshToken");
   };
@@ -142,17 +147,15 @@ export default function Navbar() {
       onClose={handleMobileMenuClose}
     >
       {isLoggedIn && (
-        <>
+        <Box>
           <MenuItem
             onClick={() => {
               setIsChatOpen(true);
               handleMobileMenuClose();
+              navigate("/chat");
             }}
           >
-            <IconButton
-              sx={{ color: "black" }}
-              onClick={() => navigate("/chat")}
-            >
+            <IconButton sx={{ color: "black" }}>
               <ChatIcon />
             </IconButton>
             <p>Chat</p>
@@ -209,7 +212,7 @@ export default function Navbar() {
             </IconButton>
             <p>Logout</p>
           </MenuItem>
-        </>
+        </Box>
       )}
 
       {!isLoggedIn && (

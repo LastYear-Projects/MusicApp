@@ -1,18 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../../components/loader/loader.tsx";
-import { Box, Typography, Avatar, Grid, TextField } from "@mui/material";
-import List from "../../components/list/List.tsx";
+import Loader from "../../components/loader/loader";
+import List from "../../components/list/List";
 import { Button, message, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import AddSong from "../../components/addSongModal/addSong.tsx";
+import AddSong from "../../components/addSongModal/addSong";
 import { Edit, EditRounded, Update } from "@mui/icons-material";
 import { handleRequestWithToken } from "../../utils/index.js";
 import { useNavigate } from "react-router-dom";
-import { SongType } from "../../types/index.tsx";
+import { SongType } from "../../types/index";
 import { useToken } from "../../hooks/useToken.js";
 import { USERS } from "../../constants/index.jsx";
 import { usePost } from "../../hooks/usePost.js";
+import { Box, Typography, Avatar, Grid, TextField } from "@mui/material";
 
 type UserType = {
   email: string;
@@ -116,7 +116,7 @@ const UserPage = () => {
           message.success("the name was changed successfully");
           handleCloseForm();
           fetchUserData();
-          setNewName("");
+          setNewName({ newName: "" });
         }
       })
       .catch((err) => {
@@ -128,10 +128,9 @@ const UserPage = () => {
     try {
       if (!handleRequestWithToken()) return navigate("/");
       if (!localStorage.getItem("moozikaToken")) return;
-      const myUser = await usePost(
-        `${USERS}/user-details`,
-        { token: useToken() }
-      );
+      const myUser = await usePost(`${USERS}/user-details`, {
+        token: useToken(),
+      });
       setUser(myUser.data);
       setSongs(myUser.data.songs);
       setIsLoading(false);
@@ -327,7 +326,7 @@ const UserPage = () => {
         >
           Songs Owned By User
         </Typography>
-        <Grid spacing={2} marginTop="2rem">
+        <Grid marginTop="2rem">
           {user.songs.length > 0 ? (
             <List list={user.songs} />
           ) : (
@@ -364,7 +363,7 @@ const UserPage = () => {
           Songs created By User
         </Typography>
 
-        <Grid spacing={2} marginTop="2rem">
+        <Grid marginTop="2rem">
           {ownSongs.length > 0 ? (
             <List list={ownSongs} />
           ) : (

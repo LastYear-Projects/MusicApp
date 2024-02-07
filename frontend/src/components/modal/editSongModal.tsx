@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
-import {message} from "antd";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 import { SongType } from "../../types";
 import { handleRequestWithToken } from "../../utils";
 import { useToken } from "../../hooks/useToken";
 import { ADMIN } from "../../constants";
+import Box from "@mui/material/Box";
 
-type EditSongProps ={
-    open:boolean,
-    onClose:()=>void,
-    songDetails: SongType,
-    onUpdate?:()=>void,
-    songId:string,
-    creator:string
-}
-const EditSongModal = ({ open, onClose, songDetails, onUpdate,songId,creator }: EditSongProps) => {
-    const [editedSong, setEditedSong] = useState({ ...songDetails });
+type EditSongProps = {
+  open: boolean;
+  onClose: () => void;
+  songDetails: SongType;
+  onUpdate?: () => void;
+  songId: string;
+  creator: string;
+};
+const EditSongModal = ({
+  open,
+  onClose,
+  songDetails,
+  onUpdate,
+  songId,
+  creator,
+}: EditSongProps) => {
+  const [editedSong, setEditedSong] = useState({ ...songDetails });
 
   const navigate = useNavigate();
 
