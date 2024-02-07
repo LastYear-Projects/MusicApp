@@ -3,7 +3,6 @@ import Song from "../../components/Song/Song.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../components/loader/loader";
-import { Box, Typography } from "@mui/material";
 import List from "../../components/list/List";
 import Comment from "../../components/comment/comment";
 import { Button, Form, message } from "antd";
@@ -11,6 +10,7 @@ import { handleRequestWithToken } from "../../utils";
 import { CommentType, SongType } from "../../types/index";
 import { useToken } from "../../hooks/useToken";
 import { COMMENTS, SONGS } from "../../constants/index.jsx";
+import { Box, Typography } from "@mui/material";
 
 const SongPage = () => {
   const { id } = useParams();
@@ -140,7 +140,9 @@ const SongPage = () => {
                         outline: "none",
                       }}
                       value={newComment}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => setNewComment(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setNewComment(e.target.value)
+                      }
                     />
                   </Form.Item>
                   <Box

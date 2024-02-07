@@ -1,5 +1,5 @@
 import React from "react";
-import Cart from "../../components/Cart/Cart.tsx";
+import Cart from "../../components/Cart/Cart";
 import { Box } from "@mui/material";
 const CartPage = () => {
   return (

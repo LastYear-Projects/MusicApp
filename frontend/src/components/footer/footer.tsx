@@ -1,11 +1,11 @@
 import React from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HomeIcon from "@mui/icons-material/Home";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Import the new icon
 import { Box } from "@mui/material";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();

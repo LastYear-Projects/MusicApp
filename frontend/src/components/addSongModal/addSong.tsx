@@ -1,19 +1,19 @@
 import React, { ChangeEvent, useState } from "react";
-import TransitionsModal from "../modal/modal";
-import { Alert, Box, Button, Snackbar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+import axios from "axios";
 
 import { Form, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { useForm } from "react-hook-form";
-
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AlbumIcon from "@mui/icons-material/Album";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
+import TransitionsModal from "../modal/modal";
 import { handleRequestWithToken } from "../../utils";
 import { SongType } from "../../types";
 import { useToken } from "../../hooks/useToken";

@@ -1,4 +1,8 @@
 import React from "react";
+import axios from "axios";
+import { handleRequestWithToken } from "../../utils";
+import { useNavigate } from "react-router-dom";
+import { CommentType } from "../../types";
 import {
   Avatar,
   Typography,
@@ -7,10 +11,6 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import axios from "axios";
-import { handleRequestWithToken } from "../../utils";
-import { useNavigate } from "react-router-dom";
-import { CommentType } from "../../types";
 import { usePost } from "../../hooks/usePost";
 import { USERS } from "../../constants";
 import { useToken } from "../../hooks/useToken";
